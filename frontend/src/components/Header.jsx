@@ -1,19 +1,20 @@
 import { Link } from "react-router-dom";
+import { Link as LinkScroll } from "react-scroll";
 import { images } from "../constants";
 
 const Header = () => {
   const navItemsInfo = [
     {
       name: "Accueil",
-      linkto: '/'
+      linkto: 'accueil'
     },
     {
       name: "Caractéristiques",
-      linkto: '#AboutUs'
+      linkto: 'caracteristiques'
     },
     {
       name: "Testimonial",
-      linkto: '#ContactUs'
+      linkto: 'testimontial'
     }
   ]
 
@@ -27,7 +28,20 @@ const Header = () => {
           <ul className="flex items-center gap-20">
             {
               navItemsInfo.map((item, index) => (
-                <Link><li key={index} className="text-white font-medium hover:font-semibold">{item.name}</li></Link>
+                <LinkScroll
+                to={item.linkto}
+                spy={true}
+                smooth={true}
+                offset={-10}
+                duration={500}
+                >
+                  <li
+                    key={index}
+                    className="text-white font-medium hover:font-semibold"
+                  >
+                    {item.name}
+                  </li>
+                </LinkScroll>
               ))
             }
           </ul>

@@ -3,7 +3,7 @@ import { images } from "../../../constants";
 
 const Accueil = () => {
   return (
-    <section className="w-3/4 mx-auto flex items-center gap-3 px-5 py-5">
+    <section className="w-3/4 mx-auto flex items-center gap-3 px-5 py-5" id="accueil">
       <div className="w-1/2 flex flex-col items-start gap-7">
         <h1 className="text-5xl font-extralight">
           Facilitez votre parcours <span className="font-semibold">professionnel</span> avec notre application

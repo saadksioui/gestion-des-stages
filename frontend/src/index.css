@@ -16,3 +16,22 @@
 ::-webkit-scrollbar-thumb:hover {
   background: #2e2e2e;
 }
+
+#testimontialFrame{
+  background: url('./assets/Home Page Imgs/TestimFrame.svg');
+}
+/* CSS for different slide positions */
+.activeSlide {
+  opacity: 1;
+  display: flex; /* Ensure the active slide is displayed */
+  transition-duration: 1s;
+  z-index: 2;
+}
+
+.nextSlide,
+.lastSlide {
+  opacity: 0;
+  display: none; /* Hide the next and last slides */
+  transition-duration: 1s;
+  z-index: 1; /* Ensure next and last slides are below active slide */
+}

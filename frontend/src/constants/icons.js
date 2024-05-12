@@ -10,6 +10,8 @@ import Home from "../assets/Icons/home.svg"
 import Lightning from "../assets/Icons/lightning.svg"
 import LinkAngled from "../assets/Icons/link-angled.svg"
 import Lock from "../assets/Icons/lock.svg"
+import ArrowWhite from "../assets/Icons/arrowWhite.svg"
+import ArrowBlack from "../assets/Icons/arrowBlack.svg"
 
 const icons = {
   Mail,
@@ -23,7 +25,9 @@ const icons = {
   Home,
   Lightning,
   LinkAngled,
-  Lock
+  Lock,
+  ArrowWhite,
+  ArrowBlack
 }
 
 export default icons
