@@ -6,6 +6,7 @@ import Pfp2 from '../assets/Home Page Imgs/ProfilePicture2.svg'
 import Pfp3 from '../assets/Home Page Imgs/ProfilePicture3.svg'
 import LoginImg from '../assets/Auth Page Imgs/LoginImg.svg'
 import RegisterImg from '../assets/Auth Page Imgs/RegisterImg.svg'
+import ISFOLogo from '../assets/User Imgs/ISFOLogo.svg'
 const images = {
   Logo,
   AccueilImg,
@@ -14,7 +15,8 @@ const images = {
   Pfp2,
   Pfp3,
   LoginImg,
-  RegisterImg
+  RegisterImg,
+  ISFOLogo
 }
 
 export default images

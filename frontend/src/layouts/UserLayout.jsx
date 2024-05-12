@@ -2,7 +2,7 @@ import { useEffect, useRef } from "react";
 import UserNavbar from "../components/UserNavbar";
 import UserSidebar from "../components/UserSidebar";
 
-const UserLayout = () => {
+const UserLayout = ({ children }) => {
   const containerRef = useRef(null);
 
   useEffect(() => {
@@ -14,21 +14,28 @@ const UserLayout = () => {
       containerRef.current.classList.remove('overflow-y-scroll');
     }
   }, [children]);
-  
+
   return (
     <div className="flex font-poppins">
-      <div className="w-1/5 h-screen border-[#A6A6AA] border-r-2">
+      {/* Sidebar */}
+      <div className="w-1/5 h-screen">
         <UserSidebar />
       </div>
+
+      {/* Main Content Area */}
       <div className="flex flex-col w-4/5 h-screen">
-        <div className="h-1/5 border-[#A6A6AA] border-b-2">
+        {/* Navbar */}
+        <div className="h-[129px] border-black border-b-[1px]">
           <UserNavbar />
         </div>
-        <div className="h-4/5" ref={containerRef}>
+
+        {/* Content */}
+        <div className="h-[calc(100%-129px)]" ref={containerRef}>
           {children}
         </div>
       </div>
     </div>
+
   )
 };
 

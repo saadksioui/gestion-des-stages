@@ -12,6 +12,10 @@ import LinkAngled from "../assets/Icons/link-angled.svg"
 import Lock from "../assets/Icons/lock.svg"
 import ArrowWhite from "../assets/Icons/arrowWhite.svg"
 import ArrowBlack from "../assets/Icons/arrowBlack.svg"
+import File from "../assets/Icons/file.svg"
+import Support from "../assets/Icons/support.svg"
+import GraduationCap from "../assets/Icons/graduation-cap.svg"
+import ArrowContained from "../assets/Icons/arrow-down-contained.svg"
 
 const icons = {
   Mail,
@@ -27,7 +31,11 @@ const icons = {
   LinkAngled,
   Lock,
   ArrowWhite,
-  ArrowBlack
+  ArrowBlack,
+  File,
+  GraduationCap,
+  Support,
+  ArrowContained
 }
 
 export default icons

@@ -1,62 +1,40 @@
 import React from 'react';
-import 'bootstrap/dist/css/bootstrap.min.css';
 
 const ContactUsPage = () => {
     return (
-        <div className="container">
-            <div className="row">
-                <div className="col-md-3">
-                    <nav className="navbar navbar-expand-md navbar-light bg-light">
-                        <ul className="navbar-nav flex-column">
-                            <li className="nav-item">
-                                <h4 className="nav-link">Menu</h4>
-                            </li>
-                            <li className="nav-item">
-                                <a className="nav-link" href="#">Stage</a>
-                            </li>
-                            <li className="nav-item">
-                                <a className="nav-link" href="#">Documents</a>
-                            </li>
-                            <li className="nav-item">
-                                <a className="nav-link" href="#">Message</a>
-                            </li>
-                            <li className="nav-item">
-                                <a className="nav-link" href="#">Support</a>
-                            </li>
-                        </ul>
-                    </nav>
-                </div>
-                <div className="col-md-9">
+        <div className="container mx-auto">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="col-span-1 md:col-span-2">
                     <div className="contact-info">
-                        <h2>Contactez-Nous</h2>
-                        <div className="mb-3">
-                            <input type="text" className="form-control" placeholder="Nom" />
+                        <h2 className="text-2xl font-semibold mb-4">Contactez-Nous</h2>
+                        <div className="mb-4">
+                            <input type="text" className="border border-gray-300 rounded-md py-2 px-4 w-full" placeholder="Nom" />
                         </div>
-                        <div className="mb-3">
-                            <input type="text" className="form-control" placeholder="Prénom" />
+                        <div className="mb-4">
+                            <input type="text" className="border border-gray-300 rounded-md py-2 px-4 w-full" placeholder="Prénom" />
                         </div>
-                        <div className="mb-3">
-                            <input type="email" className="form-control" placeholder="Email" />
+                        <div className="mb-4">
+                            <input type="email" className="border border-gray-300 rounded-md py-2 px-4 w-full" placeholder="Email" />
                         </div>
-                        <div className="mb-3">
-                            <input type="tel" className="form-control" placeholder="Téléphone" />
+                        <div className="mb-4">
+                            <input type="tel" className="border border-gray-300 rounded-md py-2 px-4 w-full" placeholder="Téléphone" />
                         </div>
-                        <div className="mb-3">
-                            <textarea className="form-control" rows="5" placeholder="Message"></textarea>
+                        <div className="mb-4">
+                            <textarea className="border border-gray-300 rounded-md py-2 px-4 w-full" rows="5" placeholder="Message"></textarea>
                         </div>
                     </div>
                     <div className="additional-info">
-                        <div className="location">
-                            <img src="location_icon.png" alt="Location" />
-                            <p className="mb-0">Sidi Maarouf, Casablanca. Autoroute Casa-kech.</p>
+                        <div className="location flex items-center mb-4">
+                            <img src="location_icon.png" alt="Location" className="w-6 h-6 mr-2" />
+                            <p className="text-gray-600">Sidi Maarouf, Casablanca. Autoroute Casa-kech.</p>
                         </div>
-                        <div className="phone">
-                            <img src="phone_icon.png" alt="Téléphone" />
-                            <p className="mb-0">+212 645-789-123</p>
+                        <div className="phone flex items-center mb-4">
+                            <img src="phone_icon.png" alt="Téléphone" className="w-6 h-6 mr-2" />
+                            <p className="text-gray-600">+212 645-789-123</p>
                         </div>
-                        <div className="message">
-                            <img src="message_icon.png" alt="Message" />
-                            <p className="mb-0">Contact@ofppt.ma</p>
+                        <div className="message flex items-center mb-4">
+                            <img src="message_icon.png" alt="Message" className="w-6 h-6 mr-2" />
+                            <p className="text-gray-600">Contact@ofppt.ma</p>
                         </div>
                     </div>
                 </div>
