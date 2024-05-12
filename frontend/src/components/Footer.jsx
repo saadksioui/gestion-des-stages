@@ -19,7 +19,7 @@ const Footer = () => {
             </p>
             <p className="font-normal text-gray-100 flex gap-2 items-center">
               <img src={icons.Phone} alt="" />
-              <span>(+212)622 222 222</span>
+              <span>(+212) 622 222 222</span>
             </p>
             <p className="font-normal text-gray-100 flex gap-2 items-start">
               <img src={icons.Location} alt="" />
