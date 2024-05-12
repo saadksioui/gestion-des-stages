@@ -1,9 +1,9 @@
-
+import DefaultLayout from "../../layouts/DefaultLayout"
 const HomePage = () => {
   return (
-    <div>
+    <DefaultLayout>
       HomePage
-    </div>
+    </DefaultLayout>
   )
 };
 

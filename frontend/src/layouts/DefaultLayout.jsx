@@ -1,9 +1,9 @@
 import Footer from "../components/Footer";
 import Header from "../components/Header";
 
-const DefaultLayout = ({children}) => {
+const DefaultLayout = ({ children }) => {
   return (
-    <div>
+    <div className="font-poppins">
       <Header />
       {children}
       <Footer />

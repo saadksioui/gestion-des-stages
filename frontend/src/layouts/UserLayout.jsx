@@ -1,7 +1,7 @@
 
 const UserLayout = () => {
   return (
-    <div>
+    <div className="font-poppins">
       UserLayout
     </div>
   )
