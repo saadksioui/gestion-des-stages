@@ -35,3 +35,4 @@
   transition-duration: 1s;
   z-index: 1; /* Ensure next and last slides are below active slide */
 }
+

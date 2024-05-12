@@ -37,7 +37,7 @@ const Header = () => {
                 >
                   <li
                     key={index}
-                    className="text-white font-medium hover:font-semibold"
+                    className="text-white font-medium cursor-pointer hover:font-semibold"
                   >
                     {item.name}
                   </li>

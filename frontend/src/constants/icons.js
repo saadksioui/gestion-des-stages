@@ -14,8 +14,13 @@ import ArrowWhite from "../assets/Icons/arrowWhite.svg"
 import ArrowBlack from "../assets/Icons/arrowBlack.svg"
 import File from "../assets/Icons/file.svg"
 import Support from "../assets/Icons/support.svg"
+import Settings from "../assets/Icons/Settings.svg"
+import Logout from "../assets/Icons/Logout.svg"
 import GraduationCap from "../assets/Icons/graduation-cap.svg"
 import ArrowContained from "../assets/Icons/arrow-down-contained.svg"
+import ArrowSwitched from "../assets/Icons/arrow-switch-horizontal.svg"
+import Info from "../assets/Icons/Info.svg"
+import Edit from "../assets/Icons/Edit.svg"
 
 const icons = {
   Mail,
@@ -35,7 +40,12 @@ const icons = {
   File,
   GraduationCap,
   Support,
-  ArrowContained
+  ArrowContained,
+  Settings,
+  Logout,
+  Info,
+  Edit,
+  ArrowSwitched
 }
 
 export default icons
