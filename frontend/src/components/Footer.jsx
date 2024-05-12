@@ -30,15 +30,15 @@ const Footer = () => {
         <nav className="flex flex-col gap-[16px] w-44">
           <h6 className="font-bold mb-2">Réseaux sociaux</h6>
           <div className="flex flex-col gap-3">
-            <a href="#" className="font-normal text-gray-100 flex gap-2 items-center">
+            <a href="https://www.facebook.com" className="font-normal text-gray-100 flex gap-2 items-center">
               <img src={icons.Facebook} alt="" />
               E-stage
             </a>
-            <a href="#" className="font-normal text-gray-100 flex gap-2 items-center">
+            <a href="https://www.instagram.com" className="font-normal text-gray-100 flex gap-2 items-center">
               <img src={icons.Instagram} alt="" />
               e.stage
             </a>
-            <a href="#" className="font-normal text-gray-100 flex gap-2 items-center">
+            <a href="https://www.linkedin.com/" className="font-normal text-gray-100 flex gap-2 items-center">
               <img src={icons.Linkdin} alt="" />
               e.stage
             </a>
