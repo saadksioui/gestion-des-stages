@@ -1,8 +1,9 @@
 import DefaultLayout from "../../layouts/DefaultLayout"
+import Accueil from "./container/Accueil";
 const HomePage = () => {
   return (
     <DefaultLayout>
-      HomePage
+      <Accueil/>
     </DefaultLayout>
   )
 };

@@ -5,17 +5,14 @@ const Header = () => {
   const navItemsInfo = [
     {
       name: "Accueil",
-      type: "link",
       linkto: '/'
     },
     {
       name: "Caractéristiques",
-      type: "link",
       linkto: '#AboutUs'
     },
     {
       name: "Testimonial",
-      type: "link",
       linkto: '#ContactUs'
     }
   ]
