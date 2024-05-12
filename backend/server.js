@@ -4,6 +4,7 @@ const mongoose = require('mongoose')
 const connectDB = require('./config/db')
 const authRoute = require('./routes/authRoute')
 const stageRoute = require('./routes/stageRoutes')
+const candidatureRoute = require('./routes/candidatureRoutes')
 
 
 const app = express()
@@ -16,6 +17,7 @@ app.use(express.urlencoded({extended: false})) // Middleware for parsing urlenco
 
 app.use('/api/auth', authRoute);
 app.use('/api/stage', stageRoute);
+app.use('/api/candidature', candidatureRoute);
 
 app.listen(port, () => {
   console.log(`Server started on port ${port}`);

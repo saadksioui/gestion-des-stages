@@ -14,7 +14,7 @@ const SignUp = asyncHandler(async (req, res) => {
 
     //* Hash Password
     const hashedPassword = await bcrypt.hash(password, 10)
-
+    //todo : check the stg collection for the insciption code 
     //* Create User
     const user = await User.create(
       {

@@ -1,5 +1,4 @@
 const Stage = require('../models/Stage');
-
 const asyncHandler = require('express-async-handler')
 
 const getAllStages = asyncHandler(async (req, res) => {
