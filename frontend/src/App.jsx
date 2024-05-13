@@ -2,13 +2,13 @@ import { BrowserRouter, Routes, Route } from "react-router-dom"
 import HomePage from "./pages/home/HomePage";
 import LoginPage from "./pages/auth/LoginPage"
 import RegisterPage from "./pages/auth/RegisterPage"
-import ListeStage from "./pages/user/ListeStage";
+import ListeStage from "./pages/Stagiaire/ListeStage";
 import EntrepriseForm from "./components/EntrepriseForm";
 import Chat from "./pages/chat/Chat";
 import Contact from "./components/Contact";
 import StagiaireForm from "./components/StagiaireForm";
-import Demandes from "./pages/user/Demandes";
-import Documents from "./pages/user/Documents";
+import Demandes from "./pages/Stagiaire/Demandes";
+import Documents from "./pages/Stagiaire/Documents";
 
 
 const App = () => {
