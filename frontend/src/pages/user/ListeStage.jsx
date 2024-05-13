@@ -1,9 +1,22 @@
-import { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { icons } from "../../constants";
 import UserLayout from "../../layouts/UserLayout";
+import EntrepriseForm from "../../components/EntrepriseForm";
+import Swal from "sweetalert2";
 
 const ListeStage = () => {
   const containerRef = useRef(null);
+  const [isModalOpen, setIsModalOpen] = useState(false); // State to manage modal visibility
+  const [formValues, setFormValues] = useState({
+    titre: "",
+    description: "",
+    domaine: "",
+    localisation: "",
+    competencesRequises: "",
+    dateDebut: "",
+    duree: "",
+    typeStg: ""
+  });
 
   useEffect(() => {
     const containerHeight = containerRef.current.clientHeight;
@@ -14,10 +27,53 @@ const ListeStage = () => {
       containerRef.current.classList.remove('overflow-y-scroll');
     }
   }, []);
+
+  const handleOpenModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const emptyFields = Object.values(formValues).some(value => value.trim() === '');
+
+    if (emptyFields) {
+      Swal.fire({
+        iconColor: "black",
+        icon: "error",
+        title: "Oops…",
+        text: "Please fill in all required fields.",
+        confirmButtonColor: "black"
+      });
+      return;
+    }
+    setFormValues({
+      titre: "",
+      description: "",
+      domaine: "",
+      localisation: "",
+      competencesRequises: "",
+      dateDebut: "",
+      duree: "",
+      typeStg: ""
+    })
+    console.log("Form submitted:", formValues);
+    handleCloseModal();
+  };
+
+
+
   return (
     <UserLayout>
       <section className="px-10 mt-10">
         <h1 className="text-4xl font-bold">Liste des stages</h1>
+        {/* Button to open the modal */}
+        <button onClick={handleOpenModal} className="text-white bg-blue-500 hover:bg-blue-700 font-bold py-2 px-4 rounded mt-4">
+          Ajouter un stage
+        </button>
         <div className="my-6 flex items-center justify-between">
           <form action="" className="w-[308px] h-[47px] flex justify-between items-center px-3 border border-[#D6D6D6] rounded-xl bg-[#F6F6F6]">
             <select id="liste-domaines" className="outline-none rounded-xl w-full bg-[#F6F6F6] text-[#999999] pl-2">
@@ -159,8 +215,16 @@ const ListeStage = () => {
           </div>
         </div>
       </section>
+
+      {/* Render the Modal component */}
+      <EntrepriseForm
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+        handleSubmit={handleSubmit}
+        {...formValues}
+      />
     </UserLayout>
   )
 };
 
-export default ListeStage
+export default ListeStage;

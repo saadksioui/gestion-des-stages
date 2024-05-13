@@ -1,85 +1,78 @@
 import React, { useState } from 'react';
+import { FaXmark } from "react-icons/fa6";
+import Swal from 'sweetalert2';
 
-const EntrepriseForm = () => {
-    const [titre, setTitre] = useState('');
-    const [description, setDescription] = useState('');
-    const [domaine, setDomaine] = useState('');
-    const [localisation, setLocalisation] = useState('');
-    const [competencesRequises, setCompetencesRequises] = useState([]);
-    const [dateDebut, setDateDebut] = useState('');
-    const [duree, setDuree] = useState('');
-    const [typeStg, setTypestg] = useState('');
+const EntrepriseForm = ({ isOpen, onClose,handleSubmit, ...formValues }) => {
+    const [titreF, setTitreF] = useState(formValues.titre || '');
+    const [descriptionF, setDescriptionF] = useState(formValues.description || '');
+    const [domaineF, setDomaineF] = useState(formValues.domaine || '');
+    const [localisationF, setLocalisationF] = useState(formValues.localisation || '');
+    const [competencesRequisesF, setCompetencesRequisesF] = useState(formValues.competencesRequises || '');
+    const [dateDebutF, setDateDebutF] = useState(formValues.dateDebut || '');
+    const [dureeF, setDureeF] = useState(formValues.duree || '');
+    const [typeStgF, setTypeStgF] = useState(formValues.typeStg || '');
 
 
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        //...
-
-    };
+    if (!isOpen) return null;
 
     return (
-        <form onSubmit={handleSubmit}>
-            <div>
-                <div>
-                    <label>
-                        Titre:
-                        <input type="text" value={titre} onChange={(e) => setTitre(e.target.value)} />
-                    </label>
+        <div className="fixed inset-0 flex justify-center items-center bg-gray-800 bg-opacity-50">
+            <div className="bg-white h-[541px] my-5 overflow-y-scroll p-6 rounded-lg w-[80%] max-w-md">
+                <div className='flex items-center mb-4 justify-between'>
+                    <h2 className="text-2xl font-bold">Ajouter un stage</h2>
+                    <button className="size-10 border-2 border-black rounded-full flex items-center justify-center" onClick={onClose}>
+                        <FaXmark />
+                    </button>
                 </div>
-                <div>
-                    <label>
-                        Description:
-                        <textarea value={description} onChange={(e) => setDescription(e.target.value)} />
-                    </label>
-                </div>
-                <div>
-                    <label>
-                        Domaine:
-                        <input type="text" value={domaine} onChange={(e) => setDomaine(e.target.value)} />
-                    </label>
-                </div>
-                <div>
-                    <label>
-                        Localisation:
-                        <input type="text" value={localisation} onChange={(e) => setLocalisation(e.target.value)} />
-                    </label>
-                </div>
-                <div>
-                    <label>
-                        Compétences Requises:
-                        <input type="text" value={competencesRequises} onChange={(e) => setCompetencesRequises(e.target.value)} />
-                    </label>
-                </div>
-                <div>
-                    <label>
-                        Date de Début:
-                        <input type="date" value={dateDebut} onChange={(e) => setDateDebut(e.target.value)} />
-                    </label>
-                </div>
-                <div>
-                    <label>
-                        Durée:
-                        <select value={duree} onChange={(e) => setDuree(e.target.value)}>
+                <form onSubmit={handleSubmit} className="max-w-full">
+                    <div className="mb-4">
+                        <label htmlFor="titre" className="block text-gray-700 font-bold mb-2">Titre:</label>
+                        <input type="text" id="titre" value={titreF} onChange={(e) => setTitreF(e.target.value)} className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
+                    </div>
+                    <div className="mb-4">
+                        <label htmlFor="description" className="block text-gray-700 font-bold mb-2">Description:</label>
+                        <input type='text' id="description" value={descriptionF} onChange={(e) => setDescriptionF(e.target.value)} className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
+                    </div>
+                    <div className="mb-4">
+                        <label htmlFor="domaine" className="block text-gray-700 font-bold mb-2">Domaine:</label>
+                        <input type="text" id="domaine" value={domaineF} onChange={(e) => setDomaineF(e.target.value)} className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
+                    </div>
+                    <div className="mb-4">
+                        <label htmlFor="localisation" className="block text-gray-700 font-bold mb-2">Localisation:</label>
+                        <input type="text" id="localisation" value={localisationF} onChange={(e) => setLocalisationF(e.target.value)} className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
+                    </div>
+                    <div className="mb-4">
+                        <label htmlFor="competencesRequises" className="block text-gray-700 font-bold mb-2">Compétences Requises:</label>
+                        <input type="text" id="competencesRequises" value={competencesRequisesF} onChange={(e) => setCompetencesRequisesF(e.target.value)} className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
+                    </div>
+                    <div className="mb-4">
+                        <label htmlFor="dateDebut" className="block text-gray-700 font-bold mb-2">Date de Début:</label>
+                        <input type="date" id="dateDebut" value={dateDebutF} onChange={(e) => setDateDebutF(e.target.value)} className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
+                    </div>
+                    <div className="mb-4">
+                        <label htmlFor="duree" className="block text-gray-700 font-bold mb-2">Durée:</label>
+                        <select id="duree" value={dureeF} onChange={(e) => setDureeF(e.target.value)} className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
                             <option value="20Jours">20 Jours</option>
                             <option value="1Mois">1 Mois</option>
                             <option value="2Mois">2 Mois</option>
                             <option value="4Mois">4 Mois</option>
                             <option value="6Mois">6 Mois</option>
                         </select>
-                    </label></div>
-                <div>
-                    <label>
-                        Type de Stage:
-                        <select value={typeStg} onChange={(e) => setTypestg(e.target.value)}>
+                    </div>
+                    <div className="mb-4">
+                        <label htmlFor="typeStg" className="block text-gray-700 font-bold mb-2">Type de Stage:</label>
+                        <select id="typeStg" value={typeStgF} onChange={(e) => setTypeStgF(e.target.value)} className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
                             <option value="Observation">Observation et Initialisation</option>
                             <option value="Application">Application</option>
-                            <option value="findetudes">Fin D'études </option>
+                            <option value="findetudes">Fin D'études</option>
                         </select>
-                    </label></div>
-                <button className='bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded' type="submit">Soumettre</button>
+                    </div>
+                    <button className="bg-black hover:bg-gray-900 text-white font-bold py-2 px-4 rounded-xl w-full" type="submit">Soumettre</button>
+
+                </form>
             </div>
-        </form>
+        </div>
     );
 };
 
