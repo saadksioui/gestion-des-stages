@@ -59,8 +59,26 @@ const addIdsStg = async (req, res) => {
         res.status(400).json({ message: error.message });
     }
 };
+
+//! ---------------------- test 
+const getResponsableByUserId = async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        const responsable = await Responsable.find({ ids_stg: { $in: [id] } });
+
+        if (!responsable) {
+            return res.status(404).json({ message: 'No Responsable found for this user ID' });
+        }
+
+        res.json(responsable);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
 module.exports = {
     createResponsable,
     deleteResponsable,
-    addIdsStg
+    addIdsStg,
+    getResponsableByUserId
 };

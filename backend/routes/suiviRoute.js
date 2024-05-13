@@ -19,4 +19,7 @@ router.delete('/delete/:id', suiviController.deleteSuivi);
 
 // Delete chat
 router.put('/deletechat/:id', suiviController.deleteChat);
+
+router.put('/deleteChatMessage/:message_id', suiviController.deleteChatMessage);
+
 module.exports = router;

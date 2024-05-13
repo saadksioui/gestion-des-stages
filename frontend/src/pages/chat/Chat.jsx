@@ -1,53 +1,82 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import moment from 'moment'
 import { icons, images } from '../../constants';
 import UserLayout from '../../layouts/UserLayout';
+import axios from 'axios';
 
 const Chat = () => {
 
+  const [chatId, setChatId] = useState('6640f2bccab400624d11ff3c')
   const [newMsg, setNewMsg] = useState('')
-  const [messages, setMessages] = useState([
-    {
-      "id_utilisateur": "66401e144c2c4ce017a5ad2c",
-      "created_at": "2024-05-12T16:42:27.648Z",
-      "message": "First message",
-      "_id": "612c5eaffa5d5e312c14e8c5"
-    },
-    {
-      "id_utilisateur": "6640f198cab400624d11ff3a",
-      "created_at": "2024-05-12T16:42:27.648Z",
-      "message": "Second message",
-      "_id": "612c5eaffa5d5e312c14e8c6"
-    },
-    {
-      "id_utilisateur": "6640f198cab400624d11ff3a",
-      "created_at": "2024-05-12T16:51:20.598Z",
-      "message": "This is a new message.",
-      "_id": "6640f388cab400624d11ff40"
-    },
-    {
-      "id_utilisateur": "6640f198cab400624d11ff3a",
-      "created_at": "2024-05-13T07:48:38.731Z",
-      "message": "This is a new message  1.",
-      "_id": "6641c5d67185099b839ff4f3"
+  const [messages, setMessages] = useState([]);
+  const [Responsable, setResponsable] = useState([]);
+  const [User, setUser] = useState([]);
+  const storedData = localStorage.getItem("sessionToken");
+  let storedId;
+  
+  try {
+    if (storedData) {
+      storedId = storedData.split(",");
     }
-  ]);
+  } catch (error) {
+    console.error('Error parsing session token:', error);
+  }
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(`http://127.0.0.1:8000/api/suivi/show/${chatId}`);
+        setMessages(response.data.chat);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+    fetchData();
+  }, [messages]);
 
-  const handleMsg = (e) => {
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(`http://127.0.0.1:8000/api/responsable/show/${storedId[1]}`);
+        setResponsable(response.data);
+        const response1 = await axios.get(`http://127.0.0.1:8000/api/auth/findById/${storedId[1]}`);
+        setUser(response1.data);
+        console.log(response1.data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+    fetchData();
+  }, []);
+
+  const handleMsg = async(e) => {
     e.preventDefault();
     const newMessage = {
-      id_utilisateur: "66401e144c2c4ce017a5ad2c",
-      created_at: moment().format(),
+      id_utilisateur: storedId[1],
       message: newMsg,
-      _id: "6641c5d67185fsfds2339ff4f3"
     };
+    try {
+      //todo: add caht's Id
+      const response = await axios.put('http://127.0.0.1:8000/api/suivi/send/6640f2bccab400624d11ff3c', newMessage);
+    } catch (error) {
+        console.error('Error fetching data:', error);
+    }
+    
     setMessages([...messages, newMessage]);
     setNewMsg('');
   };
 
-  const handleMsgDelete = (e, id) => {
+  const handleMsgDelete = async(e, id) => {
     e.preventDefault();
-    setMessages(messages.filter(m => m._id !== id));
+    const data={
+      id:chatId
+    }
+    try {
+      await axios.put(`http://127.0.0.1:8000/api/suivi/deleteChatMessage/${id}`,data);
+  
+      console.log('Chat message deleted successfully');
+    } catch (error) {
+      console.error('Error deleting chat message:', error.message);
+    }
   };
 
 
@@ -56,33 +85,19 @@ const Chat = () => {
     <UserLayout>
       <div className='p-10 w-full h-full flex items-center gap-10'>
         <div className="users rounded-xl border h-full border-[#999999] w-1/3 flex flex-col overflow-y-scroll">
+          
           <div className="user">
-            <a href="#" className='flex items-center gap-5 border-b-[0.5px] border-[#999999] p-3'>
-              <img src={images.Pfp1} className='size-20' alt="" />
-              <div>
-                <p className='text-lg font-medium'>John Doe</p>
-                <p className='text-lg font-light'>johndoe@gmail.com</p>
-              </div>
-            </a>
-          </div>
-          <div className="user">
-            <a href="#" className='flex items-center gap-5 border-b-[0.5px] border-[#999999] p-3'>
-              <img src={images.Pfp1} className='size-20' alt="" />
-              <div>
-                <p className='text-lg font-medium'>John Doe</p>
-                <p className='text-lg font-light'>johndoe@gmail.com</p>
-              </div>
-            </a>
-          </div>
-          <div className="user">
-            <a href="#" className='flex items-center gap-5 border-b-[0.5px] border-[#999999] p-3'>
-              <img src={images.Pfp3} className='size-20' alt="" />
-              <div>
-                <p className='text-lg font-medium'>Michael Brown</p>
-                <p className='text-lg font-light'>michaelbrown@gmail.com</p>
-              </div>
-            </a>
-          </div>
+            {Responsable.map((Res)=>(
+              <a href="#" className='flex items-center gap-5 border-b-[0.5px] border-[#999999] p-3'>
+                <img src={images.Pfp1} className='size-20' alt="" />
+                <div>
+                  <p className='text-lg font-medium'>{Res.nom}</p>
+                  <p className='text-lg font-light'>{Res.email}</p>
+                </div>
+              </a>
+          ))}
+            </div>
+          
         </div>
         <div className='chatbox w-2/3 h-full flex flex-col gap-5'>
           <div className="chat h-[90%] border border-[#999999] rounded-t-xl">
@@ -90,8 +105,8 @@ const Chat = () => {
               <a href="#" className='flex items-center gap-5'>
                 <img src={images.Pfp1} className='size-20' alt="" />
                 <div>
-                  <p className='text-lg font-medium'>John Doe</p>
-                  <p className='text-lg font-light'>johndoe@gmail.com</p>
+                  <p className='text-lg font-medium'>{User.nom}</p>
+                  <p className='text-lg font-light'>{User.email}</p>
                 </div>
               </a>
             </div>
@@ -99,12 +114,12 @@ const Chat = () => {
               {messages.map((msg, index) => (
                 <div
                   key={index}
-                  className={`${msg.id_utilisateur === "66401e144c2c4ce017a5ad2c"
+                  className={`${msg.id_utilisateur === storedId[1]
                     ? "flex justify-end mb-4"
                     : "flex justify-start mb-4"
                     } text-2xl py-3 px-4 w-full`}
                 >
-                  <div className={`${msg.id_utilisateur === "66401e144c2c4ce017a5ad2c"
+                  <div className={`${msg.id_utilisateur === storedId[1]
                     ? "bg-black text-white"
                     : "bg-white text-black"
                     } text-2xl py-3 px-4 rounded-xl shadow-md flex items-center gap-2 w-fit`}>
@@ -114,11 +129,13 @@ const Chat = () => {
                         {moment(msg.created_at).fromNow()}
                       </span>
                     </div>
-                    <form onSubmit={()=>handleMsgDelete(msg._id)}>
+                    {msg.id_utilisateur === storedId[1] && (
+                    <form onSubmit={(e)=>handleMsgDelete(e,msg._id)}>
                       <button type='submit'>
                         <img src={icons.Delete} alt="" />
                       </button>
                     </form>
+                  )}
                   </div>
                 </div>
               ))}
