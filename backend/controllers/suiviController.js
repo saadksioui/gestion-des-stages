@@ -4,7 +4,7 @@ const Suivi = require('../models/Suivi');
 const getSuiviById = asyncHandler(async (req, res) => {
     try {
       const { id } = req.params;
-      const suivi = await Suivi.find({_id:id});
+      const suivi = await Suivi.findOne({_id:id});
       if (!suivi) {
         return res.status(404).json({ message: "Suivi not found" });
       }
@@ -89,12 +89,39 @@ const deleteChat = asyncHandler(async (req, res) => {
     }
   });
   
+
+  const deleteChatMessage = asyncHandler(async (req, res) => {
+    try {
+      const { id } = req.body;
+      const { message_id } = req.params;
+  
+      const updateQuery = {
+        $pull: { chat: { _id: message_id } }
+      };
+  
+      const updatedSuivi = await Suivi.updateOne(
+        { _id:id },
+        updateQuery
+      );
+  
+      if (updatedSuivi.nModified === 0) {
+        return res.status(404).json({ message: 'Chat message not found' });
+      }
+  
+      res.json({ message: 'Chat message deleted successfully' });
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+  
+
 module.exports = {
     getSuiviById,
     createSuivi,
     sendMessage,
     deleteSuivi,
     deleteChat,
-    getSuiviByIdResponsable
+    getSuiviByIdResponsable,
+    deleteChatMessage
 
   }

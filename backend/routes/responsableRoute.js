@@ -1,8 +1,10 @@
 const express = require('express');
 const router = express.Router();
-const { deleteResponsable,createResponsable,addIdsStg } = require('../controllers/responsableController');
+const { deleteResponsable,createResponsable,addIdsStg,getResponsableByUserId } = require('../controllers/responsableController');
 
 router.post('/add', createResponsable);
+
+router.get('/show/:id', getResponsableByUserId);
 
 // add ids for stagiaires
 router.put('/addIdsStg/:id', addIdsStg);
