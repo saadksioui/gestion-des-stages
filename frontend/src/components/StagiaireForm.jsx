@@ -1,7 +1,7 @@
 import { FaXmark } from "react-icons/fa6";
 import React, { useState } from 'react';
 
-const StgForm = () => {
+const StagiaireForm = () => {
   const [nomF, setNom] = useState('');
   const [prenomF, setPrenom] = useState('');
   const [telephoneF, setTelephone] = useState('');
@@ -24,40 +24,40 @@ const StgForm = () => {
   const handleSubmit = (e) => {
     e.preventDefault()
 
-  //   const emptyFields = [imgF, nomF, prenomF, telephoneF, emailF, cvF,].filter(field => field === '').length > 0;
+    //   const emptyFields = [imgF, nomF, prenomF, telephoneF, emailF, cvF,].filter(field => field === '').length > 0;
 
-  //   if (emptyFields) {
-  //     Swal.fire({
-  //       iconColor: "black",
-  //       icon: "error",
-  //       title: "Oops…",
-  //       text: "Please fill in all required fields.",
-  //       confirmButtonColor: "black"
-  //     });
-  //     return;
-  //   }
-  //   else {
-  //     const stgData = {
-  //       img: imgF,
-  //       nom: nomF,
-  //       prenom: prenomF,
-  //       telephone: telephoneF,
-  //       email: emailF,
-  //       cv: cvF,
-  //     }
+    //   if (emptyFields) {
+    //     Swal.fire({
+    //       iconColor: "black",
+    //       icon: "error",
+    //       title: "Oops…",
+    //       text: "Please fill in all required fields.",
+    //       confirmButtonColor: "black"
+    //     });
+    //     return;
+    //   }
+    //   else {
+    //     const stgData = {
+    //       img: imgF,
+    //       nom: nomF,
+    //       prenom: prenomF,
+    //       telephone: telephoneF,
+    //       email: emailF,
+    //       cv: cvF,
+    //     }
 
-  //     console.log("Form submitted:", stgData);
+    //     console.log("Form submitted:", stgData);
 
-  //     setImg('')
-  //     setNom('')
-  //     setPrenom('')
-  //     setTelephone('')
-  //     setEmail('')
-  //     setCv('')
+    //     setImg('')
+    //     setNom('')
+    //     setPrenom('')
+    //     setTelephone('')
+    //     setEmail('')
+    //     setCv('')
 
-  //     handleCloseModal();
-  //   }
-   }
+    //     handleCloseModal();
+    //   }
+  }
 
   return (
     <div className="fixed inset-0 flex justify-center items-center h-screen px-10 font-poppins cursor-cell">
@@ -74,59 +74,48 @@ const StgForm = () => {
               <div className="p-3 flex flex-col gap-2">
                 <label >
                   Image de profil:
-                  <input type="file"  accept="image/*" onChange={handleImgChange} className="border-2 border-[#99999] h-8 rounded-md py-2 px-2 outline-none" />
-                </label></div>
+                </label>
+                <input type="file" accept="image/*" onChange={handleImgChange} className="border-2 border-[#99999] rounded-md py-2 px-2 outline-none" />
+              </div>
+
+              <div className="p-3 flex flex-col gap-2">
+                <label >
+                  Téléphone:
+                </label>
+                <input type="tel" value={telephoneF} onChange={(e) => setTelephone(e.target.value)} className="border-2 border-[#99999] rounded-md py-2 px-2 outline-none" />
+              </div>
+              <div className="p-3 flex flex-col gap-2">
+                <label >
+                  CV (PDF):
+                </label>
+                <input type="file" accept=".pdf" onChange={handleCvChange} className="border-2 border-[#99999] rounded-md py-2 px-2 outline-none" />
+              </div>
             </div>
-            <div className="p-3 flex flex-col gap-2">
-              <label>
-                Nom:
-                <input type="text" value={nomF} onChange={(e) => setNom(e.target.value)} className="border-2 border-[#99999] h-8 rounded-md py-2 px-2 outline-none" />
-              </label></div>
-            <div className="p-3 flex flex-col gap-2">
-              <label >
-                Prénom:
-                <input type="text" value={prenomF} onChange={(e) => setPrenom(e.target.value)} className="border-2 border-[#99999] h-8 rounded-md py-2 px-2 outline-none" />
-              </label></div>
-            <div className="p-3 flex flex-col gap-2">
-              <label >
-                Téléphone:
-                <input type="tel" value={telephoneF} onChange={(e) => setTelephone(e.target.value)} className="border-2 border-[#99999] h-8 rounded-md py-2 px-2 outline-none" />
-              </label></div>
-            <div className="p-3 flex flex-col gap-2">
-              <label >
-                Email:
-                <input type="email" value={emailF} onChange={(e) => setEmail(e.target.value)} className="border-2 border-[#99999] h-8 rounded-md py-2 px-2 outline-none" />
-              </label></div>
-            <div className="p-3 flex flex-col gap-2">
-              <label >
-                CV (PDF):
-                <input type="file" accept=".pdf" onChange={handleCvChange} className="border-2 border-[#99999] h-8 rounded-md py-2 px-2 outline-none" />
-              </label></div>
+            <div className="flex items-center gap-20 my-4">
+              {imgF && (
+                <div className="p-3 flex flex-col gap-2">
+                  <p>Image de profil :</p>
+                  <img src={URL.createObjectURL(imgF)} alt="Image de profil" className="size-48 object-cover" />
+                </div>
+              )}
+              {cvF && (
+                <div className="p-3 flex flex-col gap-2">
+                  <p>CV (PDF) :</p>
+                  <iframe src={URL.createObjectURL(cvF)}  className="size-48 object-cover" type="application/pdf" />
+                </div>
+              )}
+            </div>
             <div className="flex justify-end gap-10 items-center border-t-[1px] border-[#99999] w-full pt-2">
-              <button  className="text-red-600">Fermer</button>
+              <button className="text-red-600">Fermer</button>
               <button type="submit" className="bg-black py-2 px-4 text-white rounded-xl flex items-center justify-center text-lg">
                 Ajouter
               </button>
             </div>
-            
-
           </form>
-          {imgF && (
-  <div className="p-3 flex flex-col gap-2">
-    <p>Image de profil :</p>
-    <img src={URL.createObjectURL(imgF)} alt="Image de profil" width="200" />
-  </div>
-)}
-{cvF && (
-  <div className="p-3 flex flex-col gap-2">
-    <p>CV (PDF) :</p>
-    <embed src={URL.createObjectURL(cvF)} width="200" height="200" type="application/pdf" />
-  </div>
-)}
         </div>
       </div>
     </div>
   );
 };
 
-export default StgForm;
+export default StagiaireForm;

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { icons, images } from "../constants";
+import { Link } from 'react-router-dom'
 
 const UserSidebar = () => {
   const [dropdown, setDropDown] = useState(false)
@@ -18,20 +19,20 @@ const UserSidebar = () => {
                   <img src={icons.GraduationCap} alt="" />
                   <span>Stage</span>
                 </div>
-                <button onClick={()=>setDropDown(!dropdown)}>
+                <button onClick={() => setDropDown(!dropdown)}>
                   <img src={icons.ArrowContained} className={`${dropdown ? 'rotate-180 duration-300' : 'rotate-0 duration-300'}`} alt="" />
                 </button>
               </div>
               <ul className={`${dropdown ? 'flex flex-col items-start gap-5 mt-5' : 'hidden'}`}>
                 <li>
-                  <a href="#">
+                  <Link to="/liste-stages">
                     Liste des stages
-                  </a>
+                  </Link>
                 </li>
                 <li>
-                  <a href="#">
+                  <Link to="/demandes">
                     Demandes
-                  </a>
+                  </Link>
                 </li>
               </ul>
 
@@ -40,9 +41,11 @@ const UserSidebar = () => {
               <img src={icons.File} alt="" />
               <span>Documents</span>
             </li>
-            <li className={`flex items-center gap-3`}>
-              <img src={icons.Mail} alt="" />
-              <span>Message</span>
+            <li>
+              <Link to={'/chat'}  className={`flex items-center gap-3`}>
+                <img src={icons.Mail} alt="" />
+                <span>Message</span>
+              </Link>
             </li>
           </ul>
         </div>

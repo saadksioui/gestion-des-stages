@@ -6,6 +6,8 @@ import ListeStage from "./pages/user/ListeStage";
 import EntrepriseForm from "./components/EntrepriseForm";
 import Chat from "./pages/chat/Chat";
 import Contact from "./components/Contact";
+import StagiaireForm from "./components/StagiaireForm";
+import Demandes from "./pages/user/Demandes";
 
 
 const App = () => {
@@ -18,10 +20,12 @@ const App = () => {
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/liste-stages" element={<ListeStage />} />
-          <Route path="/Form" element={<EntrepriseForm />} />
+          <Route path="/demandes" element={<Demandes />} />
+          <Route path="/entreprise-form" element={<EntrepriseForm />} />
+          <Route path="/stagaire-form" element={<StagiaireForm />} />
           <Route path="/chat" element={<Chat />} />
 
-          
+
         </Routes>
       </BrowserRouter>
 
