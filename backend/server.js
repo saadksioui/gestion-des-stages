@@ -6,6 +6,7 @@ const authRoute = require('./routes/authRoute')
 const stageRoute = require('./routes/stageRoutes')
 const candidatureRoute = require('./routes/candidatureRoutes')
 const suiviRoute = require('./routes/suiviRoute')
+const responsableRoute = require('./routes/responsableRoute')
 const cors = require('cors');
 
 const app = express()
@@ -21,6 +22,7 @@ app.use('/api/auth', authRoute);
 app.use('/api/stage', stageRoute);
 app.use('/api/candidature', candidatureRoute);
 app.use('/api/suivi', suiviRoute);
+app.use('/api/responsable', responsableRoute);
 
 app.listen(port, () => {
   console.log(`Server started on port ${port}`);
