@@ -4,6 +4,7 @@ import LoginPage from "./pages/auth/LoginPage"
 import RegisterPage from "./pages/auth/RegisterPage"
 import ContactUsPage from "./components/Contact";
 import ListeStage from "./pages/user/ListeStage";
+import EntrepriseForm from "./components/EntrepriseForm";
 
 const App = () => {
   return (
@@ -15,6 +16,7 @@ const App = () => {
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/contact" element={<ContactUsPage />} />
           <Route path="/liste-stages" element={<ListeStage />} />
+          <Route path="/Form" element={<EntrepriseForm />} />
         </Routes>
       </BrowserRouter>
 
