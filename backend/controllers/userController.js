@@ -29,6 +29,8 @@ const SignUp = asyncHandler(async (req, res) => {
         _id: user._id,
         nom: user.nom,
         email: user.email,
+        role:user.type_utilisateur,
+        img_url:user.img_url,
         token: generateToken(user._id)
       })
     } else {
@@ -52,6 +54,7 @@ const Login = asyncHandler(async (req, res) => {
       nom: user.nom,
       role:user.type_utilisateur,
       email: user.email,
+      img_url:user.img_url,
       token: generateToken(user._id),
     })
   } else {
@@ -66,7 +69,7 @@ const Login = asyncHandler(async (req, res) => {
 //* Generate token
 const generateToken = (id) => {
   return jwt.sign({id}, process.env.JWT_SECRET, {
-    expiresIn: "30d",
+    expiresIn: "24h",
   })
 }
 

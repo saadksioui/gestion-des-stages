@@ -19,7 +19,8 @@ const LoginPage = () => {
       const response = await axios.post('http://127.0.0.1:8000/api/auth/login', userData);
 
       if (response.data.token) {
-          localStorage.setItem('sessionToken', response.data.token);
+        const user =response.data
+          localStorage.setItem('sessionToken', [response.data.token,user._id]);
           window.location.replace(`http://localhost:5173/liste-stages`);
       } else {
           setMessage(response.data.message);
