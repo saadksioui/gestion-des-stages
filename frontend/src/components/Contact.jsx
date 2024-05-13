@@ -1,46 +1,62 @@
-import React from 'react';
+import { icons } from "../constants";
+import UserLayout from "../layouts/UserLayout";
 
-const ContactUsPage = () => {
+const Contact = () => {
     return (
-        <div className="container mx-auto">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div className="col-span-1 md:col-span-2">
-                    <div className="contact-info">
-                        <h2 className="text-2xl font-semibold mb-4">Contactez-Nous</h2>
-                        <div className="mb-4">
-                            <input type="text" className="border border-gray-300 rounded-md py-2 px-4 w-full" placeholder="Nom" />
-                        </div>
-                        <div className="mb-4">
-                            <input type="text" className="border border-gray-300 rounded-md py-2 px-4 w-full" placeholder="Prénom" />
-                        </div>
-                        <div className="mb-4">
-                            <input type="email" className="border border-gray-300 rounded-md py-2 px-4 w-full" placeholder="Email" />
-                        </div>
-                        <div className="mb-4">
-                            <input type="tel" className="border border-gray-300 rounded-md py-2 px-4 w-full" placeholder="Téléphone" />
-                        </div>
-                        <div className="mb-4">
-                            <textarea className="border border-gray-300 rounded-md py-2 px-4 w-full" rows="5" placeholder="Message"></textarea>
+        <UserLayout>
+            <section className="px-10 mt-10 w-full h-full">
+                <h1 className="text-5xl h-1/5 font-bold">Contact-Nous</h1>
+                <div className="w-full h-4/5 flex items-center gap-14">
+                    <div className="w-1/2 h-1/2 flex justify-center gap-5 items-center">
+                        <div>
+                            <h1 className="text-3xl font-semibold">Parlez avec nous</h1>
+                            <p className="text-2xl">Des questions, des commentaires ou des suggestions ? Remplissez simplement le formulaire et nous vous contacterons sous peu.</p>
+                            <div className="flex flex-col gap-3">
+                                <p className="font-normal flex gap-2 items-center">
+                                    <img src={icons.Mail} alt="" />
+                                    <span>e.stage@gmail.com</span>
+                                </p>
+                                <p className="font-normal flex gap-2 items-center">
+                                    <img src={icons.Phone} alt="" />
+                                    <span>(+212) 622 222 222</span>
+                                </p>
+                                <p className="font-normal flex gap-2 items-start">
+                                    <img src={icons.Location} alt="" />
+                                    <span>1029 Route Bouskoura, km 9, 20190 Casablanca</span>
+                                </p>
+                            </div>
                         </div>
                     </div>
-                    <div className="additional-info">
-                        <div className="location flex items-center mb-4">
-                            <img src="location_icon.png" alt="Location" className="w-6 h-6 mr-2" />
-                            <p className="text-gray-600">Sidi Maarouf, Casablanca. Autoroute Casa-kech.</p>
-                        </div>
-                        <div className="phone flex items-center mb-4">
-                            <img src="phone_icon.png" alt="Téléphone" className="w-6 h-6 mr-2" />
-                            <p className="text-gray-600">+212 645-789-123</p>
-                        </div>
-                        <div className="message flex items-center mb-4">
-                            <img src="message_icon.png" alt="Message" className="w-6 h-6 mr-2" />
-                            <p className="text-gray-600">Contact@ofppt.ma</p>
-                        </div>
+                    <div className="w-1/2 h-full">
+                        <form className="w-full h-1/2 flex flex-col gap-5">
+                            <div className="flex w-full items-center gap-10">
+                                <div className="p-3 w-1/2 flex flex-col gap-2 border rounded-xl">
+                                    <label htmlFor="prenom">Prénom</label>
+                                    <input type="text" placeholder="Votre prénom.." />
+                                </div>
+                                <div className="p-3 w-1/2 flex flex-col gap-2  border rounded-xl">
+                                    <label htmlFor="nom">Nom</label>
+                                    <input type="text" placeholder="Votre nom.." />
+                                </div>
+                            </div>
+                            <div className="w-full p-3 flex flex-col gap-2 border rounded-xl">
+                                <label htmlFor="email">Email</label>
+                                <input type="email" placeholder="Votre email.." />
+                            </div>
+                            <div className="w-full p-3 flex flex-col gap-2 border rounded-xl">
+                                <label htmlFor="phone">Phone Number</label>
+                                <input type="text" placeholder="Votre Numéro de téléphone.." />
+                            </div>
+                            <div className="w-full p-3 flex flex-col gap-2 border rounded-xl">
+                                <label htmlFor="message">Message</label>
+                                <input type="text" name="message" placeholder="Votre message.." required />
+                            </div>
+                        </form>
                     </div>
                 </div>
-            </div>
-        </div>
-    );
-}
+            </section>
+        </UserLayout>
+    )
+};
 
-export default ContactUsPage;
+export default Contact
