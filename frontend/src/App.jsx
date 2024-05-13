@@ -20,6 +20,8 @@ const App = () => {
           <Route path="/liste-stages" element={<ListeStage />} />
           <Route path="/Form" element={<EntrepriseForm />} />
           <Route path="/chat" element={<Chat />} />
+
+
         </Routes>
       </BrowserRouter>
 
