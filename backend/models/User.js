@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 
 const UserSchema = mongoose.Schema({
+    //todo : add groupe  to let resbonsable filters by groupe
     nom: {
         type:String,
         required:true
@@ -16,9 +17,6 @@ const UserSchema = mongoose.Schema({
     type_utilisateur: {
         type:String,
         default:'étudiant'
-    },
-    infos_specifiques: {
-        type:String
     },
     img_url: {
         type:String,

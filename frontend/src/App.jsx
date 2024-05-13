@@ -3,8 +3,10 @@ import HomePage from "./pages/home/HomePage";
 import LoginPage from "./pages/auth/LoginPage"
 import RegisterPage from "./pages/auth/RegisterPage"
 import ListeStage from "./pages/user/ListeStage";
+import EntrepriseForm from "./components/EntrepriseForm";
 import Chat from "./pages/chat/Chat";
 import Contact from "./components/Contact";
+
 
 const App = () => {
   return (
@@ -16,6 +18,7 @@ const App = () => {
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/liste-stages" element={<ListeStage />} />
+          <Route path="/Form" element={<EntrepriseForm />} />
           <Route path="/chat" element={<Chat />} />
         </Routes>
       </BrowserRouter>
