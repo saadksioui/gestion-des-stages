@@ -21,6 +21,8 @@ import ArrowContained from "../assets/Icons/arrow-down-contained.svg"
 import ArrowSwitched from "../assets/Icons/arrow-switch-horizontal.svg"
 import Info from "../assets/Icons/Info.svg"
 import Edit from "../assets/Icons/Edit.svg"
+import Delete from "../assets/Icons/Delete.svg"
+import Update from "../assets/Icons/Update.svg"
 
 const icons = {
   Mail,
@@ -45,7 +47,9 @@ const icons = {
   Logout,
   Info,
   Edit,
-  ArrowSwitched
+  ArrowSwitched,
+  Delete,
+  Edit
 }
 
 export default icons
