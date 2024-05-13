@@ -1,13 +1,17 @@
 import { icons, images } from "../constants";
 
 const UserNavbar = () => {
+  const Logout = () => {
+    localStorage.removeItem("sessionToken");
+    window.location.href = "http://localhost:5173/";
+  };
   return (
     <section className="px-10 flex items-center justify-end h-full">
       <div className="flex items-center gap-10">
         <div>
-          <a href="#">
-            <img src={icons.Logout} alt="" />
-          </a>
+          <button onClick={Logout}>
+            <img src={icons.Logout} alt="" onClick={()=>Logout}/>
+          </button>
         </div>
         <div>
           <a href="#">

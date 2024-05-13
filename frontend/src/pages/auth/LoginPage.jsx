@@ -1,13 +1,34 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import images from '../../constants/images';
+import axios from 'axios';
 
 const LoginPage = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [Message, setMessage] = useState();
+
 
   const handleLogin = async (e) => {
     e.preventDefault()
+    const userData = {
+      email: email,
+      password: password
+    };
+    try {
+      const response = await axios.post('http://127.0.0.1:8000/api/auth/login', userData);
+
+      if (response.data.token) {
+          localStorage.setItem('sessionToken', response.data.token);
+          window.location.replace(`http://localhost:5173/liste-stages`);
+      } else {
+          setMessage(response.data.message);
+          console.log(response.data.message);
+      }
+    } catch (error) {
+        console.error('Error fetching data:', error);
+        setMessage("Login failed. Please try again.");
+    }
   }
 
   return (
@@ -16,6 +37,11 @@ const LoginPage = () => {
         <img src={images.LoginImg} alt="Hero Img" />
       </div>
       <div className="w-1/2 h-full">
+        {Message ? (
+                <p className="bg-red-500 text-white mb-3 p-3">
+                    {Message}
+                </p>
+            ) : null}
         <div className='flex flex-col justify-center items-center h-full w-full'>
           <div className="head text-center">
             <h1 className="text-[40px] text-center font-extrabold mb-1">Welcome back</h1>

@@ -1,12 +1,15 @@
 import { useState } from "react";
 import { Link } from 'react-router-dom';
 import images from "../../constants/images";
-import Swal from 'sweetalert2'
+import Swal from 'sweetalert2';
+import axios from 'axios';
 
 const RegisterPage = () => {
   const [username, setUsername] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [Message, setMessage] = useState();
+
 
   const isEightOrMoreCharacters = password.length >= 8;
   const hasUppercaseAndLowercase = /[a-z]/.test(password) && /[A-Z]/.test(password);
@@ -17,7 +20,7 @@ const RegisterPage = () => {
     return condition ? 'bg-black' : 'bg-gray-400';
   };
 
-  const handleRegister = (e) => {
+  const handleRegister = async(e) => {
     e.preventDefault()
 
     const emptyFields = [username, email, password].filter(field => field === '').length > 0;
@@ -32,10 +35,23 @@ const RegisterPage = () => {
       });
     } else {
       const userData = {
-        username: username,
+        nom: username,
         email: email,
         password: password
       };
+      try {
+        const response = await axios.post('http://127.0.0.1:8000/api/auth/signup', userData);
+        
+        if (response.data.token) {
+            localStorage.setItem('sessionToken', response.data.token);
+            window.location.replace(`http://localhost:5173/liste-stages`);
+        } else {
+            setMessage(response.data.message);
+        }
+    } catch (error) {
+        console.error('Error fetching data:', error);
+        setMessage("Registration failed. Please try again.");
+    }
     }
   }
   return (
@@ -44,6 +60,13 @@ const RegisterPage = () => {
         <img src={images.RegisterImg} alt="Hero Img" />
       </div>
       <div className="w-1/2 h-full">
+      {Message ? (
+        <p className="bg-red-500 text-white mb-3 p-3">
+            {Message}
+        </p>
+    ) : null}
+
+
         <div className="flex flex-col justify-center items-center h-full w-full">
           <div className="head text-center">
             <h1 className="text-[40px] text-center font-extrabold mb-1">Create an account</h1>
@@ -52,7 +75,7 @@ const RegisterPage = () => {
           <div className="form mt-5 w-3/4">
             <form onSubmit={(e) => handleRegister(e)}>
               <div className="username flex flex-col mb-8">
-                <label htmlFor="username" className="text-[#6B778C] mb-1 ml-4 font-medium" >Username</label>
+                <label htmlFor="username" className="text-[#6B778C] mb-1 ml-4 font-medium" >Full name</label>
                 <input type="text" name="username" className="border border-[#C4C4C4] text-gray-600 py-2 px-4 rounded-lg outline-none" placeholder="Enter your username"  onChange={(e) => setUsername(e.target.value)} />
               </div>
               <div className="email flex flex-col mb-8">

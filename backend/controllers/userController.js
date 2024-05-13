@@ -9,7 +9,7 @@ const SignUp = asyncHandler(async (req, res) => {
   const takenEmail = await User.findOne({ email });
 
   if ( takenEmail) {
-    return res.status(400).json({ message: "Email has already been taken" });
+    return res.status(200).json({ message: "Email has already been taken" });
   } else {
 
     //* Hash Password
@@ -32,7 +32,7 @@ const SignUp = asyncHandler(async (req, res) => {
         token: generateToken(user._id)
       })
     } else {
-      res.status(400)
+      res.status(200)
       throw new Error('Invalid user data')
     }
   }

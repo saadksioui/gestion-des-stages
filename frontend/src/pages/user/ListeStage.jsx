@@ -117,7 +117,7 @@ const ListeStage = () => {
                         </td>
 
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
-                          2 mois
+                          5 mois
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
                           Full Stack
@@ -137,7 +137,7 @@ const ListeStage = () => {
                         </td>
 
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
-                          2 mois
+                          1 mois
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
                           Full Stack

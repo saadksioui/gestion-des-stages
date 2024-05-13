@@ -6,12 +6,13 @@ const authRoute = require('./routes/authRoute')
 const stageRoute = require('./routes/stageRoutes')
 const candidatureRoute = require('./routes/candidatureRoutes')
 const suiviRoute = require('./routes/suiviRoute')
-
+const cors = require('cors');
 
 const app = express()
 const port = process.env.PORT_ONE || 5000
 
 connectDB()
+app.use(cors()); //Cross-Origin Resource Sharing 
 
 app.use(express.json()) // Middleware for parsing JSON bodies
 app.use(express.urlencoded({extended: false})) // Middleware for parsing urlencoded bodies
