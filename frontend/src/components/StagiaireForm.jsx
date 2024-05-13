@@ -1,7 +1,7 @@
 import { FaXmark } from "react-icons/fa6";
 import React, { useState } from 'react';
 
-const StagiaireForm = () => {
+const StagiaireForm = ({ isOpen, onClose, handleCloseModal }) => {
   const [nomF, setNom] = useState('');
   const [prenomF, setPrenom] = useState('');
   const [telephoneF, setTelephone] = useState('');
@@ -58,13 +58,14 @@ const StagiaireForm = () => {
     //     handleCloseModal();
     //   }
   }
-
+  if (!isOpen) return null;
+  
   return (
     <div className="fixed inset-0 flex justify-center items-center h-screen px-10 font-poppins cursor-cell">
       <div className="border-2 border-black bg-white rounded-xl p-5">
         <div className='flex justify-between items-center border-b-[1px] border-[#99999] w-full pb-5'>
           <h1 className="text-2xl font-semibold">Ajouter Vos Information</h1>
-          <button className="size-10 flex items-center justify-center text-lg border-2 border-black rounded-full" >
+          <button onClick={onClose} className="size-10 flex items-center justify-center text-lg border-2 border-black rounded-full" >
             <FaXmark />
           </button>
         </div>
@@ -106,7 +107,7 @@ const StagiaireForm = () => {
               )}
             </div>
             <div className="flex justify-end gap-10 items-center border-t-[1px] border-[#99999] w-full pt-2">
-              <button className="text-red-600">Fermer</button>
+              <button onClick={onClose} className="text-red-600">Fermer</button>
               <button type="submit" className="bg-black py-2 px-4 text-white rounded-xl flex items-center justify-center text-lg">
                 Ajouter
               </button>

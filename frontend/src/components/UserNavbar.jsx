@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { icons, images } from "../constants";
 
 const UserNavbar = () => {
@@ -14,9 +15,9 @@ const UserNavbar = () => {
           </button>
         </div>
         <div>
-          <a href="#">
+          <Link to="/profile">
             <img src={images.Pfp1} className="size-12 object-cover rounded-full" alt="" />
-          </a>
+          </Link>
         </div>
         <div>
           <a href="#">

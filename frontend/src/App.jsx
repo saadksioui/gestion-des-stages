@@ -9,6 +9,7 @@ import Contact from "./components/Contact";
 import StagiaireForm from "./components/StagiaireForm";
 import Demandes from "./pages/Stagiaire/Demandes";
 import Documents from "./pages/Stagiaire/Documents";
+import Profile from "./pages/Stagiaire/Profile";
 
 
 const App = () => {
@@ -23,6 +24,7 @@ const App = () => {
           <Route path="/liste-stages" element={<ListeStage />} />
           <Route path="/demandes" element={<Demandes />} />
           <Route path="/documents" element={<Documents />} />
+          <Route path="/profile" element={<Profile />} />
           <Route path="/entreprise-form" element={<EntrepriseForm />} />
           <Route path="/stagaire-form" element={<StagiaireForm />} />
           <Route path="/chat" element={<Chat />} />
