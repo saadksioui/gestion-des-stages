@@ -2,14 +2,14 @@ import { FaXmark } from "react-icons/fa6";
 import React, { useState } from 'react';
 
 const StgForm = () => {
-  const [nom, setNom] = useState('');
-  const [prenom, setPrenom] = useState('');
-  const [telephone, setTelephone] = useState('');
-  const [email, setEmail] = useState('');
-  const [img, setImg] = useState(null);
-  const [cv, setCv] = useState(null);
+  const [nomF, setNom] = useState('');
+  const [prenomF, setPrenom] = useState('');
+  const [telephoneF, setTelephone] = useState('');
+  const [emailF, setEmail] = useState('');
+  const [imgF, setImg] = useState(null);
+  const [cvF, setCv] = useState(null);
   const [visible, setVisible] = useState(true);
-  const [redirect, setRedirect] = useState(false);
+
 
   const handleImgChange = (e) => {
     const file = e.target.files[0];
@@ -22,74 +22,108 @@ const StgForm = () => {
   };
 
   const handleSubmit = (e) => {
-    e.preventDefault();
-    //...
-  };
-  const onClose = () => {
-    setVisible(false);
-  };
+    e.preventDefault()
 
-  if (!visible) {
-    return null;}
+  //   const emptyFields = [imgF, nomF, prenomF, telephoneF, emailF, cvF,].filter(field => field === '').length > 0;
+
+  //   if (emptyFields) {
+  //     Swal.fire({
+  //       iconColor: "black",
+  //       icon: "error",
+  //       title: "Oops…",
+  //       text: "Please fill in all required fields.",
+  //       confirmButtonColor: "black"
+  //     });
+  //     return;
+  //   }
+  //   else {
+  //     const stgData = {
+  //       img: imgF,
+  //       nom: nomF,
+  //       prenom: prenomF,
+  //       telephone: telephoneF,
+  //       email: emailF,
+  //       cv: cvF,
+  //     }
+
+  //     console.log("Form submitted:", stgData);
+
+  //     setImg('')
+  //     setNom('')
+  //     setPrenom('')
+  //     setTelephone('')
+  //     setEmail('')
+  //     setCv('')
+
+  //     handleCloseModal();
+  //   }
+   }
 
   return (
-    <div className="fixed inset-0 flex justify-center items-center bg-gray-800 bg-opacity-50 cursor-cell">
-      <div className="bg-white h-[541px] my-5 overflow-y-scroll p-6 rounded-lg w-[80%] max-w-md">
-        <div className='flex items-center mb-4 justify-between'>
-          <h2 className="text-2xl font-bold">Ajouter Vos Information</h2>
-          <button className="size-10 border-2 border-black rounded-full flex items-center justify-center" onClick={onClose}>
+    <div className="fixed inset-0 flex justify-center items-center h-screen px-10 font-poppins cursor-cell">
+      <div className="border-2 border-black bg-white rounded-xl p-5">
+        <div className='flex justify-between items-center border-b-[1px] border-[#99999] w-full pb-5'>
+          <h1 className="text-2xl font-semibold">Ajouter Vos Information</h1>
+          <button className="size-10 flex items-center justify-center text-lg border-2 border-black rounded-full" >
             <FaXmark />
           </button>
         </div>
-        <form onSubmit={handleSubmit} className="max-w-full">
-          <div className="mb-4">
-            <label className="block text-gray-700 font-bold mb-2">
-              Image de profil:
-              <input type="file" accept="image/*" onChange={handleImgChange} className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
-            </label>
-          </div>
-          <div className="mb-4">
-            <label className="block text-gray-700 font-bold mb-2">
-              Nom:
-              <input type="text" value={nom} onChange={(e) => setNom(e.target.value)} className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
-            </label></div>
-          <div className="mb-4">
-            <label className="block text-gray-700 font-bold mb-2">
-              Prénom:
-              <input type="text" value={prenom} onChange={(e) => setPrenom(e.target.value)} className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
-            </label></div>
-          <div className="mb-4">
-            <label className="block text-gray-700 font-bold mb-2">
-              Téléphone:
-              <input type="tel" value={telephone} onChange={(e) => setTelephone(e.target.value)} className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
-            </label></div>
-          <div className="mb-4">
-            <label className="block text-gray-700 font-bold mb-2">
-              Email:
-              <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
-            </label></div>
-          <div className="mb-4">
-            <label className="block text-gray-700 font-bold mb-2">
-              CV (PDF):
-              <input type="file" accept=".pdf" onChange={handleCvChange} className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
-            </label></div>
-          <button className="bg-black hover:bg-gray-900 text-white font-bold py-2 px-4 rounded-xl w-full" type="submit" >Soumettre</button>
-
-
-          {img && (
-            <div className="mb-4">
-              <p className="block text-red-700 font-bold mb-2 content-center">Image de profil:</p>
-              <img class="rounded-full w-40 h-40  max-w-lg transition-all duration-300 cursor-pointer filter grayscale hover:grayscale-0 " src={URL.createObjectURL(img)} alt="Image de profil" width="200" />
+        <div className="my-3">
+          <form onSubmit={handleSubmit} >
+            <div className="grid grid-cols-3 gap-5">
+              <div className="p-3 flex flex-col gap-2">
+                <label >
+                  Image de profil:
+                  <input type="file"  accept="image/*" onChange={handleImgChange} className="border-2 border-[#99999] h-8 rounded-md py-2 px-2 outline-none" />
+                </label></div>
             </div>
-          )}
-          {cv && (
-            <div className="mb-4">
-              <p className="block text-red-700 font-bold mb-2 content-center">CV (PDF):</p>
-              <embed className="w-50 h-50    border border-gray-300 rounded-lh"src={URL.createObjectURL(cv)} width="200" height="200" type="application/pdf" />
+            <div className="p-3 flex flex-col gap-2">
+              <label>
+                Nom:
+                <input type="text" value={nomF} onChange={(e) => setNom(e.target.value)} className="border-2 border-[#99999] h-8 rounded-md py-2 px-2 outline-none" />
+              </label></div>
+            <div className="p-3 flex flex-col gap-2">
+              <label >
+                Prénom:
+                <input type="text" value={prenomF} onChange={(e) => setPrenom(e.target.value)} className="border-2 border-[#99999] h-8 rounded-md py-2 px-2 outline-none" />
+              </label></div>
+            <div className="p-3 flex flex-col gap-2">
+              <label >
+                Téléphone:
+                <input type="tel" value={telephoneF} onChange={(e) => setTelephone(e.target.value)} className="border-2 border-[#99999] h-8 rounded-md py-2 px-2 outline-none" />
+              </label></div>
+            <div className="p-3 flex flex-col gap-2">
+              <label >
+                Email:
+                <input type="email" value={emailF} onChange={(e) => setEmail(e.target.value)} className="border-2 border-[#99999] h-8 rounded-md py-2 px-2 outline-none" />
+              </label></div>
+            <div className="p-3 flex flex-col gap-2">
+              <label >
+                CV (PDF):
+                <input type="file" accept=".pdf" onChange={handleCvChange} className="border-2 border-[#99999] h-8 rounded-md py-2 px-2 outline-none" />
+              </label></div>
+            <div className="flex justify-end gap-10 items-center border-t-[1px] border-[#99999] w-full pt-2">
+              <button  className="text-red-600">Fermer</button>
+              <button type="submit" className="bg-black py-2 px-4 text-white rounded-xl flex items-center justify-center text-lg">
+                Ajouter
+              </button>
             </div>
-          )}
+            
 
-        </form>
+          </form>
+          {imgF && (
+  <div className="p-3 flex flex-col gap-2">
+    <p>Image de profil :</p>
+    <img src={URL.createObjectURL(imgF)} alt="Image de profil" width="200" />
+  </div>
+)}
+{cvF && (
+  <div className="p-3 flex flex-col gap-2">
+    <p>CV (PDF) :</p>
+    <embed src={URL.createObjectURL(cvF)} width="200" height="200" type="application/pdf" />
+  </div>
+)}
+        </div>
       </div>
     </div>
   );
