@@ -86,7 +86,7 @@ const Chat = () => {
         </div>
         <div className='chatbox w-2/3 h-full flex flex-col gap-5'>
           <div className="chat h-[90%] border border-[#999999] rounded-t-xl">
-            <div className="user min-h-[15%] max-h-fit p-3 border-b-[0.5px]">
+            <div className="user h-[25%] p-3 border-b-[0.5px]">
               <a href="#" className='flex items-center gap-5'>
                 <img src={images.Pfp1} className='size-20' alt="" />
                 <div>
@@ -95,7 +95,7 @@ const Chat = () => {
                 </div>
               </a>
             </div>
-            <div class="messages h-[85%] overflow-y-scroll w-full p-3 flex flex-col gap-3">
+            <div class="messages h-[75%] overflow-y-scroll w-full p-3 flex flex-col gap-3">
               {messages.map((msg, index) => (
                 <div
                   key={index}
