@@ -6,17 +6,7 @@ import Swal from "sweetalert2";
 
 const ListeStage = () => {
   const containerRef = useRef(null);
-  const [isModalOpen, setIsModalOpen] = useState(false); // State to manage modal visibility
-  const [formValues, setFormValues] = useState({
-    titre: "",
-    description: "",
-    domaine: "",
-    localisation: "",
-    competencesRequises: "",
-    dateDebut: "",
-    duree: "",
-    typeStg: ""
-  });
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     const containerHeight = containerRef.current.clientHeight;
@@ -34,34 +24,6 @@ const ListeStage = () => {
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const emptyFields = Object.values(formValues).some(value => value.trim() === '');
-
-    if (emptyFields) {
-      Swal.fire({
-        iconColor: "black",
-        icon: "error",
-        title: "Oops…",
-        text: "Please fill in all required fields.",
-        confirmButtonColor: "black"
-      });
-      return;
-    }
-    setFormValues({
-      titre: "",
-      description: "",
-      domaine: "",
-      localisation: "",
-      competencesRequises: "",
-      dateDebut: "",
-      duree: "",
-      typeStg: ""
-    })
-    console.log("Form submitted:", formValues);
-    handleCloseModal();
   };
 
 
@@ -220,8 +182,7 @@ const ListeStage = () => {
       <EntrepriseForm
         isOpen={isModalOpen}
         onClose={handleCloseModal}
-        handleSubmit={handleSubmit}
-        {...formValues}
+        handleCloseModal={handleCloseModal}
       />
     </UserLayout>
   )
