@@ -37,12 +37,14 @@ const UserSidebar = () => {
               </ul>
 
             </li>
-            <li className={`flex items-center gap-3`}>
-              <img src={icons.File} alt="" />
-              <span>Documents</span>
+            <li>
+              <Link to={'/documents'} className={`flex items-center gap-3`}>
+                <img src={icons.File} alt="" />
+                <span>Documents</span>
+              </Link>
             </li>
             <li>
-              <Link to={'/chat'}  className={`flex items-center gap-3`}>
+              <Link to={'/chat'} className={`flex items-center gap-3`}>
                 <img src={icons.Mail} alt="" />
                 <span>Message</span>
               </Link>
@@ -50,10 +52,10 @@ const UserSidebar = () => {
           </ul>
         </div>
         <div>
-          <a href="#" className={`flex items-center gap-3 text-white`}>
+          <Link to="/contact" className={`flex items-center gap-3 text-white`}>
             <img src={icons.Support} alt="" />
             <span>Support</span>
-          </a>
+          </Link>
         </div>
       </div>
     </section>

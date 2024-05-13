@@ -49,7 +49,7 @@ const icons = {
   Edit,
   ArrowSwitched,
   Delete,
-  Edit
+  Update
 }
 
 export default icons
