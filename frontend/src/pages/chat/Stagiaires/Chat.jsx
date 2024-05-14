@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import moment from 'moment'
-import { icons, images } from '../../../constants/index';
+import { icons, images } from '../../../constants';
 import UserLayout from '../../../layouts/UserLayout';
 import axios from 'axios';
 
@@ -47,7 +47,7 @@ const ChatStg = () => {
     fetchData();
   }, []);
 
-  const handleMsg = async (e) => {
+  const handleMsg = async(e) => {
     e.preventDefault();
     const newMessage = {
       id_utilisateur: storedId[1],
@@ -56,20 +56,20 @@ const ChatStg = () => {
     try {
       const response = await axios.put(`http://127.0.0.1:8000/api/suivi/send/${chatId}`, newMessage);
     } catch (error) {
-      console.error('Error fetching data:', error);
+        console.error('Error fetching data:', error);
     }
 
     setMessages([...messages, newMessage]);
     setNewMsg('');
   };
 
-  const handleMsgDelete = async (e, id) => {
+  const handleMsgDelete = async(e, id) => {
     e.preventDefault();
-    const data = {
-      id: chatId
+    const data={
+      id:chatId
     }
     try {
-      await axios.put(`http://127.0.0.1:8000/api/suivi/deleteChatMessage/${id}`, data);
+      await axios.put(`http://127.0.0.1:8000/api/suivi/deleteChatMessage/${id}`,data);
 
       console.log('Chat message deleted successfully');
     } catch (error) {
@@ -86,30 +86,30 @@ const ChatStg = () => {
         <div className="users rounded-xl border h-full border-[#999999] w-1/3 flex flex-col overflow-y-scroll">
 
           <div className="user">
-            {/* {Responsable?.map((Res) => (
+
               <a href="#" className='flex items-center gap-5 border-b-[0.5px] border-[#999999] p-3'>
-                <img src={images.Pfp1} className='size-20' alt="" />
+                <img src={`images_cv/${User.img_url}`} className='size-20 size-20 rounded-full' alt="" />
                 <div>
-                  <p className='text-lg font-medium'>{Res.nom}</p>
-                  <p className='text-lg font-light'>{Res.email}</p>
+                  <p className='text-lg font-medium'>{Responsable.nom}</p>
+                  <p className='text-lg font-light'>{Responsable.email}</p>
                 </div>
               </a>
-            ))} */}
-          </div>
+
+            </div>
 
         </div>
         <div className='chatbox w-2/3 h-full flex flex-col gap-5'>
           <div className="chat h-[90%] border border-[#999999] rounded-t-xl">
             <div className="user h-[25%] p-3 border-b-[0.5px]">
               <a href="#" className='flex items-center gap-5'>
-                <img src={`images_cv/${User.img_url}`} className='size-20 border border-black rounded-full' alt="" />
+                <img src={`images_cv/${User.img_url}`} className='size-20 rounded-full' alt="" />
                 <div>
-                  <p className='text-lg font-medium'>{User.nom}</p>
-                  <p className='text-lg font-light'>{User.email}</p>
+                  <p className='text-lg font-medium'>{Responsable.nom}</p>
+                  <p className='text-lg font-light'>{Responsable.email}</p>
                 </div>
               </a>
             </div>
-            <div class="messages h-[75%] overflow-y-scroll w-full p-3 flex flex-col gap-3">
+            <div className="messages h-[75%] overflow-y-scroll w-full p-3 flex flex-col gap-3">
               {messages.map((msg, index) => (
                 <div
                   key={index}
@@ -129,12 +129,12 @@ const ChatStg = () => {
                       </span>
                     </div>
                     {msg.id_utilisateur === storedId[1] && (
-                      <form onSubmit={(e) => handleMsgDelete(e, msg._id)}>
-                        <button type='submit'>
-                          <img src={icons.Delete} alt="" />
-                        </button>
-                      </form>
-                    )}
+                    <form onSubmit={(e)=>handleMsgDelete(e,msg._id)}>
+                      <button type='submit'>
+                        <img src={icons.Delete} alt="" />
+                      </button>
+                    </form>
+                  )}
                   </div>
                 </div>
               ))}
