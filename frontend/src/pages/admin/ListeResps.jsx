@@ -2,10 +2,13 @@ import axios from "axios";
 import AdminLayout from "../../layouts/AdminLayout";
 import { useEffect, useRef, useState } from "react";
 import { LuCheckCircle } from "react-icons/lu";
+import { FaPlus } from "react-icons/fa6";
+import AddResp from "../../components/AdminForms/AddResp";
 
 const ListeResps = () => {
   const containerRef = useRef(null);
   const [users, setUsers] = useState([])
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -36,10 +39,24 @@ const ListeResps = () => {
 
   }, []);
 
+  const handleOpenModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
+
   return (
     <AdminLayout>
-      <section className="px-10 mt-10">
-        <h1 className="text-4xl font-bold">Liste des stagiaires</h1>
+      <section className={`px-10 mt-10 ${isModalOpen ? 'opacity-25' : ''}`}>
+        <div className="flex justify-between items-center mt-5 mb-10">
+          <h1 className="text-4xl font-bold">Liste des stagiaires</h1>
+          <button onClick={handleOpenModal} className="flex items-center gap-4 rounded-lg px-4 py-2 bg-black text-white">
+            <FaPlus />
+            <span>Ajouter</span>
+          </button>
+        </div>
         <div className="my-6 flex items-center justify-center">
           <form action="" className="w-[425px] h-[72px] flex justify-between items-center px-3 border border-[#D6D6D6] rounded-xl bg-[#F6F6F6]">
             <input type="text" placeholder="Tapez quelque chose...." className="outline-none rounded-xl bg-[#F6F6F6] placeholder:text-[#999999] text-black pl-2" />
@@ -75,10 +92,10 @@ const ListeResps = () => {
                             </td>
 
                             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
-                            {responsable.email}
+                              {responsable.email}
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
-                            {responsable.telephone}
+                              {responsable.telephone}
                             </td>
                             <td className={`px-6 py-4 flex justify-start gap-5 whitespace-nowrap font-medium text-2xl text-[#00FF00] `}>
                               <LuCheckCircle />
@@ -94,6 +111,10 @@ const ListeResps = () => {
           </div>
         </div>
       </section>
+      <AddResp
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+      />
     </AdminLayout>
   )
 };

@@ -41,12 +41,12 @@ const ListeStage = () => {
 
   return (
     <UserLayout>
-      <section className="px-10 mt-10">
+      <section className={`px-10 mt-10 ${isModalOpen ? 'opacity-25' : ''}`}>
         <h1 className="text-4xl font-bold">Liste des stages</h1>
         {stored[2] === 'entreprise' ? <button onClick={handleOpenModal} className="text-white bg-blue-500 hover:bg-blue-700 font-bold py-2 px-4 rounded mt-4">
           Ajouter un stage
         </button> : null}
-        
+
         <div className="my-6 flex items-center justify-between">
           <form action="" className="w-[308px] h-[47px] flex justify-between items-center px-3 border border-[#D6D6D6] rounded-xl bg-[#F6F6F6]">
             <select id="liste-domaines" className="outline-none rounded-xl w-full bg-[#F6F6F6] text-[#999999] pl-2">

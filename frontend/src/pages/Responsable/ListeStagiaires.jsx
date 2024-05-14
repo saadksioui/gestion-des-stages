@@ -1,10 +1,29 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import UserLayout from "../../layouts/UserLayout";
-import { icons } from "../../constants";
 import { LuCheckCircle } from "react-icons/lu";
+import axios from "axios";
 
 const ListeStagiaires = () => {
   const containerRef = useRef(null);
+  const [users, setUsers] = useState([])
+
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const response1 = await axios.get(`http://127.0.0.1:8000/api/auth/users`);
+        setUsers(response1.data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchUsers()
+  }, [])
+  console.log(users);
+
+  const Stagiaires = users.filter(user => user.type_utilisateur === 'étudiant')
+
+
 
   useEffect(() => {
     const containerHeight = containerRef.current.clientHeight;
@@ -14,6 +33,7 @@ const ListeStagiaires = () => {
     } else {
       containerRef.current.classList.remove('overflow-y-scroll');
     }
+
   }, []);
   return (
     <UserLayout>
@@ -42,51 +62,25 @@ const ListeStagiaires = () => {
                       </tr>
                     </thead>
                     <tbody>
-                      <tr>
-                        <td className="px-6 py-4 whitespace-nowrap block w-52 truncate  text-sm font-medium text-gray-800">
-                          Ksioui Saad
-                        </td>
+                      {
+                        Stagiaires.map((stagiaire, index) => (
+                          <tr key={index}>
+                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
+                              {stagiaire.nom}
+                            </td>
 
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
-                          saad@gmail.com
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
-                          0691191101
-                        </td>
-                        <td className={`px-6 py-4 flex justify-start gap-5 whitespace-nowrap font-medium text-2xl text-[#00FF00] `}>
-                          <LuCheckCircle />
-                        </td>
-                      </tr>
-                      <tr>
-                        <td className="px-6 py-4 whitespace-nowrap block w-52 truncate  text-sm font-medium text-gray-800">
-                          Sedik Abdellah
-                        </td>
-
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
-                          abdellah@gmail.com
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
-                          0691191101
-                        </td>
-                        <td className={`px-6 py-4 flex justify-start gap-5 whitespace-nowrap font-medium text-2xl text-[#00FF00] `}>
-                          <LuCheckCircle />
-                        </td>
-                      </tr>
-                      <tr>
-                        <td className="px-6 py-4 whitespace-nowrap block w-52 truncate  text-sm font-medium text-gray-800">
-                          Benbouhia Aymen
-                        </td>
-
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
-                          aymen@gmail.com
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
-                          0691191101
-                        </td>
-                        <td className={`px-6 py-4 flex justify-start gap-5 whitespace-nowrap font-medium text-2xl text-[#00FF00] `}>
-                          <LuCheckCircle />
-                        </td>
-                      </tr>
+                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
+                              {stagiaire.email}
+                            </td>
+                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
+                              {stagiaire.telephone}
+                            </td>
+                            <td className={`px-6 py-4 flex justify-start gap-5 whitespace-nowrap font-medium text-2xl text-[#00FF00] `}>
+                              <LuCheckCircle />
+                            </td>
+                          </tr>
+                        ))
+                      }
 
                     </tbody>
                   </table>

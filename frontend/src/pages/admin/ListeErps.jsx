@@ -75,10 +75,10 @@ const ListeErps = () => {
                             </td>
 
                             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
-                            {entrprise.email}
+                              {entrprise.email}
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
-                            {entrprise.telephone}
+                              {entrprise.telephone}
                             </td>
                             <td className={`px-6 py-4 flex justify-start gap-5 whitespace-nowrap font-medium text-2xl text-[#00FF00] `}>
                               <LuCheckCircle />

@@ -16,6 +16,7 @@ import ListeStagiaires from "./pages/Responsable/ListeStagiaires";
 import ListeStgs from "./pages/admin/ListeStgs";
 import ListeResps from "./pages/admin/ListeResps";
 import ListeErps from "./pages/admin/ListeErps";
+import AddResp from "./components/AdminForms/AddResp";
 
 
 
@@ -39,15 +40,16 @@ const App = () => {
           <Route path="/stagaire-form" element={<StagiaireForm />} />
 
 
-         
+
 
           <Route path="/chat" element={<Chat />} />
           <Route path="/chatR" element={<ChatR />} />
-          
+
           <Route path="/verifystg" element={<VerifyStg />} />
           <Route path="/admin/liste-des-stagiaires" element={<ListeStgs />} />
           <Route path="/admin/liste-des-responsables" element={<ListeResps />} />
           <Route path="/admin/liste-des-entrprises" element={<ListeErps />} />
+          <Route path="/admin/addResp" element={<AddResp />} />
         </Routes>
       </BrowserRouter>
 

@@ -9,6 +9,7 @@ import axios from "axios";
 const Profile = () => {
   const [User, setUser] = useState([]);
   const storedData = localStorage.getItem("sessionToken");
+  const [isModalOpen, setIsModalOpen] = useState(false);
   let storedId;
 
   try {
@@ -29,7 +30,6 @@ const Profile = () => {
     };
     fetchData();
   }, []);
-  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleOpenModal = () => {
     setIsModalOpen(true);
@@ -40,7 +40,7 @@ const Profile = () => {
   };
   return (
     <UserLayout>
-      <section className="px-10 mt-10">
+      <section className={`px-10 mt-10 ${isModalOpen ? 'opacity-25' : ''}`}>
         <h1 className="text-4xl font-bold">Profile</h1>
         <div className="mt-10 p-10 flex gap-10 relative rounded-xl border border-[#999999]">
           <div>
