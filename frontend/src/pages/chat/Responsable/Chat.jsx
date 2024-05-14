@@ -4,7 +4,7 @@ import { icons, images } from '../../../constants';
 import UserLayout from '../../../layouts/UserLayout';
 import axios from 'axios';
 
-const Chat = () => {
+const ChatResp = () => {
 
   const [chatId, setChatId] = useState('6640f2bccab400624d11ff3c')
   const [newMsg, setNewMsg] = useState('')
@@ -155,4 +155,4 @@ const Chat = () => {
   );
 };
 
-export default Chat;
+export default ChatResp;

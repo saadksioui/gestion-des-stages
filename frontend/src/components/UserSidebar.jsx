@@ -44,7 +44,7 @@ const UserSidebar = () => {
               </Link>
             </li>
             <li>
-              <Link to={'/chat'} className={`flex items-center gap-3`}>
+              <Link to={'/stagiaire/chat'} className={`flex items-center gap-3`}>
                 <img src={icons.Mail} alt="" />
                 <span>Message</span>
               </Link>
