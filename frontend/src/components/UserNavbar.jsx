@@ -2,12 +2,13 @@ import { Link } from "react-router-dom";
 import { icons } from "../constants";
 import axios from 'axios';
 import { useEffect, useState } from "react";
+import Settings from "./Settings";
 
 const UserNavbar = () => {
   const [User, setUser] = useState([]);
   const storedData = localStorage.getItem("sessionToken");
   let storedId;
-  
+
   try {
     if (storedData) {
       storedId = storedData.split(",");
@@ -30,12 +31,22 @@ const UserNavbar = () => {
     localStorage.removeItem("sessionToken");
     window.location.href = "http://localhost:5173/";
   };
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleOpenModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
+
   return (
     <section className="px-10 flex items-center justify-end h-full">
       <div className="flex items-center gap-10">
         <div>
           <button onClick={Logout}>
-            <img src={icons.Logout} alt="" onClick={()=>Logout}/>
+            <img src={icons.Logout} alt="" onClick={() => Logout} />
           </button>
         </div>
         <div>
@@ -44,12 +55,17 @@ const UserNavbar = () => {
           </Link>
         </div>
         <div>
-          <a href="#">
+          <button onClick={isModalOpen ? handleCloseModal : handleOpenModal}>
             <img src={icons.Settings} alt="" />
-          </a>
+          </button>
         </div>
 
       </div>
+      {
+        isModalOpen && (
+          <Settings/>
+        )
+      }
     </section>
   )
 };

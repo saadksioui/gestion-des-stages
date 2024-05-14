@@ -6,7 +6,7 @@ const Contact = () => {
     return (
         <UserLayout>
             <div className="px-10 mt-10">
-                <h1 className="text-5xl h-1/6 mb-20 font-bold">Contact-Nous</h1>
+                <h1 className="text-5xl h-1/6 mb-20 font-bold">Contactez-Nous</h1>
                 <div className="w-full h-5/6 flex items-start gap-14">
                     <div className="w-1/2 h-1/2 flex justify-center gap-5 items-center">
                         <div className="flex flex-col gap-5">
