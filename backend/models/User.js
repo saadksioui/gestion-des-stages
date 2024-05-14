@@ -19,8 +19,8 @@ const UserSchema = mongoose.Schema({
         default:'étudiant'
     },
     img_url: {
-        type:String,
-        default: null
+        type: String,
+        default: '1.png'
     },
     cv_url: {
         type:String,

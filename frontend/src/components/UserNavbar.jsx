@@ -1,7 +1,31 @@
 import { Link } from "react-router-dom";
-import { icons, images } from "../constants";
+import { icons } from "../constants";
+import axios from 'axios';
+import { useEffect, useState } from "react";
 
 const UserNavbar = () => {
+  const [User, setUser] = useState([]);
+  const storedData = localStorage.getItem("sessionToken");
+  let storedId;
+  
+  try {
+    if (storedData) {
+      storedId = storedData.split(",");
+    }
+  } catch (error) {
+    console.error('Error parsing session token:', error);
+  }
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response1 = await axios.get(`http://127.0.0.1:8000/api/auth/findById/${storedId[1]}`);
+        setUser(response1.data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+    fetchData();
+  }, []);
   const Logout = () => {
     localStorage.removeItem("sessionToken");
     window.location.href = "http://localhost:5173/";
@@ -16,7 +40,7 @@ const UserNavbar = () => {
         </div>
         <div>
           <Link to="/profile">
-            <img src={images.Pfp1} className="size-12 object-cover rounded-full" alt="" />
+            <img src={`images/${User.img_url}`} className="size-12 object-cover rounded-full" alt="" />
           </Link>
         </div>
         <div>

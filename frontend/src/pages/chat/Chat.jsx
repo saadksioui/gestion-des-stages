@@ -40,7 +40,6 @@ const Chat = () => {
         setResponsable(response.data);
         const response1 = await axios.get(`http://127.0.0.1:8000/api/auth/findById/${storedId[1]}`);
         setUser(response1.data);
-        console.log(response1.data);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -55,8 +54,7 @@ const Chat = () => {
       message: newMsg,
     };
     try {
-      //todo: add caht's Id
-      const response = await axios.put('http://127.0.0.1:8000/api/suivi/send/6640f2bccab400624d11ff3c', newMessage);
+      const response = await axios.put(`http://127.0.0.1:8000/api/suivi/send/${chatId}`, newMessage);
     } catch (error) {
         console.error('Error fetching data:', error);
     }
@@ -81,13 +79,13 @@ const Chat = () => {
 
 
 
+  //todo : for seesion responsable show all stgs
   return (
     <UserLayout>
       <div className='p-10 w-full h-full flex items-center gap-10'>
         <div className="users rounded-xl border h-full border-[#999999] w-1/3 flex flex-col overflow-y-scroll">
           
           <div className="user">
-            //todo : for seesion responsable show all stgs
             {Responsable.map((Res)=>(
               <a href="#" className='flex items-center gap-5 border-b-[0.5px] border-[#999999] p-3'>
                 <img src={images.Pfp1} className='size-20' alt="" />
@@ -104,7 +102,7 @@ const Chat = () => {
           <div className="chat h-[90%] border border-[#999999] rounded-t-xl">
             <div className="user h-[25%] p-3 border-b-[0.5px]">
               <a href="#" className='flex items-center gap-5'>
-                <img src={images.Pfp1} className='size-20' alt="" />
+                <img src={`images/${User.img_url}`} className='size-20' alt="" />
                 <div>
                   <p className='text-lg font-medium'>{User.nom}</p>
                   <p className='text-lg font-light'>{User.email}</p>
