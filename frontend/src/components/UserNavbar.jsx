@@ -63,7 +63,9 @@ const UserNavbar = () => {
       </div>
       {
         isModalOpen && (
-          <Settings/>
+          <Settings
+            handleCloseModal={handleCloseModal}
+          />
         )
       }
     </section>
