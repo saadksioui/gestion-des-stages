@@ -5,6 +5,16 @@ import EntrepriseForm from "../../components/EntrepriseForm";
 import Swal from "sweetalert2";
 
 const ListeStage = () => {
+  const storedData = localStorage.getItem("sessionToken");
+  let stored;
+
+  try {
+    if (storedData) {
+      stored = storedData.split(",");
+    }
+  } catch (error) {
+    console.error('Error parsing session token:', error);
+  }
   const containerRef = useRef(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -32,10 +42,10 @@ const ListeStage = () => {
     <UserLayout>
       <section className="px-10 mt-10">
         <h1 className="text-4xl font-bold">Liste des stages</h1>
-        {/* Button to open the modal */}
-        <button onClick={handleOpenModal} className="text-white bg-blue-500 hover:bg-blue-700 font-bold py-2 px-4 rounded mt-4">
+        {stored[2] === 'responsable pédagogique' ? <button onClick={handleOpenModal} className="text-white bg-blue-500 hover:bg-blue-700 font-bold py-2 px-4 rounded mt-4">
           Ajouter un stage
-        </button>
+        </button> : null}
+        
         <div className="my-6 flex items-center justify-between">
           <form action="" className="w-[308px] h-[47px] flex justify-between items-center px-3 border border-[#D6D6D6] rounded-xl bg-[#F6F6F6]">
             <select id="liste-domaines" className="outline-none rounded-xl w-full bg-[#F6F6F6] text-[#999999] pl-2">
