@@ -15,6 +15,7 @@ const ListeStage = () => {
   } catch (error) {
     console.error('Error parsing session token:', error);
   }
+  console.log(stored[2]);
   const containerRef = useRef(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -42,7 +43,7 @@ const ListeStage = () => {
     <UserLayout>
       <section className="px-10 mt-10">
         <h1 className="text-4xl font-bold">Liste des stages</h1>
-        {stored[2] === 'responsable pédagogique' ? <button onClick={handleOpenModal} className="text-white bg-blue-500 hover:bg-blue-700 font-bold py-2 px-4 rounded mt-4">
+        {stored[2] === 'entreprise' ? <button onClick={handleOpenModal} className="text-white bg-blue-500 hover:bg-blue-700 font-bold py-2 px-4 rounded mt-4">
           Ajouter un stage
         </button> : null}
         

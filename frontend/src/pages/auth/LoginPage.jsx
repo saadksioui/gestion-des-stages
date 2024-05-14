@@ -20,7 +20,8 @@ const LoginPage = () => {
 
       if (response.data.token) {
         const user =response.data
-          localStorage.setItem('sessionToken', [response.data.token,user._id,user.type_utilisateur]);
+        console.log(user);
+          localStorage.setItem('sessionToken', [response.data.token,user._id,user.role]);
           window.location.replace(`http://localhost:5173/liste-stages`);
       } else {
           setMessage(response.data.message);
