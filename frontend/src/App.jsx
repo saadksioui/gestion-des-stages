@@ -4,7 +4,7 @@ import LoginPage from "./pages/auth/LoginPage"
 import RegisterPage from "./pages/auth/RegisterPage"
 import ListeStage from "./pages/Stagiaire/ListeStage";
 import EntrepriseForm from "./components/EntrepriseForm";
-import Chat from "./pages/chat/Chat";
+import Chat from "./pages/chat/Stagiaire/Chat";
 import Contact from "./components/Contact";
 import StagiaireForm from "./components/StagiaireForm";
 import Demandes from "./pages/Stagiaire/Demandes";

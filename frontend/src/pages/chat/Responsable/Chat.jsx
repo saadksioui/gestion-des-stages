@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import moment from 'moment'
-import { icons, images } from '../../constants';
-import UserLayout from '../../layouts/UserLayout';
+import { icons, images } from '../../../constants';
+import UserLayout from '../../../layouts/UserLayout';
 import axios from 'axios';
 
 const Chat = () => {
