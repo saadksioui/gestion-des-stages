@@ -16,7 +16,7 @@ const SignUp = asyncHandler(async (req, res) => {
 
     //* Hash Password
     const hashedPassword = await bcrypt.hash(password, 10)
-    //todo : check the stg collection for the insciption code 
+    //todo : check the stg collection for the insciption code
     //* Create User
     const user = await User.create(
       {
@@ -68,7 +68,7 @@ const Login = asyncHandler(async (req, res) => {
 });
 
 
-//todo : add authorization to all 
+//todo : add authorization to all
 //* Generate token
 const generateToken = (id) => {
   return jwt.sign({id}, process.env.JWT_SECRET, {
@@ -77,7 +77,7 @@ const generateToken = (id) => {
 }
 
 
-//* update password 
+//* update password
 const updatePassword = asyncHandler(async (req, res) => {
   const { id } = req.params;
   const { oldPassword, newPassword } = req.body;
@@ -101,7 +101,7 @@ const updatePassword = asyncHandler(async (req, res) => {
   res.json({ message: 'Password updated successfully' });
 });
 
-//* get user by id 
+//* get user by id
 const getUserById = asyncHandler(async (req, res) => {
   try {
     const { id } = req.params;
@@ -118,7 +118,7 @@ const getUserById = asyncHandler(async (req, res) => {
   }
 });
 
-// update user 
+// update user
 
 // Set storage engine
 const storage = multer.diskStorage({
@@ -132,7 +132,7 @@ const storage = multer.diskStorage({
 
 const upload = multer({
   storage: storage,
-  limits: { fileSize: 5 * 1024 * 1024 } 
+  limits: { fileSize: 5 * 1024 * 1024 }
 }).fields([{ name: 'img', maxCount: 1 }, { name: 'cv', maxCount: 1 }]);
 
 
@@ -172,7 +172,7 @@ const updateUser = asyncHandler(async (req, res) => {
           console.error('Error deleting old image file:', error);
         }
       }
-      
+
       if (oldCvFilename && oldCvFilename !== cvFilename) {
         try {
           const oldCvFilePath = path.join(__dirname, '../../frontend/public/images_cv', oldCvFilename);
@@ -188,6 +188,15 @@ const updateUser = asyncHandler(async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 });
+//* Get all users
+const getAllUsers = asyncHandler(async (req, res) => {
+  try {
+    const users = await User.find();
+    res.json(users);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
 
 
 
@@ -197,7 +206,9 @@ const updateUser = asyncHandler(async (req, res) => {
 module.exports = {
   SignUp,
   Login,
+  getAllUsers,
   getUserById,
-  updateUser,upload,
+  updateUser,
+  upload,
   updatePassword
 }
