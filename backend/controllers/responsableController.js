@@ -65,7 +65,7 @@ const getResponsableByUserId = async (req, res) => {
     try {
         const { id } = req.params;
 
-        const responsable = await Responsable.find({ ids_stg: { $in: [id] } });
+        const responsable = await Responsable.findOne({ ids_stg: { $in: [id] } });
 
         if (!responsable) {
             return res.status(404).json({ message: 'No Responsable found for this user ID' });

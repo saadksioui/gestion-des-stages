@@ -86,15 +86,15 @@ const Chat = () => {
         <div className="users rounded-xl border h-full border-[#999999] w-1/3 flex flex-col overflow-y-scroll">
           
           <div className="user">
-            {Responsable.map((Res)=>(
+            
               <a href="#" className='flex items-center gap-5 border-b-[0.5px] border-[#999999] p-3'>
                 <img src={images.Pfp1} className='size-20' alt="" />
                 <div>
-                  <p className='text-lg font-medium'>{Res.nom}</p>
-                  <p className='text-lg font-light'>{Res.email}</p>
+                  <p className='text-lg font-medium'>{Responsable.nom}</p>
+                  <p className='text-lg font-light'>{Responsable.email}</p>
                 </div>
               </a>
-          ))}
+          
             </div>
           
         </div>
@@ -104,8 +104,8 @@ const Chat = () => {
               <a href="#" className='flex items-center gap-5'>
                 <img src={`images_cv/${User.img_url}`} className='size-20' alt="" />
                 <div>
-                  <p className='text-lg font-medium'>{User.nom}</p>
-                  <p className='text-lg font-light'>{User.email}</p>
+                  <p className='text-lg font-medium'>{Responsable.nom}</p>
+                  <p className='text-lg font-light'>{Responsable.email}</p>
                 </div>
               </a>
             </div>
