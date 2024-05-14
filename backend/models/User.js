@@ -22,6 +22,10 @@ const UserSchema = mongoose.Schema({
         type: String,
         default: '1.png'
     },
+    telephone: {
+        type: String,
+        default: null
+    },
     cv_url: {
         type:String,
         default: null

@@ -2,7 +2,9 @@ const User = require('../models/User')
 const asyncHandler = require('express-async-handler')
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
-
+const multer = require('multer');
+const path = require('path');
+const fs = require('fs');
 
 const SignUp = asyncHandler(async (req, res) => {
   const {nom , email, password} = req.body;
@@ -90,8 +92,84 @@ const getUserById = asyncHandler(async (req, res) => {
   }
 });
 
+// update user 
+
+// Set storage engine
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, '../frontend/public/images_cv');
+  },
+  filename: function (req, file, cb) {
+    cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
+  }
+});
+
+const upload = multer({
+  storage: storage,
+  limits: { fileSize: 5 * 1024 * 1024 } 
+}).fields([{ name: 'img', maxCount: 1 }, { name: 'cv', maxCount: 1 }]);
+
+
+
+
+const updateUser = asyncHandler(async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { telephone } = req.body;
+
+    const user = await User.findOne({_id:id});
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    const oldImgFilename = user.img_url;
+    const oldCvFilename = user.cv_url;
+
+    const imgFilename = req.files.img[0].filename;
+    const cvFilename = req.files.cv[0].filename;
+
+    const updateData = {
+      img_url: imgFilename,
+      cv_url: cvFilename,
+      telephone
+    };
+
+    const updatedUser = await User.updateOne({ _id: id }, { $set: updateData });
+    if (updatedUser){
+      // Delete old image and CV files
+      try {
+        if (oldImgFilename !== imgFilename) {
+          const oldImgFilePath = path.join(__dirname, '../frontend/public/images_cv', oldImgFilename);
+          fs.unlinkSync(oldImgFilePath);
+        }
+      } catch (error) {
+        console.error('Error deleting old image file:', error);
+      }
+      
+      try {
+        if (oldCvFilename !== cvFilename) {
+          const oldCvFilePath = path.join(__dirname, '../frontend/public/images_cv', oldCvFilename);
+          fs.unlinkSync(oldCvFilePath);
+        }
+      } catch (error) {
+        console.error('Error deleting old CV file:', error);
+      }
+    }
+
+    
+    
+
+    res.json({ message: 'User updated successfully' });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+
+
 module.exports = {
   SignUp,
   Login,
-  getUserById
+  getUserById,
+  updateUser,upload
 }
