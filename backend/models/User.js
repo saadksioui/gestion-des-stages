@@ -24,7 +24,7 @@ const UserSchema = mongoose.Schema({
     },
     telephone: {
         type: String,
-        default: null
+        default: '0000000000'
     },
     cv_url: {
         type:String,

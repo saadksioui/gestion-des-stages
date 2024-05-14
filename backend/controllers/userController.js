@@ -4,7 +4,7 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const multer = require('multer');
 const path = require('path');
-const fs = require('fs');
+const fs = require('fs').promises;
 
 const SignUp = asyncHandler(async (req, res) => {
   const {nom , email, password} = req.body;
@@ -112,6 +112,7 @@ const upload = multer({
 
 
 
+
 const updateUser = asyncHandler(async (req, res) => {
   try {
     const { id } = req.params;
@@ -136,23 +137,23 @@ const updateUser = asyncHandler(async (req, res) => {
 
     const updatedUser = await User.updateOne({ _id: id }, { $set: updateData });
     if (updatedUser) {
-      // Delete old image and CV files
-      try {
-        if (oldImgFilename !== imgFilename) {
+      // Delete old image and CV files using fs.promises.unlink
+      if (oldImgFilename && oldImgFilename !== imgFilename) {
+        try {
           const oldImgFilePath = path.join(__dirname, '../../frontend/public/images_cv', oldImgFilename);
-          fs.unlinkSync(oldImgFilePath);
+          await fs.unlink(oldImgFilePath); // Use fs.promises.unlink
+        } catch (error) {
+          console.error('Error deleting old image file:', error);
         }
-      } catch (error) {
-        console.error('Error deleting old image file:', error);
       }
       
-      try {
-        if (oldCvFilename !== cvFilename) {
+      if (oldCvFilename && oldCvFilename !== cvFilename) {
+        try {
           const oldCvFilePath = path.join(__dirname, '../../frontend/public/images_cv', oldCvFilename);
-          fs.unlinkSync(oldCvFilePath);
+          await fs.unlink(oldCvFilePath); // Use fs.promises.unlink
+        } catch (error) {
+          console.error('Error deleting old CV file:', error);
         }
-      } catch (error) {
-        console.error('Error deleting old CV file:', error);
       }
     }
 
@@ -161,6 +162,8 @@ const updateUser = asyncHandler(async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 });
+
+
 
 
 

@@ -1,7 +1,7 @@
 import { images } from "../../constants";
 import UserLayout from "../../layouts/UserLayout";
 import { IoMail } from "react-icons/io5";
-import { FaBarcode, FaGraduationCap } from "react-icons/fa6";
+import { FaBarcode, FaGraduationCap,FaPhone } from "react-icons/fa6";
 import StagiaireForm from "../../components/StagiaireForm";
 import { useEffect, useState } from "react";
 import axios from "axios";
@@ -56,6 +56,10 @@ const Profile = () => {
               <p className="text-xl font-medium text-[#999999] flex items-center gap-4">
                 <FaGraduationCap />
                 <span>Diplome: TSWFS</span>
+              </p>
+              <p className="text-xl font-medium text-[#999999] flex items-center gap-4">
+                <FaPhone />
+                <span>{User.telephone}</span>
               </p>
               <p className="text-xl font-medium text-[#999999] flex items-center gap-4">
                 <FaBarcode />
