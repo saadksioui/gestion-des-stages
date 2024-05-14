@@ -9,5 +9,7 @@ router.post('/login', authController.Login)
 router.get('/findById/:id', authController.getUserById)
 router.post('/update/:id', authController.upload, authController.updateUser);
 
+router.post('/update-password/:id', authController.updatePassword);
+
 
 module.exports = router

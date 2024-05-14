@@ -1,15 +1,28 @@
+import axios from "axios";
 import { useState } from "react";
 import Swal from "sweetalert2";
 
 const Settings = ({ handleCloseModal }) => {
+  const storedData = localStorage.getItem("sessionToken");
+  let storedId;
+
+  try {
+    if (storedData) {
+      storedId = storedData.split(",");
+    }
+  } catch (error) {
+    console.error('Error parsing session token:', error);
+  }
+  
+
   const [currentPwd, setCurrentPwd] = useState('')
   const [newPwd, setNewPwd] = useState('')
   const [confirmPwd, setConfirmPwd] = useState('')
-  const handleUpdate = (e) => {
-    e.preventDefault()
-
+  const handleUpdate = async (e) => {
+    e.preventDefault();
+  
     const emptyFields = [currentPwd, newPwd, confirmPwd].filter(field => field === '').length > 0;
-
+  
     if (emptyFields) {
       Swal.fire({
         iconColor: "black",
@@ -19,23 +32,49 @@ const Settings = ({ handleCloseModal }) => {
         confirmButtonColor: "black"
       });
       return;
-    }
-    else {
-      const passwordData = {
-        currentPwd: currentPwd,
-        newPwd: newPwd,
-        confirmPwd: confirmPwd,
+    } else if (newPwd !== confirmPwd) {
+      Swal.fire({
+        iconColor: "black",
+        icon: "error",
+        title: "Oops…",
+        text: "New password and confirm password do not match.",
+        confirmButtonColor: "black"
+      });
+      return;
+    } else {
+      try {
+        await axios.post(`http://127.0.0.1:8000/api/auth/update-password/${storedId[1]}`, {
+          oldPassword: currentPwd,
+          newPassword: newPwd
+        });
+  
+        setCurrentPwd('');
+        setNewPwd('');
+        setConfirmPwd('');
+  
+        
+        Swal.fire({
+          iconColor: "black",
+          icon: "success",
+          title: "Success",
+          text: "Password updated successfully.",
+          confirmButtonColor: "black"
+        });
+
+        handleCloseModal();
+      } catch (error) {
+        console.error('Error updating password:', error.message);
+        Swal.fire({
+          iconColor: "black",
+          icon: "error",
+          title: "Error",
+          text: error.message,
+          confirmButtonColor: "black"
+        });
       }
-
-      console.log("Password updated:", passwordData);
-
-      setCurrentPwd('')
-      setNewPwd('')
-      setConfirmPwd('')
-
-      handleCloseModal();
     }
-  }
+  };
+  
 
   return (
     <div className="absolute z-10 top-32 bg-[#f8f8f8] right-4 w-1/4 h-fit rounded-lg shadow-md px-10 py-5 font-poppins">

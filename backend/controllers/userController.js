@@ -68,12 +68,38 @@ const Login = asyncHandler(async (req, res) => {
 });
 
 
+//todo : add authorization to all 
 //* Generate token
 const generateToken = (id) => {
   return jwt.sign({id}, process.env.JWT_SECRET, {
     expiresIn: "24h",
   })
 }
+
+
+//* update password 
+const updatePassword = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+  const { oldPassword, newPassword } = req.body;
+
+  const user = await User.findOne({_id:id});
+
+  if (!user) {
+    return res.status(404).json({ message: 'User not found' });
+  }
+
+  const isPasswordValid = await bcrypt.compare(oldPassword, user.password);
+  if (!isPasswordValid) {
+    return res.status(200).json({ message: 'Invalid old password' });
+  }
+
+  const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+  user.password = hashedPassword;
+  await User.updateOne({_id:id},{$set:{password:hashedPassword}});
+
+  res.json({ message: 'Password updated successfully' });
+});
 
 //* get user by id 
 const getUserById = asyncHandler(async (req, res) => {
@@ -172,5 +198,6 @@ module.exports = {
   SignUp,
   Login,
   getUserById,
-  updateUser,upload
+  updateUser,upload,
+  updatePassword
 }
