@@ -117,7 +117,7 @@ const updateUser = asyncHandler(async (req, res) => {
     const { id } = req.params;
     const { telephone } = req.body;
 
-    const user = await User.findOne({_id:id});
+    const user = await User.findOne({ _id: id });
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
@@ -135,11 +135,11 @@ const updateUser = asyncHandler(async (req, res) => {
     };
 
     const updatedUser = await User.updateOne({ _id: id }, { $set: updateData });
-    if (updatedUser){
+    if (updatedUser) {
       // Delete old image and CV files
       try {
         if (oldImgFilename !== imgFilename) {
-          const oldImgFilePath = path.join(__dirname, '../frontend/public/images_cv', oldImgFilename);
+          const oldImgFilePath = path.join(__dirname, '../../frontend/public/images_cv', oldImgFilename);
           fs.unlinkSync(oldImgFilePath);
         }
       } catch (error) {
@@ -148,7 +148,7 @@ const updateUser = asyncHandler(async (req, res) => {
       
       try {
         if (oldCvFilename !== cvFilename) {
-          const oldCvFilePath = path.join(__dirname, '../frontend/public/images_cv', oldCvFilename);
+          const oldCvFilePath = path.join(__dirname, '../../frontend/public/images_cv', oldCvFilename);
           fs.unlinkSync(oldCvFilePath);
         }
       } catch (error) {
@@ -156,14 +156,12 @@ const updateUser = asyncHandler(async (req, res) => {
       }
     }
 
-    
-    
-
     res.json({ message: 'User updated successfully' });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 });
+
 
 
 
