@@ -3,12 +3,14 @@ import { Link } from 'react-router-dom';
 import images from "../../constants/images";
 import Swal from 'sweetalert2';
 import axios from 'axios';
+import VerifyStg from "../../components/VerifyStg";
 
 const RegisterPage = () => {
   const [username, setUsername] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [Message, setMessage] = useState();
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
 
   const isEightOrMoreCharacters = password.length >= 8;
@@ -18,6 +20,14 @@ const RegisterPage = () => {
 
   const getColor = (condition) => {
     return condition ? 'bg-black' : 'bg-gray-400';
+  };
+
+  const handleOpenModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
   };
 
   const handleRegister = async(e) => {
@@ -41,7 +51,7 @@ const RegisterPage = () => {
       };
       try {
         const response = await axios.post('http://127.0.0.1:8000/api/auth/signup', userData);
-        
+
         if (response.data.token) {
             const user =response.data
             localStorage.setItem('sessionToken', [response.data.token,user._id]);
@@ -56,7 +66,8 @@ const RegisterPage = () => {
     }
   }
   return (
-    <section className="flex h-screen justify-center gap-10 items-center font-poppins">
+    <div>
+      <section className="flex h-screen justify-center gap-10 items-center font-poppins">
       <div className="flex justify-center items-center w-1/2 h-full bg-black">
         <img src={images.RegisterImg} alt="Hero Img" />
       </div>
@@ -105,13 +116,22 @@ const RegisterPage = () => {
                   </div>
                 </div>
               </div>
-              <button type='submit' className="w-full py-2 bg-black text-white rounded-xl font-medium">Create an account</button>
+              <button onClick={isModalOpen ? handleCloseModal : handleOpenModal} className="w-full py-2 bg-black text-white rounded-xl font-medium">Create an account</button>
             </form>
           </div>
         </div>
       </div>
 
     </section>
+    {
+      isModalOpen && (
+        <VerifyStg
+          handleCloseModal={handleCloseModal}
+          handleRegister={handleRegister}
+        />
+      )
+    }
+    </div>
   )
 };
 

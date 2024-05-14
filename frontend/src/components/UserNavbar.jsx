@@ -7,6 +7,7 @@ import Settings from "./Settings";
 const UserNavbar = () => {
   const [User, setUser] = useState([]);
   const storedData = localStorage.getItem("sessionToken");
+  const [isModalOpen, setIsModalOpen] = useState(false);
   let storedId;
 
   try {
@@ -31,7 +32,6 @@ const UserNavbar = () => {
     localStorage.removeItem("sessionToken");
     window.location.href = "http://localhost:5173/";
   };
-  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleOpenModal = () => {
     setIsModalOpen(true);
