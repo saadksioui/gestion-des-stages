@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import moment from 'moment'
-import { icons, images } from '../../constants';
-import UserLayout from '../../layouts/UserLayout';
+import { icons, images } from '../../../constants';
+import UserLayout from '../../../layouts/UserLayout';
 import axios from 'axios';
 
 const Chat = () => {
@@ -86,15 +86,15 @@ const Chat = () => {
         <div className="users rounded-xl border h-full border-[#999999] w-1/3 flex flex-col overflow-y-scroll">
           
           <div className="user">
-            {Responsable.map((Res)=>(
+            
               <a href="#" className='flex items-center gap-5 border-b-[0.5px] border-[#999999] p-3'>
-                <img src={images.Pfp1} className='size-20' alt="" />
+                <img src={`images_cv/${User.img_url}`} className='size-20 size-20 rounded-full' alt="" />
                 <div>
-                  <p className='text-lg font-medium'>{Res.nom}</p>
-                  <p className='text-lg font-light'>{Res.email}</p>
+                  <p className='text-lg font-medium'>{Responsable.nom}</p>
+                  <p className='text-lg font-light'>{Responsable.email}</p>
                 </div>
               </a>
-          ))}
+          
             </div>
           
         </div>
@@ -102,14 +102,14 @@ const Chat = () => {
           <div className="chat h-[90%] border border-[#999999] rounded-t-xl">
             <div className="user h-[25%] p-3 border-b-[0.5px]">
               <a href="#" className='flex items-center gap-5'>
-                <img src={`images_cv/${User.img_url}`} className='size-20' alt="" />
+                <img src={`images_cv/${User.img_url}`} className='size-20 rounded-full' alt="" />
                 <div>
-                  <p className='text-lg font-medium'>{User.nom}</p>
-                  <p className='text-lg font-light'>{User.email}</p>
+                  <p className='text-lg font-medium'>{Responsable.nom}</p>
+                  <p className='text-lg font-light'>{Responsable.email}</p>
                 </div>
               </a>
             </div>
-            <div class="messages h-[75%] overflow-y-scroll w-full p-3 flex flex-col gap-3">
+            <div className="messages h-[75%] overflow-y-scroll w-full p-3 flex flex-col gap-3">
               {messages.map((msg, index) => (
                 <div
                   key={index}

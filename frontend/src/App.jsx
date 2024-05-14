@@ -4,7 +4,8 @@ import LoginPage from "./pages/auth/LoginPage"
 import RegisterPage from "./pages/auth/RegisterPage"
 import ListeStage from "./pages/Stagiaire/ListeStage";
 import EntrepriseForm from "./components/EntrepriseForm";
-import Chat from "./pages/chat/Stagiaire/Chat";
+import Chat from "./pages/chat/Stagiaires/Chat";
+import ChatR from "./pages/chat//Responsable/Chat";
 import Contact from "./components/Contact";
 import StagiaireForm from "./components/StagiaireForm";
 import Demandes from "./pages/Stagiaire/Demandes";
@@ -33,6 +34,7 @@ const App = () => {
           <Route path="/entreprise-form" element={<EntrepriseForm />} />
           <Route path="/stagaire-form" element={<StagiaireForm />} />
           <Route path="/chat" element={<Chat />} />
+          <Route path="/chatR" element={<ChatR />} />
           <Route path="/verifystg" element={<VerifyStg />} />
         </Routes>
       </BrowserRouter>
