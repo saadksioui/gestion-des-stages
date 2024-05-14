@@ -1,4 +1,4 @@
-const centres = [
+export const centres = [
   { Centre: "Centre de Formation Professionnelle Multiservices Tit Mlil" },
   { Centre: "Centre d'Accueil Casablanca" },
   { Centre: "Centre de Formation et d'Insertion des Femmes et des Jeunes -Tit Melil" },

@@ -11,6 +11,7 @@ import Demandes from "./pages/Stagiaire/Demandes";
 import Documents from "./pages/Stagiaire/Documents";
 import Profile from "./pages/Stagiaire/Profile";
 import VerifyStg from "./components/VerifyStg";
+import ListeStagiaires from "./pages/Responsable/ListeStagiaires";
 
 
 const App = () => {
@@ -21,11 +22,14 @@ const App = () => {
           <Route path="/" element={<HomePage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
-          <Route path="/contact" element={<Contact />} />
+
+          <Route path="/profile" element={<Profile />} />
           <Route path="/liste-stages" element={<ListeStage />} />
           <Route path="/demandes" element={<Demandes />} />
           <Route path="/documents" element={<Documents />} />
-          <Route path="/profile" element={<Profile />} />
+          <Route path="/contact" element={<Contact />} />
+
+          <Route path="/liste-stagaires" element={<ListeStagiaires />} />
           <Route path="/entreprise-form" element={<EntrepriseForm />} />
           <Route path="/stagaire-form" element={<StagiaireForm />} />
           <Route path="/chat" element={<Chat />} />

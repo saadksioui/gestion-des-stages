@@ -1,14 +1,16 @@
 import { useState } from "react";
 import { FaXmark } from "react-icons/fa6";
 import Swal from "sweetalert2";
+import { centres } from '../data/ofppt'
 
 const VerifyStg = ({ handleCloseModal, handleRegister }) => {
   const [codeInsc, setCodeInsc] = useState('')
-  const [diplome, setDiplome] = useState('')
+  const [centre, setCentre] = useState('')
+
   const handleVerify = (e) => {
     e.preventDefault()
 
-    const emptyFields = [codeInsc, diplome].filter(field => field === '').length > 0;
+    const emptyFields = [codeInsc, centre].filter(field => field === '').length > 0;
 
     if (emptyFields) {
       Swal.fire({
@@ -23,7 +25,7 @@ const VerifyStg = ({ handleCloseModal, handleRegister }) => {
     else {
       const StagiaireData = {
         codeInsc: codeInsc,
-        diplome: diplome,
+        centre: centre,
       }
 
       console.log("Data", StagiaireData);
@@ -32,7 +34,7 @@ const VerifyStg = ({ handleCloseModal, handleRegister }) => {
       handleCloseModal();
 
       setCodeInsc('')
-      setDiplome('')
+      setCentre('')
 
     }
   }
@@ -51,8 +53,15 @@ const VerifyStg = ({ handleCloseModal, handleRegister }) => {
             </div>
 
             <div className="p-3 flex flex-col gap-2">
-              <label htmlFor="diplome" className="text-xl font-medium">Diplôme:</label>
-              <input type="text" value={diplome} onChange={e => setDiplome(e.target.value)} id="diplome" name="diplome" className="border-2 border-[#99999] rounded-md py-2 px-2 outline-none" />
+              <label htmlFor="centre" className="text-xl font-medium">Diplôme:</label>
+              <select id="centre" name="centre" value={centre} onChange={e => setCentre(e.target.value)}  className="border-2 border-[#99999] rounded-md py-2 px-2 outline-none">
+                <option>Séléctionnez votre centre</option>
+                {
+                  centres?.map((centre)=>(
+                    <option value={centre.Centre}>{centre.Centre}</option>
+                  ))
+                }
+              </select>
             </div>
             <div className="p-3">
               <button type="submit" className="bg-black py-2 px-4 text-white rounded-xl flex items-center justify-center w-full mt-2 text-lg">
