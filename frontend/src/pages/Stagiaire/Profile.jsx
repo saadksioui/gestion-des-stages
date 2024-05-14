@@ -10,7 +10,7 @@ const Profile = () => {
   const [User, setUser] = useState([]);
   const storedData = localStorage.getItem("sessionToken");
   let storedId;
-  
+
   try {
     if (storedData) {
       storedId = storedData.split(",");
@@ -44,7 +44,7 @@ const Profile = () => {
         <h1 className="text-4xl font-bold">Profile</h1>
         <div className="mt-10 p-10 flex gap-10 relative rounded-xl border border-[#999999]">
           <div>
-            <img src={`images_cv/${User.img_url}`} className="drop-shadow-lg border-4 border-black rounded-full" width={200} alt="" />
+            <img src={`images_cv/${User.img_url}`} className="drop-shadow-lg border-4 border-black rounded-full object-cover size-56" alt="" />
           </div>
           <div className="flex flex-col gap-10">
             <h1 className="text-3xl font-semibold">{User.nom}</h1>
