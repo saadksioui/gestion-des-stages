@@ -4,13 +4,8 @@ import LoginPage from "./pages/auth/LoginPage"
 import RegisterPage from "./pages/auth/RegisterPage"
 import ListeStage from "./pages/Stagiaire/ListeStage";
 import EntrepriseForm from "./components/EntrepriseForm";
-<<<<<<< HEAD
 import Chat from "./pages/chat/Stagiaires/Chat";
 import ChatR from "./pages/chat//Responsable/Chat";
-=======
-import ChatStg from './pages/chat/Stagiaires/Chat'
-import ChatResp from './pages/chat/Responsable/Chat'
->>>>>>> e2060cf18f66ab7cf9e0bc1315777f8bbcc3b845
 import Contact from "./components/Contact";
 import StagiaireForm from "./components/StagiaireForm";
 import Demandes from "./pages/Stagiaire/Demandes";
@@ -41,14 +36,11 @@ const App = () => {
           <Route path="/liste-stagaires" element={<ListeStagiaires />} />
           <Route path="/entreprise-form" element={<EntrepriseForm />} />
           <Route path="/stagaire-form" element={<StagiaireForm />} />
-<<<<<<< HEAD
+
           <Route path="/chat" element={<Chat />} />
           <Route path="/chatR" element={<ChatR />} />
-=======
->>>>>>> e2060cf18f66ab7cf9e0bc1315777f8bbcc3b845
+          
           <Route path="/verifystg" element={<VerifyStg />} />
-          <Route path="/stagiaire/chat" element={<ChatStg />} />
-          <Route path="/responsable/chat" element={<ChatResp />} />
           <Route path="/admin/liste-des-stagiaires" element={<ListeStgs />} />
           <Route path="/admin/liste-des-responsables" element={<ListeResps />} />
           <Route path="/admin/liste-des-entrprises" element={<ListeErps />} />

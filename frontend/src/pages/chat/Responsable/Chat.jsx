@@ -151,4 +151,4 @@ const ChatR = () => {
   );
 };
 
-export default Chat;
+export default ChatR;
