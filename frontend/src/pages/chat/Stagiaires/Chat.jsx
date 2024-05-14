@@ -4,7 +4,7 @@ import { icons, images } from '../../../constants';
 import UserLayout from '../../../layouts/UserLayout';
 import axios from 'axios';
 
-const Chat = () => {
+const ChatStg = () => {
 
   const [chatId, setChatId] = useState('6640f2bccab400624d11ff3c')
   const [newMsg, setNewMsg] = useState('')
@@ -13,7 +13,7 @@ const Chat = () => {
   const [User, setUser] = useState([]);
   const storedData = localStorage.getItem("sessionToken");
   let storedId;
-  
+
   try {
     if (storedData) {
       storedId = storedData.split(",");
@@ -58,7 +58,7 @@ const Chat = () => {
     } catch (error) {
         console.error('Error fetching data:', error);
     }
-    
+
     setMessages([...messages, newMessage]);
     setNewMsg('');
   };
@@ -70,7 +70,7 @@ const Chat = () => {
     }
     try {
       await axios.put(`http://127.0.0.1:8000/api/suivi/deleteChatMessage/${id}`,data);
-  
+
       console.log('Chat message deleted successfully');
     } catch (error) {
       console.error('Error deleting chat message:', error.message);
@@ -84,9 +84,13 @@ const Chat = () => {
     <UserLayout>
       <div className='p-10 w-full h-full flex items-center gap-10'>
         <div className="users rounded-xl border h-full border-[#999999] w-1/3 flex flex-col overflow-y-scroll">
-          
+
           <div className="user">
+<<<<<<< HEAD
             
+=======
+
+>>>>>>> e2060cf18f66ab7cf9e0bc1315777f8bbcc3b845
               <a href="#" className='flex items-center gap-5 border-b-[0.5px] border-[#999999] p-3'>
                 <img src={`images_cv/${User.img_url}`} className='size-20 size-20 rounded-full' alt="" />
                 <div>
@@ -94,9 +98,13 @@ const Chat = () => {
                   <p className='text-lg font-light'>{Responsable.email}</p>
                 </div>
               </a>
+<<<<<<< HEAD
           
+=======
+
+>>>>>>> e2060cf18f66ab7cf9e0bc1315777f8bbcc3b845
             </div>
-          
+
         </div>
         <div className='chatbox w-2/3 h-full flex flex-col gap-5'>
           <div className="chat h-[90%] border border-[#999999] rounded-t-xl">
@@ -155,4 +163,4 @@ const Chat = () => {
   );
 };
 
-export default Chat;
+export default ChatStg;

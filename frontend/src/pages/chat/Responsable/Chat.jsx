@@ -21,7 +21,6 @@ const ChatR = () => {
   } catch (error) {
     console.error('Error parsing session token:', error);
   }
-  
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -152,4 +151,4 @@ const ChatR = () => {
   );
 };
 
-export default ChatR;
+export default Chat;
