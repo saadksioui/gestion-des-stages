@@ -51,7 +51,7 @@ const UserNavbar = () => {
         </div>
         <div>
           <Link to="/profile">
-            <img src={`images/${User.img_url}`} className="size-12 object-cover rounded-full" alt="" />
+            <img src={`images_cv/${User.img_url}`} className="size-12 object-cover rounded-full" alt="" />
           </Link>
         </div>
         <div>

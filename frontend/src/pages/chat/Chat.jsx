@@ -102,7 +102,7 @@ const Chat = () => {
           <div className="chat h-[90%] border border-[#999999] rounded-t-xl">
             <div className="user h-[25%] p-3 border-b-[0.5px]">
               <a href="#" className='flex items-center gap-5'>
-                <img src={`images/${User.img_url}`} className='size-20' alt="" />
+                <img src={`images_cv/${User.img_url}`} className='size-20' alt="" />
                 <div>
                   <p className='text-lg font-medium'>{User.nom}</p>
                   <p className='text-lg font-light'>{User.email}</p>
