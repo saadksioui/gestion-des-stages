@@ -61,13 +61,12 @@ const AddResp = ({ isOpen, onClose, handleCloseModal }) => {
       handleCloseModal();
     }
   }
-  
+
   if (!isOpen) return null;
 
   return (
     <div className="fixed inset-0 flex justify-center items-center h-screen px-10 font-poppins">
       <div className="border-2 border-black bg-white rounded-xl p-5">
-        {/* Header */}
         <div className="flex justify-between items-center border-b-[1px] border-[#99999] w-full pb-5">
           <h1 className="text-2xl font-semibold">Ajouter un responsable</h1>
           <button className="size-10 flex items-center justify-center text-lg border-2 border-black rounded-full" onClick={onClose}>
@@ -79,15 +78,15 @@ const AddResp = ({ isOpen, onClose, handleCloseModal }) => {
           <form onSubmit={handleSubmit}>
             <div className="grid grid-cols-3 gap-5 mb-4">
               <div className="p-3 flex flex-col gap-2">
-                <label htmlFor="titreStage">Nom:</label>
+                <label htmlFor="nom">Nom:</label>
                 <input type="text" className="border-2 border-[#99999] h-8 rounded-md py-2 px-2 outline-none" value={nom} onChange={e => setNom(e.target.value)} />
               </div>
               <div className="p-3 flex flex-col gap-2">
-                <label htmlFor="description">Email:</label>
+                <label htmlFor="email">Email:</label>
                 <input type="text" className="border-2 border-[#99999] h-8 rounded-md py-2 px-2 outline-none" value={email} onChange={e => setEmail(e.target.value)} />
               </div>
               <div className="p-3 flex flex-col gap-2">
-                <label htmlFor="description">Telephone:</label>
+                <label htmlFor="telephone">Telephone:</label>
                 <input type="text" className="border-2 border-[#99999] h-8 rounded-md py-2 px-2 outline-none" value={telephone} onChange={e => setTelephone(e.target.value)} />
               </div>
             </div>
