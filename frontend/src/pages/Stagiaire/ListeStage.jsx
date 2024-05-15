@@ -10,7 +10,9 @@ const ListeStage = () => {
   const storedData = localStorage.getItem("sessionToken");
   const storedRole = storedData.split(",")[2];
   let stored;
-  const [stages, setStages] = useState([])
+  const [stages, setStages] = useState([]);
+  const [stageData, setStageData] = useState({});
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   try {
     if (storedData) {
@@ -19,9 +21,8 @@ const ListeStage = () => {
   } catch (error) {
     console.error('Error parsing session token:', error);
   }
-  console.log(stored[2]);
+
   const containerRef = useRef(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     const containerHeight = containerRef.current.clientHeight;
@@ -44,16 +45,26 @@ const ListeStage = () => {
   useEffect(() => {
     const fetchStages = async () => {
       try {
-        const response = await axios.get('http://127.0.0.1:8000/api/stage/')
-
-        setStages(response.data)
+        const response = await axios.get('http://127.0.0.1:8000/api/stage/');
+        setStages(response.data);
       } catch (error) {
-        console.log(error)
+        console.error("Error fetching stages:", error);
       }
-    }
+    };
 
-    fetchStages()
-  }, [])
+    fetchStages();
+  }, []);
+
+  const fetchStageData = async (entreprise) => {
+    try {
+      const response = await axios.get(`http://127.0.0.1:8000/api/stage/entreprise/${entreprise}`);
+      setStageData(response.data);
+      console.log(stageData);
+      if(stageData) setIsModalOpen(true);
+    } catch (error) {
+      console.error("Error fetching stage data:", error);
+    }
+  };
 
 
 
@@ -121,12 +132,12 @@ const ListeStage = () => {
                             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
                               {stage.domaine}
                             </td>
-                            <td className={`px-6 py-4 flex items-center gap-5 whitespace-nowrap text-sm text-gray-800`}>
-                              <button onClick={() => handleOpenModal(stage.entreprise)}>
-                                <img src={icons.Info} alt="" />
+                            <td className="px-6 py-4 flex items-center gap-5 whitespace-nowrap text-sm text-gray-800">
+                              <button onClick={(e) => fetchStageData(stage.entreprise)}>
+                                <img src={icons.Info} alt="Info icon" />
                               </button>
                               <a href="#">
-                                <img src={icons.Edit} alt="" />
+                                <img src={icons.Edit} alt="Edit icon" />
                               </a>
                             </td>
                           </tr>
@@ -142,12 +153,11 @@ const ListeStage = () => {
         </div>
       </section>
 
-      {
-        storedRole === "entreprise" ? <EntrepriseForm isOpen={isModalOpen} onClose={handleCloseModal}
-          handleCloseModal={handleCloseModal}
-        /> : <StageInfo isOpen={isModalOpen} onClose={handleCloseModal}
-        handleCloseModal={handleCloseModal}/>
-      }
+      {storedRole === "entreprise" ? (
+        <EntrepriseForm isOpen={isModalOpen} onClose={handleCloseModal} handleCloseModal={handleCloseModal} />
+      ) : (
+        <StageInfo isOpen={isModalOpen} onClose={handleCloseModal} stageData={stageData} />
+      )}
       {/* Render the Modal component */}
 
     </UserLayout>
