@@ -91,7 +91,7 @@ const ChatStg = () => {
         <div className='users rounded-xl border h-full border-[#999999] w-1/3 flex flex-col overflow-y-scroll'>
           <div className='user'>
             <a href='#' className='flex items-center gap-5 border-b-[0.5px] border-[#999999] p-3'>
-              <img src={`images_cv/${responsable.img_url}`} className='size-20 rounded-full' alt='' />
+              <img src={`/images_cv/${responsable.img_url}`} className='size-20 rounded-full' alt='' />
               <div>
                 <p className='text-lg font-medium'>{responsable.nom}</p>
                 <p className='text-lg font-light'>{responsable.email}</p>
