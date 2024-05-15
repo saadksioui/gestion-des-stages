@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef, useCallback } from 'react';
 import moment from 'moment';
-import { icons } from '../../../constants'; 
+import { icons } from '../../../constants';
 import UserLayout from '../../../layouts/UserLayout';
 import axios from 'axios';
 
@@ -28,7 +28,7 @@ const ChatR = () => {
     console.error('Error parsing session token:', error);
   }
 
-  const [profile, setProfile] = useState(initialProfile);
+  // const [profile, setProfile] = useState(initialProfile);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -62,46 +62,13 @@ const ChatR = () => {
     }
   }, [userIds]);
 
-  useEffect(() => {
-    if (messageEndRef.current) {
-      messageEndRef.current.scrollIntoView({ behavior: 'smooth' });
-    }
-  }, [messages]);
-
-  const handleMsg = async (e) => {
-    e.preventDefault();
-    const newMessage = {
-      id_utilisateur: storedId[1],
-      message: newMsg,
-    };
-
-    try {
-      const response = await axios.post(`http://127.0.0.1:8000/api/suivi/send/${chatId}`, newMessage);
-      setMessages((prevMessages) => [...prevMessages, response.data]);
-      setNewMsg('');
-    } catch (error) {
-      console.error('Error sending message:', error);
-    }
-  };
-
-  const handleMsgDelete = useCallback(async (e, id) => {
-    e.preventDefault();
-    try {
-      await axios.delete(`http://127.0.0.1:8000/api/suivi/deleteChatMessage/${id}`);
-      setMessages((prevMessages) => prevMessages.filter((msg) => msg._id !== id));
-    } catch (error) {
-      console.error('Error deleting chat message:', error.message);
-    }
-  }, []);
-
   const showChat = useCallback(async (id) => {
     try {
-      const response = await axios.get('http://127.0.0.1:8000/api/suivi/get_responsable_etud', {
-        params: {
+      const response = await axios.get('http://127.0.0.1:8000/api/suivi/getSuiviByIdResponsable_etud', {
           id_étudiant: id,
-          id_responsable: storedId[1],
-        },
-      });
+          id_responsable:storedId[1]
+        }
+      );
 
       if (response.data && response.data.chat) {
         setMessages(response.data.chat);
@@ -118,6 +85,40 @@ const ChatR = () => {
       console.error('Error fetching chat messages:', error.message);
     }
   }, [storedId]);
+
+  useEffect(() => {
+    if (messageEndRef.current) {
+      messageEndRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [messages]);
+
+  const handleMsg = async (e) => {
+    e.preventDefault();
+    const newMessage = {
+      id_utilisateur: storedId[1],
+      message: newMsg,
+    };
+
+    try {
+      const response = await axios.post(`http://127.0.0.1:8000/api/suivi/send/${chatId}`, newMessage);
+      setMessages((prevMessages) => [...prevMessages, response.data.chat]);
+      setNewMsg('');
+    } catch (error) {
+      console.error('Error sending message:', error);
+    }
+  };
+
+  const handleMsgDelete = useCallback(async (e, id) => {
+    e.preventDefault();
+    try {
+      await axios.delete(`http://127.0.0.1:8000/api/suivi/deleteChatMessage/${id}`);
+      setMessages((prevMessages) => prevMessages.filter((msg) => msg._id !== id));
+    } catch (error) {
+      console.error('Error deleting chat message:', error.message);
+    }
+  }, []);
+
+
 
   return (
     <UserLayout>
