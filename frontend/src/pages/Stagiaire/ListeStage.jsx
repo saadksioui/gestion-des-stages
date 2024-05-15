@@ -3,10 +3,14 @@ import { icons } from "../../constants";
 import UserLayout from "../../layouts/UserLayout";
 import EntrepriseForm from "../../components/EntrepriseForm";
 import Swal from "sweetalert2";
+import axios from "axios";
+import StageInfo from "../../components/StageInfo";
 
 const ListeStage = () => {
   const storedData = localStorage.getItem("sessionToken");
+  const storedRole = storedData.split(",")[2];
   let stored;
+  const [stages, setStages] = useState([])
 
   try {
     if (storedData) {
@@ -36,6 +40,21 @@ const ListeStage = () => {
   const handleCloseModal = () => {
     setIsModalOpen(false);
   };
+
+  useEffect(() => {
+    const fetchStages = async () => {
+      try {
+        const response = await axios.get('http://127.0.0.1:8000/api/stage/')
+
+        setStages(response.data)
+      } catch (error) {
+        console.log(error)
+      }
+    }
+
+    fetchStages()
+  }, [])
+
 
 
 
@@ -69,117 +88,51 @@ const ListeStage = () => {
                     <thead className="bg-white">
                       <tr>
                         <th scope="col" className="px-6 py-3 text-start font-semibold">Titre de stage</th>
+
+                        <th scope="col" className="px-6 py-3 text-start font-semibold">Description</th>
+
                         <th scope="col" className="px-6 py-3 flex items-center gap-3 text-start font-semibold">
                           <span>Durée de stage</span>
                           <a href="#">
                             <img src={icons.ArrowSwitched} className="size-4" alt="" />
                           </a>
                         </th>
+
                         <th scope="col" className="px-6 py-3 text-start font-semibold">Domaine</th>
                         <th scope="col" className="px-6 py-3 text-start font-semibold">Action</th>
                       </tr>
                     </thead>
                     <tbody>
-                      <tr>
-                        <td className="px-6 py-4 whitespace-nowrap block w-52 truncate  text-sm font-medium text-gray-800">
-                          Lorem ipsum dolor sitsdqdsqdfsqdfsqdfsd
-                        </td>
+                      {
+                        stages?.map((stage, index) => (
+                          <tr key={index}>
+                            <td className="px-6 py-4 whitespace-nowrap w-52 truncate text-sm font-medium text-gray-800">
+                              {stage.titre}
+                            </td>
 
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
-                          2 mois
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
-                          Full Stack
-                        </td>
-                        <td className={`px-6 py-4 flex items-center gap-5 whitespace-nowrap text-sm text-gray-800`}>
-                          <a href="#">
-                            <img src={icons.Info} alt="" />
-                          </a>
-                          <a href="#">
-                            <img src={icons.Edit} alt="" />
-                          </a>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td className="px-6 py-4 whitespace-nowrap block w-52 truncate  text-sm font-medium text-gray-800">
-                          Lorem ipsum dolor sitsdqdsqdfsqdfsqdfsd
-                        </td>
+                            <td className="px-6 py-4 whitespace-nowrap block w-52 truncate text-sm font-medium text-gray-800">
+                              {stage.description}
+                            </td>
 
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
-                          2 mois
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
-                          Full Stack
-                        </td>
-                        <td className={`px-6 py-4 flex items-center gap-5 whitespace-nowrap text-sm text-gray-800`}>
-                          <a href="#">
-                            <img src={icons.Info} alt="" />
-                          </a>
-                          <a href="#">
-                            <img src={icons.Edit} alt="" />
-                          </a>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td className="px-6 py-4 whitespace-nowrap block w-52 truncate  text-sm font-medium text-gray-800">
-                          Lorem ipsum dolor sitsdqdsqdfsqdfsqdfsd
-                        </td>
+                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
+                              {stage.duree} mois
+                            </td>
 
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
-                          2 mois
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
-                          Full Stack
-                        </td>
-                        <td className={`px-6 py-4 flex items-center gap-5 whitespace-nowrap text-sm text-gray-800`}>
-                          <a href="#">
-                            <img src={icons.Info} alt="" />
-                          </a>
-                          <a href="#">
-                            <img src={icons.Edit} alt="" />
-                          </a>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td className="px-6 py-4 whitespace-nowrap block w-52 truncate  text-sm font-medium text-gray-800">
-                          Lorem ipsum dolor sitsdqdsqdfsqdfsqdfsd
-                        </td>
+                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
+                              {stage.domaine}
+                            </td>
+                            <td className={`px-6 py-4 flex items-center gap-5 whitespace-nowrap text-sm text-gray-800`}>
+                              <button onClick={() => handleOpenModal(stage.entreprise)}>
+                                <img src={icons.Info} alt="" />
+                              </button>
+                              <a href="#">
+                                <img src={icons.Edit} alt="" />
+                              </a>
+                            </td>
+                          </tr>
+                        ))
+                      }
 
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
-                          5 mois
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
-                          Full Stack
-                        </td>
-                        <td className={`px-6 py-4 flex items-center gap-5 whitespace-nowrap text-sm text-gray-800`}>
-                          <a href="#">
-                            <img src={icons.Info} alt="" />
-                          </a>
-                          <a href="#">
-                            <img src={icons.Edit} alt="" />
-                          </a>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td className="px-6 py-4 whitespace-nowrap block w-52 truncate  text-sm font-medium text-gray-800">
-                          Lorem ipsum dolor sitsdqdsqdfsqdfsqdfsd
-                        </td>
-
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
-                          1 mois
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
-                          Full Stack
-                        </td>
-                        <td className={`px-6 py-4 flex items-center gap-5 whitespace-nowrap text-sm text-gray-800`}>
-                          <a href="#">
-                            <img src={icons.Info} alt="" />
-                          </a>
-                          <a href="#">
-                            <img src={icons.Edit} alt="" />
-                          </a>
-                        </td>
-                      </tr>
                     </tbody>
                   </table>
                 </div>
@@ -189,12 +142,14 @@ const ListeStage = () => {
         </div>
       </section>
 
+      {
+        storedRole === "entreprise" ? <EntrepriseForm isOpen={isModalOpen} onClose={handleCloseModal}
+          handleCloseModal={handleCloseModal}
+        /> : <StageInfo isOpen={isModalOpen} onClose={handleCloseModal}
+        handleCloseModal={handleCloseModal}/>
+      }
       {/* Render the Modal component */}
-      <EntrepriseForm
-        isOpen={isModalOpen}
-        onClose={handleCloseModal}
-        handleCloseModal={handleCloseModal}
-      />
+
     </UserLayout>
   )
 };

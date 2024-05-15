@@ -21,6 +21,7 @@ import AddResp from "./components/AdminForms/AddResp";
 import ListeStageE from "./pages/Entreprises/ListeStageE";
 import DemandesE from "./pages/Entreprises/DemandesE";
 import DocumentsR from "./pages/Responsable/DocumentsR";
+import StageInfo from "./components/StageInfo";
 
 const App = () => {
   const storedData = localStorage.getItem("sessionToken");
@@ -37,7 +38,7 @@ const App = () => {
 
           </>
         )}
-          
+
           {(storedRole === 'entreprise' || storedRole === 'admin') && (
             <>
               <Route path="/profile" element={<Profile />} />
@@ -79,7 +80,8 @@ const App = () => {
             <Route path="/admin/addResp" element={<AddResp />} />
           </>
         )}
-          //todo : create NotFound page 
+        <Route path="/stageinfo" element={<StageInfo/>}/>
+          //todo : create NotFound page
           {/* <Route path='*' element={<Navigate to='/' />} /> */}
         </Routes>
       </BrowserRouter>
