@@ -1,5 +1,6 @@
 import React from "react";
 import { FaXmark } from "react-icons/fa6";
+import moment from 'moment';
 
 const StageInfo = ({ isOpen, onClose, stageData }) => {
   if (!isOpen) return null;
@@ -36,7 +37,13 @@ const StageInfo = ({ isOpen, onClose, stageData }) => {
             </div>
             <div>
               <label className="text-xl font-medium">Date de début:</label>
-              <p className="text-lg text-[#999999] font-semibold">{moment().format(stageData.date_debut)}</p>
+              <p className="text-lg text-[#999999] font-semibold">{moment().format(stageData.date_debut.substring(0, 10))}</p>
+            </div>
+            <div>
+              <label className="text-xl font-medium">Competences Requises:</label>
+              {stageData?.competences_requises && stageData.competences_requises.map((competence, index) => (
+                <li key={index}>{competence}</li>
+              ))}
             </div>
           </div>
         </div>
