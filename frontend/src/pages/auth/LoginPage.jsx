@@ -22,7 +22,13 @@ const LoginPage = () => {
         const user =response.data
         console.log(user);
           localStorage.setItem('sessionToken', [response.data.token,user._id,user.role]);
-          window.location.replace(`http://localhost:5173/liste-stages`);
+          if(user.role=='admin'){
+          window.location.replace(`http://localhost:5173/admin/liste-des-stagiaires`);
+          }
+          else{
+
+            window.location.replace(`http://localhost:5173/liste-stages`);
+          }
       } else {
           setMessage(response.data.message);
           console.log(response.data.message);

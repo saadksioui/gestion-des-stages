@@ -11,6 +11,7 @@ import StagiaireForm from "./components/StagiaireForm";
 import Demandes from "./pages/Stagiaire/Demandes";
 import Documents from "./pages/Stagiaire/Documents";
 import Profile from "./pages/Stagiaire/Profile";
+import ProfileA from "./pages/admin/Profile";
 import VerifyStg from "./components/VerifyStg";
 import ListeStagiaires from "./pages/Responsable/ListeStagiaires";
 import ListeStgs from "./pages/admin/ListeStgs";
@@ -68,6 +69,7 @@ const App = () => {
           )}
           {storedRole === 'admin' && (
           <>
+            <Route path="/profileA" element={<ProfileA />} />
             <Route path="/entreprise-form" element={<EntrepriseForm />} />
             <Route path="/stagaire-form" element={<StagiaireForm />} />
             <Route path="/verifystg" element={<VerifyStg />} />
