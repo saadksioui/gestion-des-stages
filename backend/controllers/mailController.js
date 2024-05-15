@@ -6,15 +6,15 @@ const sendMail = async (req, res) => {
     let transporter = nodemailer.createTransport({
       host: "smtp.imitate.email",
       auth: {
-        user: process.env.EMAIL, // you email 
+        user: process.env.EMAIL, // you email
         pass: process.env.PASSWORD, // you email app password
       },
     });
 
     //sendmail
     await transporter.sendMail({
-      from: 'multiversal.guru@gmail.com', // you email
-      to: email, // to email
+      from: email, // you email
+      to: 'ofppt.estage@gmail.com', // to email
       subject: sujet,
       text: body
     });
