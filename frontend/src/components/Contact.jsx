@@ -45,8 +45,8 @@ const Contact = () => {
                                 <input className="outline-none text-lg" type="email" name="email" placeholder="Votre email.." />
                             </div>
                             <div className="w-full p-3 flex flex-col gap-2 border rounded-xl">
-                                <label htmlFor="phone">Numéro de téléphone</label>
-                                <input className="outline-none text-lg" type="text" name="phone" placeholder="Votre Numéro de téléphone.." />
+                                <label htmlFor="Sujet">Sujet</label>
+                                <input className="outline-none text-lg" type="text" name="sujet" placeholder="Votre sujet.." />
                             </div>
                             <div className="w-full p-3 flex flex-col gap-2 border rounded-xl">
                                 <label htmlFor="message">Message</label>
