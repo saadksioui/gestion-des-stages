@@ -51,7 +51,7 @@ const ListeResps = () => {
     <AdminLayout>
       <section className={`px-10 mt-10 ${isModalOpen ? 'opacity-25' : ''}`}>
         <div className="flex justify-between items-center mt-5 mb-10">
-          <h1 className="text-4xl font-bold">Liste des stagiaires</h1>
+          <h1 className="text-4xl font-bold">Liste des Responsables</h1>
           <button onClick={handleOpenModal} className="flex items-center gap-4 rounded-lg px-4 py-2 bg-black text-white">
             <FaPlus />
             <span>Ajouter</span>
