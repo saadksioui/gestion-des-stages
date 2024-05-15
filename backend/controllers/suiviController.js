@@ -14,19 +14,19 @@ const getSuiviById = asyncHandler(async (req, res) => {
     }
   });
 
-  
+
   const getSuiviByIdResponsable_etud = asyncHandler(async (req, res) => {
     try {
       const { id_responsable ,id_étudiant } = req.body;
-  
+
       const suivis = await Suivi.findOne({ id_responsable:id_responsable ,id_étudiant:id_étudiant});
-  
+
       res.json(suivis);
     } catch (error) {
       res.status(500).json({ message: error.message });
     }
   });
-  
+
 const createSuivi = asyncHandler(async (req, res) => {
   try {
     const suivi = new Suivi(req.body);
@@ -37,28 +37,34 @@ const createSuivi = asyncHandler(async (req, res) => {
   }
 });
 
+
 const sendMessage = asyncHandler(async (req, res) => {
-    try {
-      const { id } = req.params;
-      const { id_utilisateur, message } = req.body;
-  
-      const newMessage = {
-        id_utilisateur,
-        message,
-        created_at: Date.now() 
-      };
-  
-      const updatedSuivi = await Suivi.updateOne(
-        { _id: id }, 
-        { $push: { chat: newMessage } } 
-      );
-  
-      res.json(updatedSuivi);
-    } catch (error) {
-      res.status(400).json({ message: error.message });
+  try {
+    const { id } = req.params; // This is the chat ID
+    const { id_utilisateur, message } = req.body;
+
+    const newMessage = {
+      id_utilisateur,
+      message,
+      created_at: Date.now(),
+    };
+
+    const updatedSuivi = await Suivi.findByIdAndUpdate(
+      id,
+      { $push: { chat: newMessage } },
+      { new: true } // Return the updated document
+    );
+
+    if (!updatedSuivi) {
+      return res.status(404).json({ message: 'Suivi not found' });
     }
-  });
-  
+
+    res.json(newMessage); // Return the new message instead of the entire updated document
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+});
+
 
 const deleteSuivi = asyncHandler(async (req, res) => {
   try {
@@ -73,43 +79,43 @@ const deleteSuivi = asyncHandler(async (req, res) => {
 const deleteChat = asyncHandler(async (req, res) => {
     try {
       const { id } = req.params;
-  
+
       const updatedSuivi = await Suivi.updateOne(
-        { _id: id }, 
-        { $unset: { chat: "" } } 
+        { _id: id },
+        { $unset: { chat: "" } }
       );
-  
+
       res.json({message:'supprimé avec succès'},updatedSuivi);
     } catch (error) {
       res.status(400).json({ message: error.message });
     }
   });
-  
+
 
   const deleteChatMessage = asyncHandler(async (req, res) => {
     try {
       const { id } = req.body;
       const { message_id } = req.params;
-  
+
       const updateQuery = {
         $pull: { chat: { _id: message_id } }
       };
-  
+
       const updatedSuivi = await Suivi.updateOne(
         { _id:id },
         updateQuery
       );
-  
+
       if (updatedSuivi.nModified === 0) {
         return res.status(404).json({ message: 'Chat message not found' });
       }
-  
+
       res.json({ message: 'Chat message deleted successfully' });
     } catch (error) {
       res.status(500).json({ message: error.message });
     }
   });
-  
+
 
 module.exports = {
     getSuiviById,

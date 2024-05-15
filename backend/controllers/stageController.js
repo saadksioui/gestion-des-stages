@@ -16,7 +16,7 @@ const getAllStages = asyncHandler(async (req, res) => {
 //     try {
 //       const stages = await Stage.findOne();
 //       const entreprise = await User.findOne({ _id: stages.entreprise });
-  
+
 //       res.json({ stages, entreprise });
 //     } catch (error) {
 //       res.status(500).json({ message: error.message });
@@ -53,33 +53,33 @@ const deleteStage = asyncHandler(async (req, res) => {
   }
 });
 
-//todo :search by domaine and titre 
+//todo :search by domaine and titre
 
 const searchStages = asyncHandler(async (req, res) => {
     try {
       const { titre, domaine } = req.body;
       let query = {};
-  
+
       //  The i option makes the regex case-insensitive, so the search is not affected by the case of the letters.
       if (titre) {
-        query.titre = { $regex: titre, $options: 'i' }; 
+        query.titre = { $regex: titre, $options: 'i' };
       }
       if (domaine) {
-        query.domaine = { $regex: domaine, $options: 'i' }; 
+        query.domaine = { $regex: domaine, $options: 'i' };
       }
-  
+
       const stages = await Stage.find(query);
       if (stages.length === 0) {
         return res.status(404).json({ message: "Aucun résultat trouvé pour les critères de recherche spécifiés." });
       }
-  
+
       res.json(stages);
     } catch (error) {
       res.status(500).json({ message: error.message });
     }
   });
 
-  //* get stage by entreprise id 
+  //* get stage by entreprise id
   const getStagesByEntrepriseId = asyncHandler(async (req, res) => {
     try {
       const { entrepriseId } = req.params;
@@ -89,7 +89,7 @@ const searchStages = asyncHandler(async (req, res) => {
       res.status(500).json({ message: error.message });
     }
   });
-  
+
 module.exports = {
   getAllStages,
   createStage,
