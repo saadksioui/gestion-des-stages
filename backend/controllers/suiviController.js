@@ -130,7 +130,7 @@ const deleteChat = asyncHandler(async (req, res) => {
         return res.status(404).json({ message: 'Chat message not found' });
       }
 
-      res.json({ message: 'Chat message deleted successfully' });
+      res.json({ message: 'Chat message deleted successfully 1' });
     } catch (error) {
       res.status(500).json({ message: error.message });
     }

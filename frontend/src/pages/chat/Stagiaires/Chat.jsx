@@ -10,7 +10,6 @@ const ChatStg = () => {
   const [responsable, setResponsable] = useState({});
 
   const [chat, setchat] = useState({});
-  console.log(chat);
   const [chatId, setChatId] = useState();
   const [responsableID, setResponsableID] = useState();
   const [user, setUser] = useState({});
@@ -20,7 +19,6 @@ const ChatStg = () => {
 
   let storedId = storedData.split(',');
 
-  console.log(storedId[1]);
 
   // Fetch chat messages
   useEffect(() => {
@@ -31,7 +29,6 @@ const ChatStg = () => {
             id_étudiant: storedId[1]
           }
         });
-        console.log(response.data);
         setMessages(response.data.chat);
         setchat(response.data);
         setChatId(response.data._id);
@@ -41,7 +38,6 @@ const ChatStg = () => {
     };
     fetchMessages();
   }, [messages]);
-  console.log(chatId);
   // Fetch responsable and user data
   useEffect(() => {
     const fetchData = async () => {
@@ -64,7 +60,7 @@ const ChatStg = () => {
     if (messageEndRef.current) {
       messageEndRef.current.scrollIntoView({ behavior: 'smooth' });
     }
-  }, []);
+  }, [messages]);
 
   const handleMsg = async (e) => {
     e.preventDefault();
@@ -84,7 +80,7 @@ const ChatStg = () => {
   const handleMsgDelete = async (e, id) => {
     e.preventDefault();
     try {
-      await axios.delete(`http://127.0.0.1:8000/api/suivi/deleteChatMessage/${chatId}`, { data: { id } });
+      await axios.put(`http://127.0.0.1:8000/api/suivi/deleteChatMessage/${id}`,  { id:chatId } );
       setMessages((prevMessages) => prevMessages.filter((msg) => msg._id !== id));
       console.log('Chat message deleted successfully');
     } catch (error) {
