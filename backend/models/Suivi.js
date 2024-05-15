@@ -17,8 +17,7 @@ const suiviSchema = new mongoose.Schema({
     chat: [
         {
             id_utilisateur: {
-                type: mongoose.Schema.Types.ObjectId, ref: 'User',
-                required: true
+                type: mongoose.Schema.Types.ObjectId, ref: 'User'
             },
             created_at: {
                 type: Date,

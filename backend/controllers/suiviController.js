@@ -6,24 +6,20 @@ const getSuiviById = asyncHandler(async (req, res) => {
       const { id } = req.params;
       const suivi = await Suivi.findOne({_id:id});
       if (!suivi) {
-        return res.status(404).json({ message: "Suivi not found" });
+        return res.status(200).json({ message: "Suivi not found" });
       }
       res.json(suivi);
     } catch (error) {
       res.status(500).json({ message: error.message });
     }
   });
-  //todo : fix 
-  // get all suvi for one Responsable
-  const getSuiviByIdResponsable = asyncHandler(async (req, res) => {
+
+  
+  const getSuiviByIdResponsable_etud = asyncHandler(async (req, res) => {
     try {
-      const { id_responsabl } = req.params;
+      const { id_responsable ,id_étudiant } = req.body;
   
-      const suivis = await Suivi.find({ id_responsable:id_responsabl });
-  
-      if (!suivis || suivis.length === 0) {
-        return res.status(404).json({ message: "No suivis found for this responsable" });
-      }
+      const suivis = await Suivi.findOne({ id_responsable:id_responsable ,id_étudiant:id_étudiant});
   
       res.json(suivis);
     } catch (error) {
@@ -121,7 +117,7 @@ module.exports = {
     sendMessage,
     deleteSuivi,
     deleteChat,
-    getSuiviByIdResponsable,
+    getSuiviByIdResponsable_etud,
     deleteChatMessage
 
   }

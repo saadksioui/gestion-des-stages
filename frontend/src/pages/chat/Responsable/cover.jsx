@@ -95,14 +95,14 @@ const ChatR = () => {
 
   const ShowChat = async (id) => {
     try {
-      const response = await axios.get('http://127.0.0.1:8000/api/suivi/get_responsable_etud', 
-      {params:{
-        id_étudiant: id,
-        id_responsable: storedId[1]
-      }});
+      const data = {
+        id_responsable: storedId[1],
+        id_étudiant: id
+      };
+      const response = await axios.get('http://127.0.0.1:8000/api/suivi/get_responsable_etud', data);
       setMessages(response.data.chat);
       setProfile(id);
-      setChatId(response.data._id); 
+      setChatId(response.data._id); // Set the suivi ID
     } catch (error) {
       console.error('Error fetching chat messages:', error.message);
     }
@@ -136,7 +136,7 @@ const ChatR = () => {
               </a>
             </div>
             <div className="messages h-[75%] overflow-y-scroll w-full p-3 flex flex-col gap-3">
-              {/* {messages.map((msg, index) => (
+              {messages.map((msg, index) => (
                 <div
                   key={index}
                   ref={index === messages.length - 1 ? messageEndRef : null}
@@ -156,7 +156,7 @@ const ChatR = () => {
                     )}
                   </div>
                 </div>
-              ))} */}
+              ))}
             </div>
           </div>
           <div className="input w-full h-[10%]">
