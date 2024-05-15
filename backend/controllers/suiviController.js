@@ -28,11 +28,16 @@ const getSuiviById = asyncHandler(async (req, res) => {
   });
   const getSuiviByIdEtud = asyncHandler(async (req, res) => {
     try {
-      const { id_étudiant } = req.body;
+      const { id_étudiant } = req.query;
 
-      const suivi = await Suivi.findOne({ id_étudiant:id_étudiant});
+      // Assuming `Suivi` is your Mongoose model for the collection
+      const suivi = await Suivi.findOne({ id_étudiant });
 
-      res.json(suivi);
+      // if (!suivi) {
+      //   return res.status(404).json({ message: 'Suivi not found for this student ID' });
+      // }
+
+      res.status(201).json(suivi);
     } catch (error) {
       res.status(500).json({ message: error.message });
     }
@@ -60,6 +65,7 @@ const sendMessage = asyncHandler(async (req, res) => {
       created_at: Date.now(),
     };
 
+    // Use findByIdAndUpdate to update and return the updated document
     const updatedSuivi = await Suivi.findByIdAndUpdate(
       id,
       { $push: { chat: newMessage } },
@@ -70,11 +76,13 @@ const sendMessage = asyncHandler(async (req, res) => {
       return res.status(404).json({ message: 'Suivi not found' });
     }
 
-    res.json(newMessage); // Return the new message instead of the entire updated document
+    // Return the newly added message
+    res.json(newMessage);
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
 });
+
 
 
 const deleteSuivi = asyncHandler(async (req, res) => {
@@ -121,13 +129,23 @@ const deleteChat = asyncHandler(async (req, res) => {
         return res.status(404).json({ message: 'Chat message not found' });
       }
 
-      res.json({ message: 'Chat message deleted successfully' });
+      res.json({ message: 'Chat message deleted successfully 1' });
     } catch (error) {
       res.status(500).json({ message: error.message });
     }
   });
 
+  const getSuiviByIdResponsable_etud = asyncHandler(async (req, res) => {
+    try {
+      const { id_responsable ,id_étudiant } = req.query;
 
+      const suivis = await Suivi.findOne({ id_responsable:id_responsable, id_étudiant:id_étudiant });
+
+      res.json(suivis);
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  });
 module.exports = {
     getSuiviById,
     createSuivi,
@@ -136,5 +154,6 @@ module.exports = {
     deleteChat,
     getSuivisByIdResponsable,
     deleteChatMessage,
-    getSuiviByIdEtud
+    getSuiviByIdEtud,
+    getSuiviByIdResponsable_etud
   }

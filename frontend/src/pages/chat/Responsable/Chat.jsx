@@ -83,7 +83,40 @@ const ChatR = () => {
     } catch (error) {
       console.error('Error fetching chat messages:', error.message);
     }
-  }, [storedId]);
+  }, [messages,chatId]);
+
+  useEffect(() => {
+    if (messageEndRef.current) {
+      messageEndRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [messages]);
+  const handleMsg = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await axios.post(`http://127.0.0.1:8000/api/suivi/send/${chatId}`, {
+          id_utilisateur: storedId[1],
+          message: newMsg,
+      });
+
+      setMessages((prevMessages) => [...prevMessages, response.data]);
+      setNewMsg('');
+    } catch (error) {
+      console.error('Error sending message:', error);
+    }
+  };
+
+  const handleMsgDelete = async (e, id) => {
+    e.preventDefault();
+    try {
+      await axios.put(`http://127.0.0.1:8000/api/suivi/deleteChatMessage/${id}`,  { id:chatId } );
+      setMessages((prevMessages) => prevMessages.filter((msg) => msg._id !== id));
+      console.log('Chat message deleted successfully');
+    } catch (error) {
+      console.error('Error deleting chat message:', error.message);
+    }
+  };
+
+
 
   useEffect(() => {
     if (messageEndRef.current) {
