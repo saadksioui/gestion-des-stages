@@ -58,7 +58,7 @@ const createSuivi = asyncHandler(async (req, res) => {
 const sendMessage = asyncHandler(async (req, res) => {
   try {
     const { id } = req.params; // This is the chat ID
-    const { id_utilisateur, message } = req.query;
+    const { id_utilisateur, message } = req.body;
 
     const newMessage = {
       id_utilisateur,

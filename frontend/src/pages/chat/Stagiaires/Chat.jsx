@@ -40,7 +40,7 @@ const ChatStg = () => {
       }
     };
     fetchMessages();
-  }, []);
+  }, [messages]);
   console.log(chatId);
   // Fetch responsable and user data
   useEffect(() => {
@@ -70,12 +70,10 @@ const ChatStg = () => {
     e.preventDefault();
     try {
       const response = await axios.post(`http://127.0.0.1:8000/api/suivi/send/${chatId}`, {
-        params: {
           id_utilisateur: storedId[1],
           message: newMsg,
-        }
       });
-      
+
       setMessages((prevMessages) => [...prevMessages, response.data]);
       setNewMsg('');
     } catch (error) {
