@@ -6,7 +6,8 @@ const suiviController = require('../controllers/suiviController');
 router.get('/show/:id', suiviController.getSuiviById);
 
 // GET all suivis for one Responsable
-router.get('/get_responsable_etud', suiviController.getSuiviByIdResponsable_etud);
+router.get('/get_responsable', suiviController.getSuivisByIdResponsable);
+router.get('/get_etud', suiviController.getSuiviByIdEtud);
 
 // Create a new suivi
 router.post('/add', suiviController.createSuivi);

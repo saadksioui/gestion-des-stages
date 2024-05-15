@@ -15,13 +15,24 @@ const getSuiviById = asyncHandler(async (req, res) => {
   });
 
 
-  const getSuiviByIdResponsable_etud = asyncHandler(async (req, res) => {
+  const getSuivisByIdResponsable = asyncHandler(async (req, res) => {
     try {
-      const { id_responsable ,id_étudiant } = req.body;
+      const { id_responsable } = req.body;
 
-      const suivis = await Suivi.findOne({ id_responsable:id_responsable ,id_étudiant:id_étudiant});
+      const suivis = await Suivi.find({ id_responsable:id_responsable});
 
       res.json(suivis);
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+  const getSuiviByIdEtud = asyncHandler(async (req, res) => {
+    try {
+      const { id_étudiant } = req.body;
+
+      const suivi = await Suivi.findOne({ id_étudiant:id_étudiant});
+
+      res.json(suivi);
     } catch (error) {
       res.status(500).json({ message: error.message });
     }
@@ -123,7 +134,7 @@ module.exports = {
     sendMessage,
     deleteSuivi,
     deleteChat,
-    getSuiviByIdResponsable_etud,
-    deleteChatMessage
-
+    getSuivisByIdResponsable,
+    deleteChatMessage,
+    getSuiviByIdEtud
   }
