@@ -14,7 +14,7 @@ router.get('/get_etud', suiviController.getSuiviByIdEtud);
 router.post('/add', suiviController.createSuivi);
 
 // Update a suivi
-router.put('/send/:id', suiviController.sendMessage);
+router.post('/send/:id', suiviController.sendMessage);
 
 // Delete a suivi
 router.delete('/delete/:id', suiviController.deleteSuivi);

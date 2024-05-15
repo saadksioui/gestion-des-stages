@@ -8,38 +8,40 @@ const ChatStg = () => {
   const [newMsg, setNewMsg] = useState('');
   const [messages, setMessages] = useState([]);
   const [responsable, setResponsable] = useState({});
-  
+
   const [chat, setchat] = useState({});
   console.log(chat);
   const [chatId, setChatId] = useState();
   const [responsableID, setResponsableID] = useState();
   const [user, setUser] = useState({});
   const messageEndRef = useRef(null);
-  
+
   const storedData = localStorage.getItem('sessionToken');
-  
-  let storedId= storedData.split(',');
+
+  let storedId = storedData.split(',');
 
   console.log(storedId[1]);
 
   // Fetch chat messages
   useEffect(() => {
     const fetchMessages = async () => {
-      const data={
-        id_étudiant: storedId[1]
-    }
       try {
-        const response = await axios.get('http://127.0.0.1:8000/api/suivi/get_etud',data );
+        const response = await axios.get('http://127.0.0.1:8000/api/suivi/get_etud', {
+          params: {
+            id_étudiant: storedId[1]
+          }
+        });
         console.log(response.data);
         setMessages(response.data.chat);
         setchat(response.data);
+        setChatId(response.data._id);
       } catch (error) {
         console.error('Error fetching data:', error);
       }
     };
     fetchMessages();
   }, []);
-
+  console.log(chatId);
   // Fetch responsable and user data
   useEffect(() => {
     const fetchData = async () => {
@@ -66,12 +68,14 @@ const ChatStg = () => {
 
   const handleMsg = async (e) => {
     e.preventDefault();
-    const newMessage = {
-      id_utilisateur: storedId[1],
-      message: newMsg,
-    };
     try {
-      const response = await axios.post(`http://127.0.0.1:8000/api/suivi/send/${chatId}`, newMessage);
+      const response = await axios.post(`http://127.0.0.1:8000/api/suivi/send/${chatId}`, {
+        params: {
+          id_utilisateur: storedId[1],
+          message: newMsg,
+        }
+      });
+      
       setMessages((prevMessages) => [...prevMessages, response.data]);
       setNewMsg('');
     } catch (error) {
@@ -89,7 +93,7 @@ const ChatStg = () => {
       console.error('Error deleting chat message:', error.message);
     }
   };
-  
+
   return (
     <UserLayout>
       <div className='p-10 w-full h-full flex items-center gap-10'>
@@ -150,7 +154,7 @@ const ChatStg = () => {
                 className='w-[90%] outline-none h-full rounded-xl bg-[#F6F6F6] placeholder:text-[#999999] text-lg text-black pl-2'
                 placeholder='Type your message here...'
               />
-              <button className='p-3 w-[10%] text-white bg-black rounded-xl'>Send</button>
+              <button type='submit' className='p-3 w-[10%] text-white bg-black rounded-xl'>Send</button>
             </form>
           </div>
         </div>
