@@ -1,8 +1,13 @@
+import axios from "axios";
 import { useState } from "react";
 import { FaXmark } from "react-icons/fa6";
 import Swal from "sweetalert2";
 
 const EntrepriseForm = ({ isOpen, onClose, handleCloseModal }) => {
+
+    const storedData = localStorage.getItem("sessionToken");
+    let stored= storedData.split(",");
+
     const [titreF, setTitreF] = useState('');
     const [descriptionF, setDescriptionF] = useState('');
     const [domaineF, setDomaineF] = useState('');
@@ -13,10 +18,10 @@ const EntrepriseForm = ({ isOpen, onClose, handleCloseModal }) => {
     const [typeStgF, setTypeStgF] = useState('');
 
     const dureeAvail = [
-        '1 mois',
-        '2 mois',
-        '4 mois',
-        '6 mois',
+        1,
+        2,
+        4,
+        6,
     ]
 
     const typeStgAvail = [
@@ -25,7 +30,7 @@ const EntrepriseForm = ({ isOpen, onClose, handleCloseModal }) => {
         "Fin D'études",
     ]
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async(e) => {
         e.preventDefault()
 
         const emptyFields = [titreF, descriptionF, domaineF, localisationF, competencesRequisesF, dateDebutF, dureeF, typeStgF].filter(field => field === '').length > 0;
@@ -48,12 +53,24 @@ const EntrepriseForm = ({ isOpen, onClose, handleCloseModal }) => {
                 localisation: localisationF,
                 competences_requises: competencesRequisesF,
                 date_debut: dateDebutF,
+                entreprise: stored[1],
                 duree: dureeF,
                 type_stage: typeStgF,
             }
 
             console.log("Form submitted:", stageData);
-
+            try {
+                const response = await axios.post('http://127.0.0.1:8000/api/stage/add', stageData);
+                console.log('Stage added:', response.data);
+                handleCloseModal();
+                Swal.fire({
+                    icon: "success",
+                    title: "Success",
+                    text: "Stage added successfully.",
+                });
+            } catch (error) {
+                console.error('Error adding stage:', error);
+            }
             setTitreF('')
             setDescriptionF('')
             setDomaineF('')
@@ -113,7 +130,7 @@ const EntrepriseForm = ({ isOpen, onClose, handleCloseModal }) => {
                                     <option>Séléctionner une durée</option>
                                     {
                                         dureeAvail.map((item) => (
-                                            <option value={item}>{item}</option>
+                                            <option value={item}>{item} mois</option>
                                         ))
                                     }
                                 </select>

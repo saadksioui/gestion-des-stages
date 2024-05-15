@@ -78,12 +78,24 @@ const searchStages = asyncHandler(async (req, res) => {
       res.status(500).json({ message: error.message });
     }
   });
+
+  //* get stage by entreprise id 
+  const getStagesByEntrepriseId = asyncHandler(async (req, res) => {
+    try {
+      const { entrepriseId } = req.params;
+      const stages = await Stage.find({ entreprise: entrepriseId });
+      res.json(stages);
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  });
   
 module.exports = {
   getAllStages,
   createStage,
   updateStage,
   deleteStage,
-  searchStages
+  searchStages,
+  getStagesByEntrepriseId
 };
 

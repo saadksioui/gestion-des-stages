@@ -19,7 +19,7 @@ const ListeErps = () => {
 
     fetchUsers()
   }, [])
-  console.log(users);
+  
 
   const Entrprises = users.filter(user => user.type_utilisateur === 'entreprise')
 

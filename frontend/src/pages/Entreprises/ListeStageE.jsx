@@ -3,8 +3,11 @@ import { icons } from "../../constants";
 import UserLayout from "../../layouts/UserLayout";
 import EntrepriseForm from "../../components/EntrepriseForm";
 import Swal from "sweetalert2";
+import axios from "axios";
 
-const ListeStage = () => {
+const ListeStageE = () => {
+  const [stages, setStages] = useState([])
+
   const storedData = localStorage.getItem("sessionToken");
   let stored;
 
@@ -15,7 +18,7 @@ const ListeStage = () => {
   } catch (error) {
     console.error('Error parsing session token:', error);
   }
-  console.log(stored[2]);
+
   const containerRef = useRef(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -28,6 +31,19 @@ const ListeStage = () => {
       containerRef.current.classList.remove('overflow-y-scroll');
     }
   }, []);
+
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const response = await axios.get(`http://127.0.0.1:8000/api/stage/entreprise/${stored[1]}`);
+        setStages(response.data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchUsers()
+  }, [stored[1]])
 
   const handleOpenModal = () => {
     setIsModalOpen(true);
@@ -43,9 +59,9 @@ const ListeStage = () => {
     <UserLayout>
       <section className="px-10 mt-10">
         <h1 className="text-4xl font-bold">Liste des stages</h1>
-        {stored[2] === 'entreprise' ? <button onClick={handleOpenModal} className="text-white bg-blue-500 hover:bg-blue-700 font-bold py-2 px-4 rounded mt-4">
+        <button onClick={handleOpenModal} className="text-white bg-blue-500 hover:bg-blue-700 font-bold py-2 px-4 rounded mt-4">
           Ajouter un stage
-        </button> : null}
+        </button>
         
         <div className="my-6 flex items-center justify-between">
           <form action="" >
@@ -71,110 +87,37 @@ const ListeStage = () => {
                           </a>
                         </th>
                         <th scope="col" className="px-6 py-3 text-start font-semibold">Domaine</th>
+                        <th scope="col" className="px-6 py-3 text-start font-semibold">Date debut</th>
                         <th scope="col" className="px-6 py-3 text-start font-semibold">Action</th>
                       </tr>
                     </thead>
                     <tbody>
-                      <tr>
-                        <td className="px-6 py-4 whitespace-nowrap block w-52 truncate  text-sm font-medium text-gray-800">
-                          Lorem ipsum dolor sitsdqdsqdfsqdfsqdfsd
-                        </td>
+                      {stages.map((stage,i)=>(
+                        <tr key={i}>
+                          <td className="px-6 py-4 whitespace-nowrap block w-52 truncate  text-sm font-medium text-gray-800">
+                            {stage.titre}
+                          </td>
 
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
-                          2 mois
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
-                          Full Stack
-                        </td>
-                        <td className={`px-6 py-4 flex items-center gap-5 whitespace-nowrap text-sm text-gray-800`}>
-                          <a href="#">
-                            <img src={icons.Info} alt="" />
-                          </a>
-                          <a href="#">
-                            <img src={icons.Edit} alt="" />
-                          </a>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td className="px-6 py-4 whitespace-nowrap block w-52 truncate  text-sm font-medium text-gray-800">
-                          Lorem ipsum dolor sitsdqdsqdfsqdfsqdfsd
-                        </td>
-
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
-                          2 mois
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
-                          Full Stack
-                        </td>
-                        <td className={`px-6 py-4 flex items-center gap-5 whitespace-nowrap text-sm text-gray-800`}>
-                          <a href="#">
-                            <img src={icons.Info} alt="" />
-                          </a>
-                          <a href="#">
-                            <img src={icons.Edit} alt="" />
-                          </a>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td className="px-6 py-4 whitespace-nowrap block w-52 truncate  text-sm font-medium text-gray-800">
-                          Lorem ipsum dolor sitsdqdsqdfsqdfsqdfsd
-                        </td>
-
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
-                          2 mois
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
-                          Full Stack
-                        </td>
-                        <td className={`px-6 py-4 flex items-center gap-5 whitespace-nowrap text-sm text-gray-800`}>
-                          <a href="#">
-                            <img src={icons.Info} alt="" />
-                          </a>
-                          <a href="#">
-                            <img src={icons.Edit} alt="" />
-                          </a>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td className="px-6 py-4 whitespace-nowrap block w-52 truncate  text-sm font-medium text-gray-800">
-                          Lorem ipsum dolor sitsdqdsqdfsqdfsqdfsd
-                        </td>
-
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
-                          5 mois
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
-                          Full Stack
-                        </td>
-                        <td className={`px-6 py-4 flex items-center gap-5 whitespace-nowrap text-sm text-gray-800`}>
-                          <a href="#">
-                            <img src={icons.Info} alt="" />
-                          </a>
-                          <a href="#">
-                            <img src={icons.Edit} alt="" />
-                          </a>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td className="px-6 py-4 whitespace-nowrap block w-52 truncate  text-sm font-medium text-gray-800">
-                          Lorem ipsum dolor sitsdqdsqdfsqdfsqdfsd
-                        </td>
-
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
-                          1 mois
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
-                          Full Stack
-                        </td>
-                        <td className={`px-6 py-4 flex items-center gap-5 whitespace-nowrap text-sm text-gray-800`}>
-                          <a href="#">
-                            <img src={icons.Info} alt="" />
-                          </a>
-                          <a href="#">
-                            <img src={icons.Edit} alt="" />
-                          </a>
-                        </td>
-                      </tr>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
+                            {stage.duree} mois
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
+                          {stage.domaine}
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
+                          {stage.date_debut.substring(0, 10)}
+                          </td>
+                          <td className={`px-6 py-4 flex items-center gap-5 whitespace-nowrap text-sm text-gray-800`}>
+                            <a href="#">
+                              <img src={icons.Info} alt="" />
+                            </a>
+                            <a href="#">
+                              <img src={icons.Edit} alt="" />
+                            </a>
+                          </td>
+                        </tr>
+                      ))}
+                      
                     </tbody>
                   </table>
                 </div>
@@ -184,7 +127,6 @@ const ListeStage = () => {
         </div>
       </section>
 
-      {/* Render the Modal component */}
       <EntrepriseForm
         isOpen={isModalOpen}
         onClose={handleCloseModal}
@@ -194,4 +136,4 @@ const ListeStage = () => {
   )
 };
 
-export default ListeStage;
+export default ListeStageE;

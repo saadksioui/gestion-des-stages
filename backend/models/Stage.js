@@ -19,8 +19,8 @@ const stageSchema = new mongoose.Schema({
         required: true
     },
     competences_requises: {
-        type: [String],
-        default: []
+        type: String
+        
     },
     date_debut: {
         type: Date,

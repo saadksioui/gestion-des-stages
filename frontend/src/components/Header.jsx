@@ -46,7 +46,7 @@ const Header = () => {
             }
           </ul>
         </div>
-        <Link to={'/register'}>
+        <Link to={'/login'}>
           <div className="text-white font-semibold p-3 rounded-xl border-white border-2 hover:bg-white hover:text-black duration-150">
             Commencer
           </div>

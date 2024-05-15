@@ -5,6 +5,8 @@ const stageController = require('../controllers/stageController');
 // GET all stages
 router.get('/', stageController.getAllStages);
 
+// GET all stages by entreprise
+router.get('/entreprise/:entrepriseId', stageController.getStagesByEntrepriseId);
 // Create a new stage
 router.post('/add', stageController.createStage);
 
