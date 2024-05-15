@@ -64,8 +64,9 @@ const ChatR = () => {
 
   const showChat = useCallback(async (id) => {
     try {
-      const response = await axios.get('http://127.0.0.1:8000/api/suivi/get_etud', {
+      const response = await axios.get('http://127.0.0.1:8000/api/suivi/getSuiviByIdResponsable_etud', {
           id_étudiant: id,
+          id_responsable:storedId[1]
         }
       );
 

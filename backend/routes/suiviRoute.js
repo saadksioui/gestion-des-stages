@@ -2,11 +2,12 @@ const express = require('express');
 const router = express.Router();
 const suiviController = require('../controllers/suiviController');
 
-// GET all suivis
+// GET  suivis
 router.get('/show/:id', suiviController.getSuiviById);
 
 // GET all suivis for one Responsable
 router.get('/get_responsable', suiviController.getSuivisByIdResponsable);
+router.get('/getSuiviByIdResponsable_etud', suiviController.getSuiviByIdResponsable_etud);
 router.get('/get_etud', suiviController.getSuiviByIdEtud);
 
 // Create a new suivi

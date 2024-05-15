@@ -60,10 +60,9 @@ const sendMessage = asyncHandler(async (req, res) => {
       created_at: Date.now(),
     };
 
-    const updatedSuivi = await Suivi.findByIdAndUpdate(
-      id,
-      { $push: { chat: newMessage } },
-      { new: true } // Return the updated document
+    const updatedSuivi = await Suivi.updateOne(
+      {_id:id},
+      { $push: { chat: newMessage } }
     );
 
     if (!updatedSuivi) {
@@ -127,7 +126,17 @@ const deleteChat = asyncHandler(async (req, res) => {
     }
   });
 
+  const getSuiviByIdResponsable_etud = asyncHandler(async (req, res) => {
+    try {
+      const { id_responsable ,id_étudiant } = req.query; 
 
+      const suivis = await Suivi.findOne({ id_responsable:id_responsable, id_étudiant:id_étudiant });
+
+      res.json(suivis);
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  });
 module.exports = {
     getSuiviById,
     createSuivi,
@@ -136,5 +145,6 @@ module.exports = {
     deleteChat,
     getSuivisByIdResponsable,
     deleteChatMessage,
-    getSuiviByIdEtud
+    getSuiviByIdEtud,
+    getSuiviByIdResponsable_etud
   }

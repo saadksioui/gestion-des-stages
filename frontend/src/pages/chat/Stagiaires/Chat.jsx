@@ -5,44 +5,49 @@ import UserLayout from '../../../layouts/UserLayout';
 import axios from 'axios';
 
 const ChatStg = () => {
-  const [chatId, setChatId] = useState('6640f2bccab400624d11ff3c');
   const [newMsg, setNewMsg] = useState('');
   const [messages, setMessages] = useState([]);
   const [responsable, setResponsable] = useState({});
+  
+  const [chat, setchat] = useState({});
+  console.log(chat);
+  const [chatId, setChatId] = useState();
+  const [responsableID, setResponsableID] = useState();
   const [user, setUser] = useState({});
   const messageEndRef = useRef(null);
-
+  
   const storedData = localStorage.getItem('sessionToken');
-  let storedId;
+  
+  let storedId= storedData.split(',');
 
-  try {
-    if (storedData) {
-      storedId = storedData.split(',');
-    }
-  } catch (error) {
-    console.error('Error parsing session token:', error);
-  }
+  console.log(storedId[1]);
 
   // Fetch chat messages
   useEffect(() => {
     const fetchMessages = async () => {
+      const data={
+        id_étudiant: storedId[1]
+    }
       try {
-        const response = await axios.get(`http://127.0.0.1:8000/api/suivi/show/${chatId}`);
+        const response = await axios.get('http://127.0.0.1:8000/api/suivi/get_etud',data );
+        console.log(response.data);
         setMessages(response.data.chat);
+        setchat(response.data);
       } catch (error) {
         console.error('Error fetching data:', error);
       }
     };
     fetchMessages();
-  }, [chatId]);
+  }, []);
 
   // Fetch responsable and user data
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const responsableResponse = await axios.get(`http://127.0.0.1:8000/api/responsable/show/${storedId[1]}`);
+        const responsableIdResponse = await axios.get(`http://127.0.0.1:8000/api/responsable/show/${storedId[1]}`);
+        setResponsableID(responsableIdResponse.data._id);
+        const responsableResponse = await axios.get(`http://127.0.0.1:8000/api/auth/findById/${responsableIdResponse.data._id}`);
         setResponsable(responsableResponse.data);
-
         const userResponse = await axios.get(`http://127.0.0.1:8000/api/auth/findById/${storedId[1]}`);
         setUser(userResponse.data);
       } catch (error) {
@@ -50,14 +55,14 @@ const ChatStg = () => {
       }
     };
     fetchData();
-  }, [storedId]);
+  }, []);
 
   // Scroll to the newest message
   useEffect(() => {
     if (messageEndRef.current) {
       messageEndRef.current.scrollIntoView({ behavior: 'smooth' });
     }
-  }, [messages]);
+  }, []);
 
   const handleMsg = async (e) => {
     e.preventDefault();
@@ -84,7 +89,7 @@ const ChatStg = () => {
       console.error('Error deleting chat message:', error.message);
     }
   };
-
+  
   return (
     <UserLayout>
       <div className='p-10 w-full h-full flex items-center gap-10'>
