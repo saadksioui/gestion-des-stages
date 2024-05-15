@@ -9,7 +9,7 @@ router.get('/', stageController.getAllStages);
 router.get('/entreprises/:entrepriseId', stageController.getStagesByEntrepriseId);
 
 // GET all stages by entreprise
-router.get('/entreprise/:entrepriseId', stageController.getStageByEntrepriseId);
+router.get('/onestage/:id', stageController.getStageById);
 // Create a new stage
 router.post('/add', stageController.createStage);
 

@@ -55,9 +55,9 @@ const ListeStage = () => {
     fetchStages();
   }, []);
 
-  const fetchStageData = async (entreprise) => {
+  const fetchStageData = async (id) => {
     try {
-      const response = await axios.get(`http://127.0.0.1:8000/api/stage/entreprise/${entreprise}`);
+      const response = await axios.get(`http://127.0.0.1:8000/api/stage/onestage/${id}`);
       setStageData(response.data);
       console.log(stageData);
       if(stageData) setIsModalOpen(true);
@@ -133,7 +133,7 @@ const ListeStage = () => {
                               {stage.domaine}
                             </td>
                             <td className="px-6 py-4 flex items-center gap-5 whitespace-nowrap text-sm text-gray-800">
-                              <button onClick={(e) => fetchStageData(stage.entreprise)}>
+                              <button onClick={(e) => fetchStageData(stage._id)}>
                                 <img src={icons.Info} alt="Info icon" />
                               </button>
                               <a href="#">
