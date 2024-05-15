@@ -65,7 +65,7 @@ const Contact = () => {
                                 </p>
                                 <p className="font-normal flex gap-5 items-center">
                                     <IoMail className="text-3xl" />
-                                    <span className="text-xl text-[#327AF8] font-medium">e.stage@gmail.com</span>
+                                    <span className="text-xl text-[#327AF8] font-medium">ofppt.estage@gmail.com</span>
                                 </p>
                             </div>
                         </div>
