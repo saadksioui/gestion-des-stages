@@ -21,6 +21,8 @@ import AddResp from "./components/AdminForms/AddResp";
 import ListeStageE from "./pages/Entreprises/ListeStageE";
 import DemandesE from "./pages/Entreprises/DemandesE";
 import DocumentsR from "./pages/Responsable/DocumentsR";
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const App = () => {
   const storedData = localStorage.getItem("sessionToken");
@@ -29,20 +31,20 @@ const App = () => {
     <div>
       <BrowserRouter>
         <Routes>
-        {storedRole !== 'admin' && storedRole !== 'entreprise' && storedRole !== 'étudiant' && storedRole !== 'responsable pédagogique' && (
-          <>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/register" element={<RegisterPage />} />
+          {storedRole !== 'admin' && storedRole !== 'entreprise' && storedRole !== 'étudiant' && storedRole !== 'responsable pédagogique' && (
+            <>
+              <Route path="/" element={<HomePage />} />
+              <Route path="/login" element={<LoginPage />} />
+              <Route path="/register" element={<RegisterPage />} />
 
-          </>
-        )}
-          
+            </>
+          )}
+
           {(storedRole === 'entreprise' || storedRole === 'admin') && (
             <>
               <Route path="/profile" element={<Profile />} />
-              <Route path="/liste-stages" element={<ListeStageE/>} />
-              <Route path="/demandes" element={<DemandesE/>} />
+              <Route path="/liste-stages" element={<ListeStageE />} />
+              <Route path="/demandes" element={<DemandesE />} />
               <Route path="/contact" element={<Contact />} />
 
             </>
@@ -50,8 +52,8 @@ const App = () => {
           {(storedRole === 'étudiant' || storedRole === 'admin') && (
             <>
               <Route path="/profile" element={<Profile />} />
-              <Route path="/liste-stages" element={<ListeStage/>} />
-              <Route path="/demandes" element={<Demandes/>} />
+              <Route path="/liste-stages" element={<ListeStage />} />
+              <Route path="/demandes" element={<Demandes />} />
               <Route path="/contact" element={<Contact />} />
               <Route path="/chat" element={<Chat />} />
               <Route path="/documents" element={<Documents />} />
@@ -61,29 +63,42 @@ const App = () => {
             <>
               <Route path="/profile" element={<Profile />} />
               <Route path="/liste-stages" element={<ListeStagiaires />} />
-              <Route path="/documents" element={<DocumentsR/>} />
+              <Route path="/documents" element={<DocumentsR />} />
               <Route path="/contact" element={<Contact />} />
               <Route path="/chat" element={<ChatR />} />
 
             </>
           )}
           {storedRole === 'admin' && (
-          <>
-            <Route path="/profileA" element={<ProfileA />} />
-            <Route path="/entreprise-form" element={<EntrepriseForm />} />
-            <Route path="/stagaire-form" element={<StagiaireForm />} />
-            <Route path="/verifystg" element={<VerifyStg />} />
-            <Route path="/admin/liste-des-stagiaires" element={<ListeStgs />} />
-            <Route path="/admin/liste-des-responsables" element={<ListeResps />} />
-            <Route path="/admin/liste-des-entrprises" element={<ListeErps />} />
-            <Route path="/admin/addResp" element={<AddResp />} />
-          </>
-        )}
-          //todo : create NotFound page 
+            <>
+              <Route path="/profileA" element={<ProfileA />} />
+              <Route path="/entreprise-form" element={<EntrepriseForm />} />
+              <Route path="/stagaire-form" element={<StagiaireForm />} />
+              <Route path="/verifystg" element={<VerifyStg />} />
+              <Route path="/admin/liste-des-stagiaires" element={<ListeStgs />} />
+              <Route path="/admin/liste-des-responsables" element={<ListeResps />} />
+              <Route path="/admin/liste-des-entrprises" element={<ListeErps />} />
+              <Route path="/admin/addResp" element={<AddResp />} />
+            </>
+          )}
+
+          //todo : create NotFound page
           {/* <Route path='*' element={<Navigate to='/' />} /> */}
         </Routes>
       </BrowserRouter>
-
+      <ToastContainer
+            position="bottom-right"
+            autoClose={5000}
+            hideProgressBar={false}
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+            theme="dark"
+            transition:Bounce
+          />
     </div>
   )
 };
