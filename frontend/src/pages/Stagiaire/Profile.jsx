@@ -29,7 +29,7 @@ const Profile = () => {
       }
     };
     fetchData();
-  }, []);
+  }, [User]);
 
   const handleOpenModal = () => {
     setIsModalOpen(true);

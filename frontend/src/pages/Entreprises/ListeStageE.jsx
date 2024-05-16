@@ -47,7 +47,7 @@ const ListeStageE = () => {
     };
 
     fetchUsers()
-  }, [stored[1]])
+  }, [stages])
 
   const handleOpenModal = () => {
     setIsModalOpen(true);
@@ -155,6 +155,9 @@ const ListeStageE = () => {
                             </a>
                             <a href="#">
                               <img src={icons.Edit} alt="" />
+                            </a>
+                            <a href="#">
+                              <img src={icons.Delete} alt="" />
                             </a>
                           </td>
                         </tr>

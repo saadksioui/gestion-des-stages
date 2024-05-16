@@ -20,7 +20,7 @@ const UserSchema = mongoose.Schema({
     },
     img_url: {
         type: String,
-        default: '1.png'
+        default: 'default/1.png'
     },
     telephone: {
         type: String,
