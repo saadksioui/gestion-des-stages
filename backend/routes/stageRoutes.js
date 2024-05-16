@@ -7,6 +7,9 @@ router.get('/', stageController.getAllStages);
 
 // GET all stages by entreprise
 router.get('/entreprise/:entrepriseId', stageController.getStagesByEntrepriseId);
+
+// GET one stage by id
+router.get('/onestage/:id', stageController.getStageById);
 // Create a new stage
 router.post('/add', stageController.createStage);
 
