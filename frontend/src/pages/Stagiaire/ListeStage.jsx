@@ -5,6 +5,7 @@ import EntrepriseForm from "../../components/EntrepriseForm";
 import Swal from "sweetalert2";
 import axios from "axios";
 import StageInfo from "../../components/StageInfo";
+import { toast } from "react-toastify";
 
 const ListeStage = () => {
   const storedData = localStorage.getItem("sessionToken");
@@ -19,7 +20,7 @@ const ListeStage = () => {
       stored = storedData.split(",");
     }
   } catch (error) {
-    console.error('Error parsing session token:', error);
+    toast.error('Error parsing session token:', error);
   }
 
   const containerRef = useRef(null);
@@ -48,7 +49,7 @@ const ListeStage = () => {
         const response = await axios.get('http://127.0.0.1:8000/api/stage/');
         setStages(response.data);
       } catch (error) {
-        console.error("Error fetching stages:", error);
+        toast.error("Error fetching stages:", error);
       }
     };
 

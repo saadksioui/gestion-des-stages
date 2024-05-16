@@ -48,16 +48,25 @@ const getCandidaturesById = async (req, res) => {
     } catch (error) {
       res.status(500).json({ message: error.message });
     }
-  
+
 };
 
 const getCandidaturesByStage = async (req, res) => {
   try {
     const { id_stage } = req.body;
     const candidatures = await Candidature.find({id_stage:id_stage});
-    if (candidatures.length === 0) {
-      return res.status(404).json({ message: "introuvable" });
-    }
+    res.json(candidatures);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+
+};
+const getCandidaturesByStagiaire = async (req, res) => {
+  try {
+    const { id_stagiaire } = req.params;
+    const candidatures = await Candidature.find({
+      id_utilisateur: id_stagiaire
+    });
     res.json(candidatures);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -71,5 +80,6 @@ module.exports = {
   updateCandidature,
   deleteCandidature,
   getCandidaturesById,
-  getCandidaturesByStage
+  getCandidaturesByStage,
+  getCandidaturesByStagiaire
 };

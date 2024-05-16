@@ -1,11 +1,16 @@
-import { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { icons } from "../../constants";
 import UserLayout from "../../layouts/UserLayout";
 import { TbPointFilled } from "react-icons/tb";
-
+import { toast } from "react-toastify";
+import { Link } from "react-router-dom";
+import axios from "axios"; // Add this line
 
 const Demandes = () => {
   const containerRef = useRef(null);
+  const [demandes, setDemandes] = useState([]);
+  const storedData = localStorage.getItem("sessionToken");
+  const storedId = storedData ? storedData.split(",")[1] : null; // Check if storedData exists
 
   useEffect(() => {
     const containerHeight = containerRef.current.clientHeight;
@@ -16,6 +21,22 @@ const Demandes = () => {
       containerRef.current.classList.remove('overflow-y-scroll');
     }
   }, []);
+
+  useEffect(() => {
+    const fetchDemandes = async () => {
+      try {
+        if (storedId) {
+          const response = await axios.get(`http://127.0.0.1:8000/api/candidature/demandes/${storedId}`);
+          setDemandes(response.data);
+        }
+      } catch (error) {
+        toast.error("Error fetching demandes:", error);
+      }
+    };
+
+    fetchDemandes();
+  }, [storedId]);
+
   return (
     <UserLayout>
       <section className="px-10 mt-10">
@@ -43,74 +64,38 @@ const Demandes = () => {
                       </tr>
                     </thead>
                     <tbody>
-                      <tr>
-                        <td className="px-6 py-4 whitespace-nowrap block w-52 truncate  text-sm font-medium text-gray-800">
-                          Lorem ipsum dolor sitsdqdsqdfsqdfsqdfsd
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap gap-1">
-                          <div className="flex items-center bg-[#1565d833] text-[#1565D8] w-fit px-2 py-1 rounded-lg">
-                            <TbPointFilled className="text-lg" />
-                            <span>
-                              En cours
-                            </span>
-                          </div>
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
-                          Full Stack
-                        </td>
-                        <td className={`px-6 py-4 flex items-center gap-5 whitespace-nowrap text-sm text-gray-800`}>
-                          <a href="#">
-                            <img src={icons.Info} alt="" />
-                          </a>
-                          <a href="#">
-                            <img src={icons.Delete} alt="" />
-                          </a>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td className="px-6 py-4 whitespace-nowrap block w-52 truncate  text-sm font-medium text-gray-800">
-                          Lorem ipsum dolor sitsdqdsqdfsqdfsqdfsd
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap gap-1">
-                          <div className="flex items-center bg-[#ff00002b] text-[#FF0000] w-fit px-2 py-1 rounded-lg">
-                            <TbPointFilled className="text-lg" />
-                            <span>En attendant</span>
-                          </div>
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
-                          Full Stack
-                        </td>
-                        <td className={`px-6 py-4 flex items-center gap-5 whitespace-nowrap text-sm text-gray-800`}>
-                          <a href="#">
-                            <img src={icons.Info} alt="" />
-                          </a>
-                          <a href="#">
-                            <img src={icons.Delete} alt="" />
-                          </a>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td className="px-6 py-4 whitespace-nowrap block w-52 truncate  text-sm font-medium text-gray-800">
-                          Lorem ipsum dolor sitsdqdsqdfsqdfsqdfsd
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap gap-1">
-                          <div className="flex items-center bg-[#00ff0024] text-[#00FF00] w-fit px-2 py-1 rounded-lg">
-                            <TbPointFilled className="text-lg" />
-                            <span>Accepté</span>
-                          </div>
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
-                          Full Stack
-                        </td>
-                        <td className={`px-6 py-4 flex items-center gap-5 whitespace-nowrap text-sm text-gray-800`}>
-                          <a href="#">
-                            <img src={icons.Info} alt="" />
-                          </a>
-                          <a href="#">
-                            <img src={icons.Delete} alt="" />
-                          </a>
-                        </td>
-                      </tr>
+                      {demandes.length === 0 ? (
+                        <tr>
+                          <td className="text-center" colSpan="4">
+                            <h1 className="text-2xl font-bold text-center">Aucune demande</h1>
+                            <Link to={'/liste-stages'}>Créer une demande du stage</Link>
+                          </td>
+                        </tr>
+                      ) : (
+                        demandes.map((demande, index) => (
+                          <tr key={index}>
+                            <td className="px-6 py-4 whitespace-nowrap block w-52 truncate  text-sm font-medium text-gray-800">
+                              {demande._id}
+                            </td>
+                            <td className="px-6 py-4 whitespace-nowrap gap-1">
+                              <div className="flex items-center w-fit px-2 py-1 rounded-lg">
+                              {demande.statut_candidature}
+                              </div>
+                            </td>
+                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
+                              {demande.id_stage}
+                            </td>
+                            <td className={`px-6 py-4 flex items-center gap-5 whitespace-nowrap text-sm text-gray-800`}>
+                              <a href="#">
+                                <img src={icons.Info} alt="" />
+                              </a>
+                              <a href="#">
+                                <img src={icons.Delete} alt="" />
+                              </a>
+                            </td>
+                          </tr>
+                        ))
+                      )}
                     </tbody>
                   </table>
                 </div>
@@ -123,4 +108,4 @@ const Demandes = () => {
   )
 };
 
-export default Demandes
+export default Demandes;

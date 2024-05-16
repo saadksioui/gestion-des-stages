@@ -20,4 +20,7 @@ router.get('/search', candidatureController.getCandidaturesById);
 // GET candidature by Stage Id
 router.get('/search/stage', candidatureController.getCandidaturesByStage);
 
+// GET candidature by Stagiaire Id
+router.get('/demandes/:id_stagiaire', candidatureController.getCandidaturesByStagiaire);
+
 module.exports = router;
