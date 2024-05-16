@@ -58,9 +58,9 @@ const ChatStg = () => {
   // Scroll to the newest message
   useEffect(() => {
     if (messageEndRef.current) {
-      messageEndRef.current.scrollIntoView({ behavior: 'smooth' });
+      messageEndRef.current.scrollIntoView({ behavior: 'instant' });
     }
-  }, [messages]);
+  }, [messageEndRef.current]);
 
   const handleMsg = async (e) => {
     e.preventDefault();
@@ -87,7 +87,6 @@ const ChatStg = () => {
       console.error('Error deleting chat message:', error.message);
     }
   };
-
   return (
     <UserLayout>
       <div className='p-10 w-full h-full flex items-center gap-10'>
