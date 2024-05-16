@@ -6,7 +6,11 @@ import Swal from "sweetalert2";
 import axios from "axios";
 
 const ListeStageE = () => {
-  const [stages, setStages] = useState([])
+  const [stages, setStages] = useState([]);
+  const [selectedDomain, setSelectedDomain] = useState("");
+  const [searchTitle, setSearchTitle] = useState("");
+  const [filteredStages, setFilteredStages] = useState([]);
+  const [sortDirection, setSortDirection] = useState("asc");
 
   const storedData = localStorage.getItem("sessionToken");
   let stored;
@@ -53,7 +57,40 @@ const ListeStageE = () => {
     setIsModalOpen(false);
   };
 
+  useEffect(() => {
+    let filteredData = [...stages];
 
+    if (selectedDomain !== "") {
+      filteredData = filteredData.filter(stage => stage.domaine === selectedDomain);
+    }
+
+    if (searchTitle !== "") {
+      filteredData = filteredData.filter(stage => stage.titre.toLowerCase().includes(searchTitle.toLowerCase()));
+    }
+
+    setFilteredStages(filteredData);
+  }, [selectedDomain, searchTitle, stages]);
+
+  const handleSelectChange = (e) => {
+    setSelectedDomain(e.target.value);
+  };
+
+  const handleSearchTitleChange = (e) => {
+    setSearchTitle(e.target.value);
+  };
+
+  const handleSortByDuree = () => {
+    const sortedStages = [...filteredStages];
+    sortedStages.sort((a, b) => {
+      if (sortDirection === "asc") {
+        return a.duree - b.duree;
+      } else {
+        return b.duree - a.duree;
+      }
+    });
+    setFilteredStages(sortedStages);
+    setSortDirection(sortDirection === "asc" ? "desc" : "asc");
+  };
 
   return (
     <UserLayout>
@@ -64,10 +101,16 @@ const ListeStageE = () => {
         </button>
         
         <div className="my-6 flex items-center justify-between">
-          <form action="" >
+          <form action="" className="w-[308px] h-[47px] flex justify-between items-center px-3 border border-[#D6D6D6] rounded-xl bg-[#F6F6F6]">
+            <select id="liste-domaines" className="outline-none rounded-xl w-full bg-[#F6F6F6] text-[#999999] pl-2 " onChange={handleSelectChange}>
+              <option value="">Tous les domaines</option>
+              {Array.from(new Set(stages.map(item => item.domaine))).map((domaine, i) => (
+                <option key={i} value={domaine} className="text-black">{domaine}</option>
+              ))}
+            </select>
           </form>
           <form action="" className="w-[425px] h-[72px] flex justify-between items-center px-3 border border-[#D6D6D6] rounded-xl bg-[#F6F6F6]">
-            <input type="text" placeholder="Tapez quelque chose...." className="outline-none rounded-xl bg-[#F6F6F6] placeholder:text-[#999999] text-black pl-2" />
+            <input type="text" placeholder="Tapez titre...." value={searchTitle} onChange={handleSearchTitleChange} className="outline-none rounded-xl bg-[#F6F6F6] placeholder:text-[#999999] text-black pl-2" />
             <button type="submit" className="p-3 text-white bg-black rounded-xl">Rechercher</button>
           </form>
         </div>
@@ -80,7 +123,7 @@ const ListeStageE = () => {
                     <thead className="bg-white">
                       <tr>
                         <th scope="col" className="px-6 py-3 text-start font-semibold">Titre de stage</th>
-                        <th scope="col" className="px-6 py-3 flex items-center gap-3 text-start font-semibold">
+                        <th scope="col" className="px-6 py-3 flex items-center gap-3 text-start font-semibold" onClick={handleSortByDuree}>
                           <span>Durée de stage</span>
                           <a href="#">
                             <img src={icons.ArrowSwitched} className="size-4" alt="" />
@@ -92,20 +135,19 @@ const ListeStageE = () => {
                       </tr>
                     </thead>
                     <tbody>
-                      {stages.map((stage,i)=>(
+                      {filteredStages.map((stage, i) => (
                         <tr key={i}>
                           <td className="px-6 py-4 whitespace-nowrap block w-52 truncate  text-sm font-medium text-gray-800">
                             {stage.titre}
                           </td>
-
                           <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
                             {stage.duree} mois
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
-                          {stage.domaine}
+                            {stage.domaine}
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
-                          {stage.date_debut.substring(0, 10)}
+                            {stage.date_debut.substring(0, 10)}
                           </td>
                           <td className={`px-6 py-4 flex items-center gap-5 whitespace-nowrap text-sm text-gray-800`}>
                             <a href="#">
@@ -117,7 +159,6 @@ const ListeStageE = () => {
                           </td>
                         </tr>
                       ))}
-                      
                     </tbody>
                   </table>
                 </div>
@@ -127,6 +168,7 @@ const ListeStageE = () => {
         </div>
       </section>
 
+      {/* Modal component */}
       <EntrepriseForm
         isOpen={isModalOpen}
         onClose={handleCloseModal}
