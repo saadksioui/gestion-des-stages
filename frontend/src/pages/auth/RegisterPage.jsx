@@ -4,6 +4,7 @@ import images from "../../constants/images";
 import Swal from 'sweetalert2';
 import axios from 'axios';
 import VerifyStg from "../../components/VerifyStg";
+import { FaEye, FaEyeSlash } from "react-icons/fa6";
 
 const RegisterPage = () => {
   const [username, setUsername] = useState('')
@@ -11,6 +12,7 @@ const RegisterPage = () => {
   const [password, setPassword] = useState('')
   const [Message, setMessage] = useState();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [showPassword, setShowPassword] = useState(false)
 
 
   const isEightOrMoreCharacters = password.length >= 8;
@@ -67,9 +69,9 @@ const RegisterPage = () => {
   }
   return (
     <div>
-      <section className="flex h-screen justify-center gap-10 items-center font-poppins">
-        <div className="flex justify-center items-center w-1/2 h-full bg-black">
-          <img src={images.RegisterImg} alt="Hero Img" />
+      <section className="flex h-screen mx-10 justify-center gap-10 items-center font-poppins">
+        <div className="flex justify-center items-center w-1/2 h-full">
+          <img src={images.RegisterImg} alt="Hero Img" className="size-[532px]" />
         </div>
         <div className="w-1/2 h-full">
           {Message ? (
@@ -96,7 +98,14 @@ const RegisterPage = () => {
                 </div>
                 <div className="password flex flex-col mb-8">
                   <label htmlFor="password" className="text-[#6B778C] mb-1 ml-4 font-medium">Password</label>
-                  <input type="password" name="password" className="border border-[#C4C4C4] text-gray-600 py-2 px-4 rounded-lg outline-none" placeholder="Enter your password" value={password} onChange={e => setPassword(e.target.value)} />
+                  <div className="flex justify-between px-4 items-center rounded-lg border border-[#C4C4C4]">
+                    <input type={showPassword ? "text" : "password"} name="password" className="text-gray-600 py-2 outline-none rounded-lg flex-1" placeholder="Enter your password" value={password} onChange={e => setPassword(e.target.value)} />
+                    <div className="cursor-pointer" onClick={()=>setShowPassword(!showPassword)}>
+                      {
+                        showPassword ? <FaEyeSlash /> : <FaEye />
+                      }
+                    </div>
+                  </div>
                   <div className="passwordConf flex flex-wrap gap-3 mt-3">
                     <div className='flex items-center gap-1'>
                       <div className={`check size-3 rounded-full ${getColor(isEightOrMoreCharacters)}`}></div>

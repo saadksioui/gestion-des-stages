@@ -1,165 +1,124 @@
 import { useEffect, useState } from "react";
 import { icons, images } from "../constants";
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router-dom';
+import { IoIosArrowDown } from "react-icons/io";
+import { FaChevronCircleLeft } from "react-icons/fa";
 
 const UserSidebar = () => {
   const storedData = localStorage.getItem("sessionToken");
-  let storedRole = storedData.split(",");
+  const storedRole = storedData.split(",")[2];
 
-  const [dropdown, setDropDown] = useState(false)
-  const [role, setRole] = useState()
+  const [dropdown, setDropDown] = useState(false);
+  const [role, setRole] = useState();
+
   useEffect(() => {
-  if(storedRole[2] == 'étudiant'){
-    setRole(
+    const generateMenu = (menuItems) => (
       <div className="flex flex-col w-3/4 mx-auto items-start justify-between h-3/5">
         <div className="flex-1 w-full">
-          <h1 className="font-montserrat text-white">MENU</h1>
-          <ul className="flex flex-col items-start gap-5 mt-10 w-full text-white">
-            <li className={`flex flex-col items-center justify-between w-full`}>
-              <div className={`flex items-center justify-between w-full`}>
-                <div className="flex items-center gap-3">
-                  <img src={icons.GraduationCap} alt="" />
-                  <span>Stage</span>
+          <ul className="flex flex-col items-start gap-5 mt-10 w-full">
+            {menuItems.map((item, index) => (
+              <li key={index} className={`flex flex-col items-center justify-between w-full`}>
+                <div className={`flex items-center justify-between w-full`}>
+                  <div className="flex items-center gap-3">
+                    <img src={item.icon} alt="" className="w-6 h-6" />
+                    <span className="text-base">{item.title}</span>
+                  </div>
+                  {item.submenu && (
+                    <button onClick={() => setDropDown(!dropdown)}>
+                      <IoIosArrowDown className={`${dropdown ? 'transform rotate-180 duration-300' : 'transform rotate-0 duration-300'}`} alt="" />
+                    </button>
+                  )}
                 </div>
-                <button onClick={() => setDropDown(!dropdown)}>
-                  <img src={icons.ArrowContained} className={`${dropdown ? 'rotate-180 duration-300' : 'rotate-0 duration-300'}`} alt="" />
-                </button>
-              </div>
-              <ul className={`${dropdown ? 'flex flex-col items-start gap-5 mt-5' : 'hidden'}`}>
-                <li>
-                  <Link to="/liste-stages">
-                    Liste des stages
-                  </Link>
-                </li>
-                <li>
-                  <Link to="/demandes">
-                    Demandes
-                  </Link>
-                </li>
-              </ul>
-
-            </li>
-            <li>
-              <Link to={'/documents'} className={`flex items-center gap-3`}>
-                <img src={icons.File} alt="" />
-                <span>Documents</span>
-              </Link>
-            </li>
-            <li>
-              <Link to={'/chat'} className={`flex items-center gap-3`}>
-                <img src={icons.Mail} alt="" />
-                <span>Message</span>
-              </Link>
-            </li>
+                {item.submenu && (
+                  <ul className={`${dropdown ? 'flex flex-col items-start gap-2 mt-2' : 'hidden'}`}>
+                    {item.submenu.map((subItem, subIndex) => (
+                      <li key={subIndex}>
+                        <Link to={subItem.link} className="text-sm hover:text-gray-700">
+                          {subItem.title}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </li>
+            ))}
           </ul>
         </div>
         <div>
-          <Link to="/contact" className={`flex items-center gap-3 text-white`}>
-            <img src={icons.Support} alt="" />
-            <span>Support</span>
+          <Link to="/contact" className={`flex items-center gap-3`}>
+            <img src={icons.Support} alt="" className="w-6 h-6" />
+            <span className="text-base">Support</span>
           </Link>
         </div>
       </div>
-    )
-  }
-  else if(storedRole[2] == 'entreprise'){
-    setRole(
-      <div className="flex flex-col w-3/4 mx-auto items-start justify-between h-3/5">
-        <div className="flex-1 w-full">
-          <h1 className="font-montserrat text-white">MENU</h1>
-          <ul className="flex flex-col items-start gap-5 mt-10 w-full text-white">
-            <li className={`flex flex-col items-center justify-between w-full`}>
-              <div className={`flex items-center justify-between w-full`}>
-                <div className="flex items-center gap-3">
-                  <img src={icons.GraduationCap} alt="" />
-                  <span>Stage</span>
-                </div>
-                <button onClick={() => setDropDown(!dropdown)}>
-                  <img src={icons.ArrowContained} className={`${dropdown ? 'rotate-180 duration-300' : 'rotate-0 duration-300'}`} alt="" />
-                </button>
-              </div>
-              <ul className={`${dropdown ? 'flex flex-col items-start gap-5 mt-5' : 'hidden'}`}>
-                <li>
-                  <Link to="/liste-stages">
-                    Liste des stages
-                  </Link>
-                </li>
-                <li>
-                  <Link to="/demandes">
-                    Demandes
-                  </Link>
-                </li>
-              </ul>
+    );
 
-            </li>
-            
-          </ul>
-        </div>
-        <div>
-          <Link to="/contact" className={`flex items-center gap-3 text-white`}>
-            <img src={icons.Support} alt="" />
-            <span>Support</span>
-          </Link>
-        </div>
-      </div>
-    )
-  }
-  else if(storedRole[2]=='responsable pédagogique'){
-    setRole(
-      <div className="flex flex-col w-3/4 mx-auto items-start justify-between h-3/5">
-        <div className="flex-1 w-full">
-          <h1 className="font-montserrat text-white">MENU</h1>
-          <ul className="flex flex-col items-start gap-5 mt-10 w-full text-white">
-            <li className={`flex flex-col items-center justify-between w-full`}>
-              <div className={`flex items-center justify-between w-full`}>
-                <div className="flex items-center gap-3">
-                  <img src={icons.GraduationCap} alt="" />
-                  <span>stagiaires</span>
-                </div>
-                <button onClick={() => setDropDown(!dropdown)}>
-                  <img src={icons.ArrowContained} className={`${dropdown ? 'rotate-180 duration-300' : 'rotate-0 duration-300'}`} alt="" />
-                </button>
-              </div>
-              <ul className={`${dropdown ? 'flex flex-col items-start gap-5 mt-5' : 'hidden'}`}>
-                <li>
-                  <Link to="/liste-stages">
-                    Liste des stagiaires
-                  </Link>
-                </li>
-              </ul>
+    const menuItems = {
+      'étudiant': [
+        {
+          icon: icons.GraduationCap,
+          title: 'Stage',
+          submenu: [
+            { link: '/liste-stages', title: 'Liste des stages' },
+            { link: '/demandes', title: 'Demandes' }
+          ]
+        },
+        {
+          icon: icons.File,
+          title: 'Documents',
+          link: '/documents'
+        },
+        {
+          icon: icons.Mail,
+          title: 'Message',
+          link: '/chat'
+        }
+      ],
+      'entreprise': [
+        {
+          icon: icons.GraduationCap,
+          title: 'Stage',
+          submenu: [
+            { link: '/liste-stages', title: 'Liste des stages' },
+            { link: '/demandes', title: 'Demandes' }
+          ]
+        }
+      ],
+      'responsable pédagogique': [
+        {
+          icon: icons.GraduationCap,
+          title: 'Stagiaires',
+          submenu: [
+            { link: '/liste-stages', title: 'Liste des stagiaires' }
+          ]
+        },
+        {
+          icon: icons.File,
+          title: 'Documents',
+          link: '/documents'
+        },
+        {
+          icon: icons.Mail,
+          title: 'Message',
+          link: '/chat'
+        }
+      ]
+    };
 
-            </li>
-            <li>
-              <Link to={'/documents'} className={`flex items-center gap-3`}>
-                <img src={icons.File} alt="" />
-                <span>Documents</span>
-              </Link>
-            </li>
-            <li>
-              <Link to={'/chat'} className={`flex items-center gap-3`}>
-                <img src={icons.Mail} alt="" />
-                <span>Message</span>
-              </Link>
-            </li>
-          </ul>
-        </div>
-        <div>
-          <Link to="/contact" className={`flex items-center gap-3 text-white`}>
-            <img src={icons.Support} alt="" />
-            <span>Support</span>
-          </Link>
-        </div>
-      </div>
-    )
-  }}, [dropdown]);
+    setRole(generateMenu(menuItems[storedRole]));
+  }, [dropdown, storedRole]);
+
   return (
-    <section className="flex flex-col w-full gap-1 bg-black h-full">
-      <div className="flex justify-center items-center h-1/5 mb-12">
-        <img src={images.ISFOLogo} className="w-44" alt="" />
+    <section className="flex flex-col w-full gap-4 text-gray-800 h-full">
+      <div className="flex justify-between items-center h-1/5 mb-10 mx-5">
+        <img src={images.BlackLogo} className="w-32" alt="Logo" />
+        <button>
+          <FaChevronCircleLeft className="text-2xl" />
+        </button>
       </div>
       {role}
     </section>
-  )
+  );
 };
 
-export default UserSidebar
+export default UserSidebar;

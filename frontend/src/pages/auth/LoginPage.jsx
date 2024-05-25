@@ -2,11 +2,13 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import images from '../../constants/images';
 import axios from 'axios';
+import { FaEye, FaEyeSlash } from 'react-icons/fa6';
 
 const LoginPage = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [Message, setMessage] = useState();
+  const [showPassword, setShowPassword] = useState(false)
 
 
   const handleLogin = async (e) => {
@@ -19,37 +21,37 @@ const LoginPage = () => {
       const response = await axios.post('http://127.0.0.1:8000/api/auth/login', userData);
 
       if (response.data.token) {
-        const user =response.data
+        const user = response.data
         console.log(user);
-          localStorage.setItem('sessionToken', [response.data.token,user._id,user.role]);
-          if(user.role=='admin'){
+        localStorage.setItem('sessionToken', [response.data.token, user._id, user.role]);
+        if (user.role == 'admin') {
           window.location.replace(`http://localhost:5173/admin/liste-des-stagiaires`);
-          }
-          else{
+        }
+        else {
 
-            window.location.replace(`http://localhost:5173/liste-stages`);
-          }
+          window.location.replace(`http://localhost:5173/liste-stages`);
+        }
       } else {
-          setMessage(response.data.message);
-          console.log(response.data.message);
+        setMessage(response.data.message);
+        console.log(response.data.message);
       }
     } catch (error) {
-        console.error('Error fetching data:', error);
-        setMessage("Login failed. Please try again.");
+      console.error('Error fetching data:', error);
+      setMessage("Login failed. Please try again.");
     }
   }
 
   return (
-    <section className="flex h-screen justify-center gap-10 items-center font-poppins">
-      <div className="flex justify-center items-center w-1/2 h-full bg-black">
+    <section className="flex h-screen mx-10 justify-center gap-10 items-center font-poppins">
+      <div className="flex justify-center items-center w-1/2 h-full">
         <img src={images.LoginImg} alt="Hero Img" />
       </div>
       <div className="w-1/2 h-full">
         {Message ? (
-                <p className="bg-red-500 text-white mb-3 p-3">
-                    {Message}
-                </p>
-            ) : null}
+          <p className="bg-red-500 text-white mb-3 p-3">
+            {Message}
+          </p>
+        ) : null}
         <div className='flex flex-col justify-center items-center h-full w-full'>
           <div className="head text-center">
             <h1 className="text-[40px] text-center font-extrabold mb-1">Welcome back</h1>
@@ -63,7 +65,16 @@ const LoginPage = () => {
               </div>
               <div className="password flex flex-col mb-8">
                 <label htmlFor="password" className="text-[#6B778C] mb-1 ml-4 font-medium">Password</label>
-                <input type="password" name="password" className="border border-[#C4C4C4] text-gray-600 py-2 px-4 rounded-lg outline-none" placeholder="Enter your password" onChange={e => setPassword(e.target.value)} />
+                <div className="flex justify-between px-4 items-center rounded-lg border border-[#C4C4C4]">
+                  <input type={showPassword ? "text" : "password"} name="password" className="text-gray-600 py-2 outline-none rounded-lg flex-1" placeholder="Enter your password" value={password} onChange={e => setPassword(e.target.value)} />
+                  <div className="cursor-pointer" onClick={() => setShowPassword(!showPassword)}>
+                    {
+                      showPassword ? <FaEyeSlash /> : <FaEye />
+                    }
+                  </div>
+                </div>
+                <span className='flex justify-end mt-2 underline font-semibold cursor-pointer'>Forget password?</span>
+
               </div>
               <button type="submit" className="w-full py-2 bg-black text-white rounded-xl font-medium">Login</button>
               <p className='text-center mt-4 font-medium'>Don't have an account? <Link to={'/register'} className='underline text-gray-500'>Sign up!</Link></p>
