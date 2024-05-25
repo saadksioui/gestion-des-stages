@@ -5,6 +5,9 @@ const bcrypt = require("bcryptjs");
 const multer = require('multer');
 const path = require('path');
 const fs = require('fs').promises;
+const crypto = require('crypto');
+const sendEmailV_2 = require('./mailTest');
+require('dotenv').config();
 
 const SignUp = asyncHandler(async (req, res) => {
   const {nom , email, password} = req.body;
@@ -197,7 +200,60 @@ const getAllUsers = asyncHandler(async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 });
+//! reset password
+const requestPasswordReset = asyncHandler(async (req, res) => {
+  const { email } = req.body;
+  const user = await User.findOne({ email });
 
+  if (!user) {
+    return res.status(404).json({ message: 'User not found' });
+  }
+
+  const resetToken = crypto.randomBytes(32).toString('hex');
+  const resetTokenExpiry = Date.now() + 3600000; // Token valid for 1 hour
+
+  user.resetPasswordToken = resetToken;
+  user.resetPasswordExpires = resetTokenExpiry;
+  await user.save();
+
+  const resetUrl = `http://localhost:3000/reset-password/${resetToken}`;
+  const emailText = `You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n
+                     Please click on the following link, or paste this into your browser to complete the process:\n\n
+                     ${resetUrl}\n\n
+                     If you did not request this, please ignore this email and your password will remain unchanged.\n`;
+
+  try {
+    await sendEmailV_2({
+      to: user.email,
+      subject: 'Password Reset',
+      text: emailText,
+    });
+    res.status(200).json({ message: 'Password reset email sent' });
+  } catch (error) {
+    res.status(500).json({ message: `Failed to send email: ${error.message}` });
+  }
+});
+
+
+const resetPassword = asyncHandler(async (req, res) => {
+  const { token, newPassword } = req.body;
+  const user = await User.findOne({
+    resetPasswordToken: token,
+    resetPasswordExpires: { $gt: Date.now() },
+  });
+
+  if (!user) {
+    return res.status(400).json({ message: 'Password reset token is invalid or has expired' });
+  }
+
+  const hashedPassword = await bcrypt.hash(newPassword, 10);
+  user.password = hashedPassword;
+  user.resetPasswordToken = undefined;
+  user.resetPasswordExpires = undefined;
+  await user.save();
+
+  res.status(200).json({ message: 'Password has been reset' });
+});
 
 
 
@@ -210,5 +266,7 @@ module.exports = {
   getUserById,
   updateUser,
   upload,
-  updatePassword
+  updatePassword,
+  requestPasswordReset,
+  resetPassword
 }
