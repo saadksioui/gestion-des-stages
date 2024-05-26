@@ -7,7 +7,8 @@ import Pfp2 from '../assets/Home Page Imgs/ProfilePicture2.svg'
 import Pfp3 from '../assets/Home Page Imgs/ProfilePicture3.svg'
 import LoginImg from '../assets/Auth Page Imgs/LoginImg.svg'
 import RegisterImg from '../assets/Auth Page Imgs/RegisterImg.svg'
-import ISFOLogo from '../assets/User Imgs/ISFOLogo.svg'
+import ISFOLogoWhite from '../assets/User Imgs/logo-white.svg'
+import ISFOLogoBlack from '../assets/User Imgs/logo-black.svg'
 import DefaultUserPfp from '../assets/user-default-pfp.svg'
 
 const images = {
@@ -20,7 +21,8 @@ const images = {
   Pfp3,
   LoginImg,
   RegisterImg,
-  ISFOLogo,
+  ISFOLogoWhite,
+  ISFOLogoBlack,
   DefaultUserPfp
 }
 

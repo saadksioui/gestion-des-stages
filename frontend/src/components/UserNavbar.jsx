@@ -28,6 +28,7 @@ const UserNavbar = () => {
     };
     fetchData();
   }, []);
+  
   const Logout = () => {
     localStorage.removeItem("sessionToken");
     window.location.href = "http://localhost:5173/";

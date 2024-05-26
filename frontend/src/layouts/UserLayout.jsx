@@ -18,12 +18,12 @@ const UserLayout = ({ children }) => {
   return (
     <div className="flex font-poppins">
       {/* Sidebar */}
-      <div className="w-1/5 h-screen">
+      <div className="w-[17%] h-screen bg-gray-100">
         <UserSidebar />
       </div>
 
       {/* Main Content Area */}
-      <div className="flex flex-col w-4/5 h-screen">
+      <div className="flex flex-col w-[83%] h-screen">
         {/* Navbar */}
         <div className="h-[129px] border-black border-b-[1px]">
           <UserNavbar />
