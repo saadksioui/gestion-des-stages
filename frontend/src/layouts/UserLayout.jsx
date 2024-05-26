@@ -1,8 +1,26 @@
-import { useEffect, useRef } from "react";
-import UserSidebar from "../components/UserSidebar";
+import { useEffect, useRef, useState } from "react";
+import { Link, useLocation } from "react-router-dom";
+import { IoIosArrowDown } from "react-icons/io";
+import { FaGear, FaGraduationCap } from "react-icons/fa6";
+import { IoDocumentText, IoMail, IoMenu } from "react-icons/io5";
+import { images } from "../constants";
+import { LuChevronFirst, LuChevronLast, LuMoreVertical } from "react-icons/lu";
+import { MdLogout, MdOutlineSupportAgent } from "react-icons/md";
+import axios from "axios";
 
 const UserLayout = ({ children }) => {
+  const [expanded, setExpanded] = useState(true)
+  const [dropdown, setDropDown] = useState(false);
+  const [role, setRole] = useState();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [User, setUser] = useState([]);
+
+  const storedData = localStorage.getItem("sessionToken");
+  const storedRole = storedData ? storedData.split(",")[2] : '';
+  const storedId = storedData ? storedData.split(",")[1] : '';
+
   const containerRef = useRef(null);
+  const location = useLocation();
 
   useEffect(() => {
     const containerHeight = containerRef.current.clientHeight;
@@ -14,23 +32,204 @@ const UserLayout = ({ children }) => {
     }
   }, [children]);
 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(`http://127.0.0.1:8000/api/auth/findById/${storedId}`);
+        setUser(response.data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+    fetchData();
+  }, []);
+
+  console.log(User);
+
+  useEffect(() => {
+    const generateMenu = (menuItems) => (
+      <div className="flex-1 w-full">
+        <ul className="flex flex-col items-start gap-5 mt-10 w-full font-medium">
+          {menuItems.map((item, index) => (
+            <li key={index} className="flex flex-col items-center justify-between w-full">
+              <div className={`flex items-center justify-between pr-5 w-full transition-colors duration-200 ${location.pathname === item.link || item.submenu && item.submenu.some(sub => location.pathname === sub.link) ? 'text-white bg-black rounded-lg shadow-lg' : 'text-black hover:text-gray-900'}`}>
+                <Link to={item.link || "#"} className={`flex items-center gap-3 px-2 py-2 w-full  `}>
+                  <div className={`${expanded ? "text-2xl" : "text-base"
+                    }`}>
+                    {item.icon}
+                  </div>
+                  <div className={`overflow-hidden transition-all ${expanded ? "w-52 ml-3" : "w-0"
+                    }`}>{item.title}</div>
+                </Link>
+                {item.submenu && (
+                  <button className={`text-base ${expanded ? 'block' : 'hidden'}`} onClick={() => setDropDown(!dropdown)}>
+                    <IoIosArrowDown className={`${dropdown ? 'transform rotate-180 duration-300' : 'transform rotate-0 duration-300'}`} />
+                  </button>
+                )}
+              </div>
+              {item.submenu && (
+                <ul className={`${dropdown ? 'flex flex-col items-start gap-2 mt-2' : 'hidden'}`}>
+                  {item.submenu.map((subItem, subIndex) => (
+                    <li key={subIndex}>
+                      <Link to={subItem.link} className={`text-base`}>
+                        {subItem.title}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </li>
+          ))}
+        </ul>
+      </div>
+    );
+
+    const menuItems = {
+      'étudiant': [
+        {
+          icon: <FaGraduationCap />,
+          title: 'Stage',
+          submenu: [
+            { link: '/liste-stages', title: 'Liste des stages' },
+            { link: '/demandes', title: 'Demandes' }
+          ]
+        },
+        {
+          icon: <IoDocumentText />,
+          title: 'Documents',
+          link: '/documents'
+        },
+        {
+          icon: <IoMail />,
+          title: 'Message',
+          link: '/chat'
+        }
+      ],
+      'entreprise': [
+        {
+          icon: <FaGraduationCap />,
+          title: 'Stage',
+          submenu: [
+            { link: '/liste-stages', title: 'Liste des stages' },
+            { link: '/demandes', title: 'Demandes' }
+          ]
+        }
+      ],
+      'responsable pédagogique': [
+        {
+          icon: <FaGraduationCap />,
+          title: 'Stagiaires',
+          submenu: [
+            { link: '/liste-stages', title: 'Liste des stagiaires' }
+          ]
+        },
+        {
+          icon: <IoDocumentText />,
+          title: 'Documents',
+          link: '/documents'
+        },
+        {
+          icon: <IoMail />,
+          title: 'Message',
+          link: '/chat'
+        }
+      ]
+    };
+
+    if (storedRole) {
+      setRole(generateMenu(menuItems[storedRole]));
+    }
+  }, [dropdown, storedRole, location]);
+
+  const Logout = () => {
+    localStorage.removeItem("sessionToken");
+    window.location.href = "http://localhost:5173/";
+  };
+
+  const handleOpenModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
+
+  console.log(User);
   return (
-    <div className="flex font-poppins">
+    <div className="w-full h-screen flex items-center font-poppins">
       {/* Sidebar */}
-      <div className="w-[17%] h-screen">
-        <UserSidebar />
+      <div className={`${expanded ? 'w-[17%]' : 'w-[5%]'} h-full flex flex-col shadow-sm duration-300`}>
+        {/* Logo */}
+        <div className="p-4 pb-2 flex justify-between items-center">
+          <img
+            src={images.ISFOLogoBlack}
+            className={`overflow-hidden transition-all ${expanded ? "w-28" : "w-0"
+              }`}
+            alt=""
+          />
+          <button
+            onClick={() => setExpanded((curr) => !curr)}
+            className="p-1.5 rounded-lg bg-gray-50 hover:bg-gray-100"
+          >
+            {expanded ? <LuChevronFirst /> : <LuChevronLast />}
+          </button>
+        </div>
+        {/* Menu */}
+        <ul className="flex-1 px-3">
+          {role}
+        </ul>
+        {/* Settings Links */}
+        <div className="flex-1 px-3 flex flex-col items-start gap-5 font-medium">
+          <div className="w-full">
+            <button onClick={isModalOpen ? handleCloseModal : handleOpenModal} className={`flex items-center gap-3 w-full px-2 py-2 transition-colors duration-200 ${isModalOpen ? 'text-white bg-black rounded-lg shadow-lg' : 'text-black hover:text-gray-900'}`}>
+              <FaGear />
+              <span className="text-base">Settings</span>
+            </button>
+          </div>
+          <div className="w-full">
+            <Link to="/contact" className={`flex items-center gap-3 w-full px-2 py-2 transition-colors duration-200 ${location.pathname === '/contact' ? 'text-white bg-black rounded-lg shadow-lg' : 'text-black hover:text-gray-900'}`}>
+              <MdOutlineSupportAgent />
+              <span className="text-base">Support</span>
+            </Link>
+          </div>
+          <div className="w-full">
+            <button onClick={Logout} className={`flex items-center gap-3 w-full px-2 py-2 text-red-600`}>
+              <MdLogout />
+              <span className="text-base">Log out</span>
+            </button>
+          </div>
+        </div>
+        {/* User Info */}
+        <Link to={'/profile'}>
+          <div className={`border-t flex p-3 ${expanded ? 'justify-center items-center w-full' : ''}`}>
+            <img
+              src={`images_cv/${User.img_url}`}
+              alt=""
+              className="w-10 h-10 rounded-md"
+            />
+            <div
+              className={`
+              flex justify-between items-center
+              duration-300 overflow-hidden transition-all ${expanded ? "w-52 ml-3" : "w-0"}
+          `}
+            >
+              <div className="leading-4">
+                <h4 className="font-semibold">{User.nom}</h4>
+                <span className="text-xs text-gray-600">{User.email}</span>
+              </div>
+              <LuMoreVertical size={20} />
+            </div>
+          </div>
+        </Link>
       </div>
 
       {/* Main Content Area */}
-      <div className="flex flex-col w-[83%] h-screen">
+      <div className="border-[0.5px] border-gray-100 h-full w-[1px]"></div>
 
-        {/* Content */}
-        <div className="h-full" ref={containerRef}>
-          {children}
-        </div>
+      <div className={`h-full ${expanded ? 'w-[83%]' : 'w-[95%]'}`} ref={containerRef}>
+        {children}
       </div>
     </div>
-
   )
 };
 
