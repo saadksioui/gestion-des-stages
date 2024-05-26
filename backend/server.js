@@ -37,9 +37,14 @@ const io = new Server(server, {
 });
 
 io.on('connection', (socket) => {
-  console.log('A user connected');
+  console.log('New client connected');
+
+  socket.on('deleteMessage', (data) => {
+    io.emit('messageDeleted', data);
+  });
+
   socket.on('disconnect', () => {
-    console.log('A user disconnected');
+    console.log('Client disconnected');
   });
 });
 

@@ -26,7 +26,6 @@ const LoginPage = () => {
           window.location.replace(`http://localhost:5173/admin/liste-des-stagiaires`);
           }
           else{
-
             window.location.replace(`http://localhost:5173/liste-stages`);
           }
       } else {

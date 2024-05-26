@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, useCallback } from 'react';
 import moment from 'moment';
 import { icons } from '../../../constants';
 import UserLayout from '../../../layouts/UserLayout';
@@ -11,35 +11,34 @@ const ChatStg = () => {
   const [newMsg, setNewMsg] = useState('');
   const [messages, setMessages] = useState([]);
   const [responsable, setResponsable] = useState({});
-  const [chat, setchat] = useState({});
+  const [chat, setChat] = useState({});
   const [chatId, setChatId] = useState();
   const [responsableID, setResponsableID] = useState();
   const [user, setUser] = useState({});
   const messageEndRef = useRef(null);
 
   const storedData = localStorage.getItem('sessionToken');
-  let storedId = storedData.split(',');
+  let storedId = storedData ? storedData.split(',') : [];
 
-  // Fetch chat messages
+  const fetchMessages = useCallback(async () => {
+    try {
+      const response = await axios.get('http://127.0.0.1:8000/api/suivi/get_etud', {
+        params: {
+          id_étudiant: storedId[1],
+        },
+      });
+      setMessages(response.data.chat);
+      setChat(response.data);
+      setChatId(response.data._id);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  }, [storedId]);
+
   useEffect(() => {
-    const fetchMessages = async () => {
-      try {
-        const response = await axios.get('http://127.0.0.1:8000/api/suivi/get_etud', {
-          params: {
-            id_étudiant: storedId[1]
-          }
-        });
-        setMessages(response.data.chat);
-        setchat(response.data);
-        setChatId(response.data._id);
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
-    };
     fetchMessages();
-  }, []);
+  }, [fetchMessages, newMsg]);
 
-  // Fetch responsable and user data
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -53,10 +52,11 @@ const ChatStg = () => {
         console.error('Error fetching data:', error);
       }
     };
-    fetchData();
-  }, []);
+    if (storedId[1]) {
+      fetchData();
+    }
+  }, [storedId]);
 
-  // Set up Socket.IO connection and listeners
   useEffect(() => {
     socket.on('newMessage', (data) => {
       if (data.chatId === chatId) {
@@ -64,18 +64,28 @@ const ChatStg = () => {
       }
     });
 
-    // Clean up the connection on component unmount
+    socket.on('messageDeleted', (data) => {
+      if (data.chatId === chatId) {
+        setMessages((prevMessages) => prevMessages.filter((msg) => msg._id !== data.messageId));
+      }
+    });
+
     return () => {
       socket.off('newMessage');
+      socket.off('messageDeleted');
     };
   }, [chatId]);
 
-  // Scroll to the newest message
   useEffect(() => {
     if (messageEndRef.current) {
-      messageEndRef.current.scrollIntoView({ behavior: 'instant' });
+      messageEndRef.current.scrollIntoView({ behavior: 'smooth' });
     }
   }, [messages]);
+
+  useEffect(() => {
+    const interval = setInterval(fetchMessages, 2000);
+    return () => clearInterval(interval);
+  }, [fetchMessages]);
 
   const handleMsg = async (e) => {
     e.preventDefault();
@@ -84,8 +94,6 @@ const ChatStg = () => {
         id_utilisateur: storedId[1],
         message: newMsg,
       });
-
-      setMessages((prevMessages) => [...prevMessages, response.data]);
       setNewMsg('');
     } catch (error) {
       console.error('Error sending message:', error);
@@ -94,9 +102,13 @@ const ChatStg = () => {
 
   const handleMsgDelete = async (e, id) => {
     e.preventDefault();
+    if (!id) {
+      console.error('Message ID is undefined');
+      return;
+    }
     try {
       await axios.put(`http://127.0.0.1:8000/api/suivi/deleteChatMessage/${id}`, { id: chatId });
-      setMessages((prevMessages) => prevMessages.filter((msg) => msg._id !== id));
+      socket.emit('deleteMessage', { chatId, messageId: id });
       console.log('Chat message deleted successfully');
     } catch (error) {
       console.error('Error deleting chat message:', error.message);

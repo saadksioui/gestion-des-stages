@@ -43,7 +43,7 @@ const ChatR = () => {
     };
 
     fetchData();
-  }, [storedId]);
+  }, []);
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -85,13 +85,35 @@ const ChatR = () => {
     } catch (error) {
       console.error('Error fetching chat messages:', error.message);
     }
-  }, []);
+  }, [newMsg]);
+
+  const fetchMessages = useCallback(async () => {
+    if (selectedUser && chatId) {
+      try {
+        const response = await axios.get('http://127.0.0.1:8000/api/suivi/get_etud', {
+          params: {
+            id_étudiant: selectedUser._id
+          }
+        });
+        if (response.data && response.data.chat) {
+          setMessages(response.data.chat);
+        }
+      } catch (error) {
+        console.error('Error refreshing chat messages:', error);
+      }
+    }
+  }, [selectedUser, chatId]);
 
   useEffect(() => {
     if (messageEndRef.current) {
       messageEndRef.current.scrollIntoView({ behavior: 'smooth' });
     }
   }, [messages]);
+
+  useEffect(() => {
+    const interval = setInterval(fetchMessages, 2000);
+    return () => clearInterval(interval);
+  }, [fetchMessages]);
 
   const handleMsg = async (e) => {
     e.preventDefault();
@@ -101,7 +123,7 @@ const ChatR = () => {
         message: newMsg,
       });
 
-      setMessages((prevMessages) => [...prevMessages, response.data]);
+      socket.emit('sendMessage', { chatId, message: response.data });
       setNewMsg('');
     } catch (error) {
       console.error('Error sending message:', error);
@@ -112,12 +134,13 @@ const ChatR = () => {
     e.preventDefault();
     try {
       await axios.put(`http://127.0.0.1:8000/api/suivi/deleteChatMessage/${id}`, { id: chatId });
-      setMessages((prevMessages) => prevMessages.filter((msg) => msg._id !== id));
+      socket.emit('deleteMessage', { chatId, messageId: id });
       console.log('Chat message deleted successfully');
     } catch (error) {
       console.error('Error deleting chat message:', error.message);
     }
   };
+  
 
   useEffect(() => {
     socket.on('newMessage', (data) => {
@@ -126,8 +149,15 @@ const ChatR = () => {
       }
     });
 
+    socket.on('messageDeleted', (data) => {
+      if (data.chatId === chatId) {
+        setMessages((prevMessages) => prevMessages.filter((msg) => msg._id !== data.messageId));
+      }
+    });
+
     return () => {
       socket.off('newMessage');
+      socket.off('messageDeleted');
     };
   }, [chatId]);
 
