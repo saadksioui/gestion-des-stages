@@ -76,7 +76,7 @@ const sendMessage = asyncHandler(async (req, res) => {
       return res.status(404).json({ message: 'Suivi not found' });
     }
 
-    // Emit the new message to all connected clients
+    const io = req.app.get('socketio');
     io.emit('newMessage', { chatId: id, message: newMessage });
 
     res.json(newMessage);
@@ -84,6 +84,7 @@ const sendMessage = asyncHandler(async (req, res) => {
     res.status(400).json({ message: error.message });
   }
 });
+
 
 
 
