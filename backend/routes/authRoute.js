@@ -9,6 +9,8 @@ router.post('/login', authController.Login)
 router.get('/users', authController.getAllUsers)
 router.get('/findById/:id', authController.getUserById)
 router.post('/update/:id', authController.upload, authController.updateUser);
+router.post('/request-password-reset', authController.requestPasswordReset);
+router.post('/reset-password', authController.resetPassword);
 
 router.post('/update-password/:id', authController.updatePassword);
 

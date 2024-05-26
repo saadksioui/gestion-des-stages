@@ -26,10 +26,12 @@ const LoginPage = () => {
         localStorage.setItem('sessionToken', [response.data.token, user._id, user.role]);
         if (user.role == 'admin') {
           window.location.replace(`http://localhost:5173/admin/liste-des-stagiaires`);
-        }
-        else{
-          window.location.replace(`http://localhost:5173/liste-stages`);
-        }
+
+          }
+          else{
+            window.location.replace(`http://localhost:5173/liste-stages`);
+          }
+
       } else {
         setMessage(response.data.message);
         console.log(response.data.message);

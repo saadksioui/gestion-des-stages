@@ -1,6 +1,6 @@
 const asyncHandler = require('express-async-handler')
 const Suivi = require('../models/Suivi');
-
+const io = require('../server');
 const getSuiviById = asyncHandler(async (req, res) => {
     try {
       const { id } = req.params;
@@ -66,7 +66,6 @@ const sendMessage = asyncHandler(async (req, res) => {
       created_at: Date.now(),
     };
 
-    // Use findByIdAndUpdate to update and return the updated document
     const updatedSuivi = await Suivi.findByIdAndUpdate(
       id,
       { $push: { chat: newMessage } },
@@ -77,12 +76,16 @@ const sendMessage = asyncHandler(async (req, res) => {
       return res.status(404).json({ message: 'Suivi not found' });
     }
 
-    // Return the newly added message
+    const io = req.app.get('socketio');
+    io.emit('newMessage', { chatId: id, message: newMessage });
+
     res.json(newMessage);
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
 });
+
+
 
 
 
