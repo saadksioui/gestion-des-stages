@@ -3,6 +3,9 @@ import moment from 'moment';
 import { icons } from '../../../constants';
 import UserLayout from '../../../layouts/UserLayout';
 import axios from 'axios';
+import io from 'socket.io-client';
+
+const socket = io('http://localhost:8000');
 
 const ChatR = () => {
   const [chatId, setChatId] = useState('');
@@ -28,8 +31,6 @@ const ChatR = () => {
     console.error('Error parsing session token:', error);
   }
 
-  // const [profile, setProfile] = useState(initialProfile);
-
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -42,7 +43,7 @@ const ChatR = () => {
     };
 
     fetchData();
-  }, [storedId]);
+  }, []);
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -65,10 +66,10 @@ const ChatR = () => {
   const showChat = useCallback(async (id) => {
     try {
       const response = await axios.get('http://127.0.0.1:8000/api/suivi/get_etud', {
-          params: {
-            id_étudiant: id
-          }}
-      );
+        params: {
+          id_étudiant: id
+        }
+      });
 
       if (response.data && response.data.chat) {
         setMessages(response.data.chat);
@@ -84,22 +85,45 @@ const ChatR = () => {
     } catch (error) {
       console.error('Error fetching chat messages:', error.message);
     }
-  }, [messages,chatId]);
+  }, [newMsg]);
+
+  const fetchMessages = useCallback(async () => {
+    if (selectedUser && chatId) {
+      try {
+        const response = await axios.get('http://127.0.0.1:8000/api/suivi/get_etud', {
+          params: {
+            id_étudiant: selectedUser._id
+          }
+        });
+        if (response.data && response.data.chat) {
+          setMessages(response.data.chat);
+        }
+      } catch (error) {
+        console.error('Error refreshing chat messages:', error);
+      }
+    }
+  }, [selectedUser, chatId]);
 
   useEffect(() => {
     if (messageEndRef.current) {
       messageEndRef.current.scrollIntoView({ behavior: 'smooth' });
     }
   }, [messages]);
+
+  useEffect(() => {
+    const interval = setInterval(fetchMessages, 2000);
+    return () => clearInterval(interval);
+  }, [fetchMessages]);
+
   const handleMsg = async (e) => {
     e.preventDefault();
     try {
       const response = await axios.post(`http://127.0.0.1:8000/api/suivi/send/${chatId}`, {
-          id_utilisateur: storedId[1],
-          message: newMsg,
+        id_utilisateur: storedId[1],
+        message: newMsg,
       });
 
-      setMessages((prevMessages) => [...prevMessages, response.data]);
+      socket.emit('sendMessage', { chatId, message: response.data });
       setNewMsg('');
     } catch (error) {
       console.error('Error sending message:', error);
@@ -109,15 +133,33 @@ const ChatR = () => {
   const handleMsgDelete = async (e, id) => {
     e.preventDefault();
     try {
-      await axios.put(`http://127.0.0.1:8000/api/suivi/deleteChatMessage/${id}`,  { id:chatId } );
-      setMessages((prevMessages) => prevMessages.filter((msg) => msg._id !== id));
+      await axios.put(`http://127.0.0.1:8000/api/suivi/deleteChatMessage/${id}`, { id: chatId });
+      socket.emit('deleteMessage', { chatId, messageId: id });
       console.log('Chat message deleted successfully');
     } catch (error) {
       console.error('Error deleting chat message:', error.message);
     }
   };
+  
 
+  useEffect(() => {
+    socket.on('newMessage', (data) => {
+      if (data.chatId === chatId) {
+        setMessages((prevMessages) => [...prevMessages, data.message]);
+      }
+    });
 
+    socket.on('messageDeleted', (data) => {
+      if (data.chatId === chatId) {
+        setMessages((prevMessages) => prevMessages.filter((msg) => msg._id !== data.messageId));
+      }
+    });
+
+    return () => {
+      socket.off('newMessage');
+      socket.off('messageDeleted');
+    };
+  }, [chatId]);
 
   return (
     <UserLayout>
