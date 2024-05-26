@@ -1,5 +1,4 @@
 import { useEffect, useRef } from "react";
-import UserNavbar from "../components/UserNavbar";
 import UserSidebar from "../components/UserSidebar";
 
 const UserLayout = ({ children }) => {
@@ -18,19 +17,15 @@ const UserLayout = ({ children }) => {
   return (
     <div className="flex font-poppins">
       {/* Sidebar */}
-      <div className="w-[17%] h-screen bg-gray-100">
+      <div className="w-[17%] h-screen">
         <UserSidebar />
       </div>
 
       {/* Main Content Area */}
       <div className="flex flex-col w-[83%] h-screen">
-        {/* Navbar */}
-        <div className="h-[129px] border-black border-b-[1px]">
-          <UserNavbar />
-        </div>
 
         {/* Content */}
-        <div className="h-[calc(100%-129px)]" ref={containerRef}>
+        <div className="h-full" ref={containerRef}>
           {children}
         </div>
       </div>
