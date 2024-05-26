@@ -3,12 +3,14 @@ import moment from 'moment';
 import { icons } from '../../../constants';
 import UserLayout from '../../../layouts/UserLayout';
 import axios from 'axios';
+import io from 'socket.io-client';
+
+const socket = io('http://localhost:8000');  // Adjust this URL to match your server's URL
 
 const ChatStg = () => {
   const [newMsg, setNewMsg] = useState('');
   const [messages, setMessages] = useState([]);
   const [responsable, setResponsable] = useState({});
-
   const [chat, setchat] = useState({});
   const [chatId, setChatId] = useState();
   const [responsableID, setResponsableID] = useState();
@@ -16,9 +18,7 @@ const ChatStg = () => {
   const messageEndRef = useRef(null);
 
   const storedData = localStorage.getItem('sessionToken');
-
   let storedId = storedData.split(',');
-
 
   // Fetch chat messages
   useEffect(() => {
@@ -37,7 +37,8 @@ const ChatStg = () => {
       }
     };
     fetchMessages();
-  }, [messages]);
+  }, []);
+
   // Fetch responsable and user data
   useEffect(() => {
     const fetchData = async () => {
@@ -55,19 +56,33 @@ const ChatStg = () => {
     fetchData();
   }, []);
 
+  // Set up Socket.IO connection and listeners
+  useEffect(() => {
+    socket.on('newMessage', (data) => {
+      if (data.chatId === chatId) {
+        setMessages((prevMessages) => [...prevMessages, data.message]);
+      }
+    });
+
+    // Clean up the connection on component unmount
+    return () => {
+      socket.off('newMessage');
+    };
+  }, [chatId]);
+
   // Scroll to the newest message
   useEffect(() => {
     if (messageEndRef.current) {
       messageEndRef.current.scrollIntoView({ behavior: 'instant' });
     }
-  }, [messageEndRef.current]);
+  }, [messages]);
 
   const handleMsg = async (e) => {
     e.preventDefault();
     try {
       const response = await axios.post(`http://127.0.0.1:8000/api/suivi/send/${chatId}`, {
-          id_utilisateur: storedId[1],
-          message: newMsg,
+        id_utilisateur: storedId[1],
+        message: newMsg,
       });
 
       setMessages((prevMessages) => [...prevMessages, response.data]);
@@ -80,13 +95,14 @@ const ChatStg = () => {
   const handleMsgDelete = async (e, id) => {
     e.preventDefault();
     try {
-      await axios.put(`http://127.0.0.1:8000/api/suivi/deleteChatMessage/${id}`,  { id:chatId } );
+      await axios.put(`http://127.0.0.1:8000/api/suivi/deleteChatMessage/${id}`, { id: chatId });
       setMessages((prevMessages) => prevMessages.filter((msg) => msg._id !== id));
       console.log('Chat message deleted successfully');
     } catch (error) {
       console.error('Error deleting chat message:', error.message);
     }
   };
+
   return (
     <UserLayout>
       <div className='p-10 w-full h-full flex items-center gap-10'>

@@ -3,6 +3,9 @@ import moment from 'moment';
 import { icons } from '../../../constants';
 import UserLayout from '../../../layouts/UserLayout';
 import axios from 'axios';
+import io from 'socket.io-client';
+
+const socket = io('http://localhost:3000');
 
 const ChatR = () => {
   const [chatId, setChatId] = useState('');
@@ -27,8 +30,6 @@ const ChatR = () => {
   } catch (error) {
     console.error('Error parsing session token:', error);
   }
-
-  // const [profile, setProfile] = useState(initialProfile);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -65,10 +66,10 @@ const ChatR = () => {
   const showChat = useCallback(async (id) => {
     try {
       const response = await axios.get('http://127.0.0.1:8000/api/suivi/get_etud', {
-          params: {
-            id_étudiant: id
-          }}
-      );
+        params: {
+          id_étudiant: id
+        }
+      });
 
       if (response.data && response.data.chat) {
         setMessages(response.data.chat);
@@ -84,19 +85,20 @@ const ChatR = () => {
     } catch (error) {
       console.error('Error fetching chat messages:', error.message);
     }
-  }, [messages,chatId]);
+  }, []);
 
   useEffect(() => {
     if (messageEndRef.current) {
       messageEndRef.current.scrollIntoView({ behavior: 'smooth' });
     }
   }, [messages]);
+
   const handleMsg = async (e) => {
     e.preventDefault();
     try {
       const response = await axios.post(`http://127.0.0.1:8000/api/suivi/send/${chatId}`, {
-          id_utilisateur: storedId[1],
-          message: newMsg,
+        id_utilisateur: storedId[1],
+        message: newMsg,
       });
 
       setMessages((prevMessages) => [...prevMessages, response.data]);
@@ -109,7 +111,7 @@ const ChatR = () => {
   const handleMsgDelete = async (e, id) => {
     e.preventDefault();
     try {
-      await axios.put(`http://127.0.0.1:8000/api/suivi/deleteChatMessage/${id}`,  { id:chatId } );
+      await axios.put(`http://127.0.0.1:8000/api/suivi/deleteChatMessage/${id}`, { id: chatId });
       setMessages((prevMessages) => prevMessages.filter((msg) => msg._id !== id));
       console.log('Chat message deleted successfully');
     } catch (error) {
@@ -117,7 +119,17 @@ const ChatR = () => {
     }
   };
 
+  useEffect(() => {
+    socket.on('newMessage', (data) => {
+      if (data.chatId === chatId) {
+        setMessages((prevMessages) => [...prevMessages, data.message]);
+      }
+    });
 
+    return () => {
+      socket.off('newMessage');
+    };
+  }, [chatId]);
 
   return (
     <UserLayout>
