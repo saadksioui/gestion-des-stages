@@ -8,12 +8,14 @@ import { LuMoreVertical } from "react-icons/lu";
 import { MdLogout, MdOutlineSupportAgent } from "react-icons/md";
 import axios from "axios";
 import Settings from "../components/Settings";
+import { FaBars } from "react-icons/fa";
 
 const UserLayout = ({ children }) => {
   const [dropdown, setDropDown] = useState(false);
   const [role, setRole] = useState();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [User, setUser] = useState([]);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const storedData = localStorage.getItem("sessionToken");
   const storedRole = storedData ? storedData.split(",")[2] : '';
@@ -49,7 +51,7 @@ const UserLayout = ({ children }) => {
   useEffect(() => {
     const generateMenu = (menuItems) => (
       <div className="flex-1 w-full">
-        <ul className="flex flex-col items-start gap-5 mt-10 w-full font-medium">
+        <ul className="flex flex-col items-start gap-5 my-10 w-full font-medium">
           {menuItems.map((item, index) => (
             <li key={index} className="flex flex-col items-center justify-between w-full">
               <div className={`flex items-center justify-between pr-5 w-full transition-colors duration-200 ${location.pathname === item.link || item.submenu && item.submenu.some(sub => location.pathname === sub.link) ? 'text-white bg-black rounded-lg shadow-lg' : 'text-black hover:text-gray-900'}`}>
@@ -152,11 +154,22 @@ const UserLayout = ({ children }) => {
     setIsModalOpen(false);
   };
 
-  console.log(User);
+  const toggleSidebar = () => {
+    setIsSidebarOpen(!isSidebarOpen);
+  };
+
   return (
-    <div className={`w-full h-screen flex items-center font-poppins`}>
+    <div className="w-full h-screen flex flex-col lg:flex-row font-poppins">
+      {/* Burger Icon for Mobile */}
+      <div className="lg:hidden p-4 flex justify-between items-center bg-white shadow-sm">
+        <img src={images.ISFOLogoBlack} className="w-28" alt="Logo" />
+        <button onClick={toggleSidebar} className="text-2xl">
+          <FaBars />
+        </button>
+      </div>
+
       {/* Sidebar */}
-      <div className={`w-[17%] h-full flex flex-col shadow-sm duration-300`}>
+      <div className={`fixed lg:relative top-0 left-0 w-full lg:w-[17%] h-full lg:h-auto bg-white z-50 lg:z-auto lg:flex lg:flex-col shadow-sm duration-300 ${isSidebarOpen ? 'block' : 'hidden'} lg:block`}>
         {/* Logo */}
         <div className="p-4 pb-2 flex justify-between items-center">
           <img
@@ -164,6 +177,9 @@ const UserLayout = ({ children }) => {
             className={`overflow-hidden transition-all w-28`}
             alt=""
           />
+          <button onClick={toggleSidebar} className="lg:hidden text-2xl">
+            <IoMenu />
+          </button>
         </div>
         {/* Menu */}
         <ul className="flex-1 px-3">
@@ -197,8 +213,8 @@ const UserLayout = ({ children }) => {
           </div>
         </div>
         {/* User Info */}
-        <Link to={'/profile'}>
-          <div className={`border-t flex p-3`}>
+        <Link to={'/profile'} className="w-full">
+          <div className={`border-t flex p-3 w-full mt-10 lg:mt-0`}>
             <img
               src={`images_cv/${User.img_url}`}
               alt=""
@@ -206,7 +222,7 @@ const UserLayout = ({ children }) => {
             />
             <div
               className={`
-              flex justify-between items-center w-52 ml-3`}
+              flex justify-between items-center w-full lg:w-52 ml-3`}
             >
               <div className="leading-4">
                 <h4 className="font-semibold">{User.nom}</h4>
@@ -219,11 +235,10 @@ const UserLayout = ({ children }) => {
       </div>
 
       {/* Main Content Area */}
-      <div className="border-[0.5px] border-gray-100 h-full w-[1px]"></div>
+      <div className="border-[0.5px] border-gray-100 h-full w-[1px] hidden lg:block"></div>
 
-      <div className={`h-full w-[83%] ${isModalOpen && 'opacity-30'}`} ref={containerRef}>
+      <div className={`h-full w-full lg:w-[83%] ${isModalOpen && 'opacity-30'}`} ref={containerRef}>
         {children}
-
       </div>
       {
         isModalOpen && (
@@ -234,8 +249,7 @@ const UserLayout = ({ children }) => {
       }
 
     </div>
-
-  )
+  );
 };
 
-export default UserLayout
+export default UserLayout;
