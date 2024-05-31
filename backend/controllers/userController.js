@@ -48,27 +48,35 @@ const SignUp = asyncHandler(async (req, res) => {
 
 //* Login
 const Login = asyncHandler(async (req, res) => {
-  const {email, password} = req.body;
+  const { email, password } = req.body;
 
-  //* Check for user email
+  // Check for user email
   const user = await User.findOne({ email });
 
-  if (user && (await bcrypt.compare(password, user.password))) {
-    res.json({
-      _id: user._id,
-      nom: user.nom,
-      role:user.type_utilisateur,
-      email: user.email,
-      img_url:user.img_url,
-      token: generateToken(user._id),
-    })
-  } else {
+  if (!user) {
     return res.json({
-      message: "Invalid Email or Password"
+      message: "Invalid Email"
     });
   }
 
+  const isPasswordCorrect = await bcrypt.compare(password, user.password);
+
+  if (!isPasswordCorrect) {
+    return res.json({
+      message: "Invalid Password"
+    });
+  }
+
+  res.json({
+    _id: user._id,
+    nom: user.nom,
+    role: user.type_utilisateur,
+    email: user.email,
+    img_url: user.img_url,
+    token: generateToken(user._id),
+  });
 });
+
 
 
 //todo : add authorization to all
