@@ -1,9 +1,9 @@
 import axios from "axios";
-import AdminLayout from "../../layouts/AdminLayout";
 import { useEffect, useRef, useState } from "react";
 import { LuCheckCircle } from "react-icons/lu";
 import AddEtp from "../../components/AdminForms/AddEtp";
 import { FaPlus } from "react-icons/fa6";
+import UserLayout from "../../layouts/UserLayout";
 
 const ListeErps = () => {
   const containerRef = useRef(null);
@@ -22,7 +22,7 @@ const ListeErps = () => {
 
     fetchUsers()
   }, [])
-  
+
 
   const Entrprises = users.filter(user => user.type_utilisateur === 'entreprise')
 
@@ -48,7 +48,7 @@ const ListeErps = () => {
   };
 
   return (
-    <AdminLayout>
+    <UserLayout>
       <section className="px-10 mt-10">
         <div className="flex justify-between items-center mt-5 mb-10">
           <h1 className="text-4xl font-bold">Liste des Entreprises</h1>
@@ -116,7 +116,7 @@ const ListeErps = () => {
         isOpen={isModalOpen}
         onClose={handleCloseModal}
       />
-    </AdminLayout>
+    </UserLayout>
   )
 };
 

@@ -1,9 +1,9 @@
 import axios from "axios";
-import AdminLayout from "../../layouts/AdminLayout";
 import { useEffect, useRef, useState } from "react";
 import { LuCheckCircle } from "react-icons/lu";
 import { FaPlus } from "react-icons/fa6";
 import AddResp from "../../components/AdminForms/AddResp";
+import UserLayout from "../../layouts/UserLayout";
 
 const ListeResps = () => {
   const containerRef = useRef(null);
@@ -48,7 +48,7 @@ const ListeResps = () => {
   };
 
   return (
-    <AdminLayout>
+    <UserLayout>
       <section className={`px-10 mt-10 ${isModalOpen ? 'opacity-25' : ''}`}>
         <div className="flex justify-between items-center mt-5 mb-10">
           <h1 className="text-4xl font-bold">Liste des Responsables</h1>
@@ -115,7 +115,7 @@ const ListeResps = () => {
         isOpen={isModalOpen}
         onClose={handleCloseModal}
       />
-    </AdminLayout>
+    </UserLayout>
   )
 };
 

@@ -1,7 +1,7 @@
 import axios from "axios";
-import AdminLayout from "../../layouts/AdminLayout";
 import { useEffect, useRef, useState } from "react";
 import { LuCheckCircle } from "react-icons/lu";
+import UserLayout from "../../layouts/UserLayout";
 
 
 const ListeStgs = () => {
@@ -38,7 +38,7 @@ const ListeStgs = () => {
   }, []);
 
   return (
-    <AdminLayout>
+    <UserLayout>
       <section className="px-10 mt-10">
         <h1 className="text-4xl font-bold">Liste des stagiaires</h1>
         <div className="my-6 flex items-center justify-center">
@@ -95,7 +95,7 @@ const ListeStgs = () => {
           </div>
         </div>
       </section>
-    </AdminLayout>
+    </UserLayout>
   )
 };
 

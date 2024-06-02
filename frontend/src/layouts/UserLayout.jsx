@@ -2,10 +2,10 @@ import { useEffect, useRef, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { IoIosArrowDown } from "react-icons/io";
 import { FaGear, FaGraduationCap } from "react-icons/fa6";
-import { IoDocumentText, IoMail, IoMenu } from "react-icons/io5";
+import { IoBusiness, IoDocumentText, IoMail, IoMenu } from "react-icons/io5";
 import { images } from "../constants";
 import { LuMoreVertical } from "react-icons/lu";
-import { MdLogout, MdOutlineSupportAgent } from "react-icons/md";
+import { MdLogout, MdOutlineSupportAgent, MdSupervisorAccount } from "react-icons/md";
 import axios from "axios";
 import Settings from "../components/Settings";
 import { FaBars } from "react-icons/fa";
@@ -133,6 +133,24 @@ const UserLayout = ({ children }) => {
           title: 'Message',
           link: '/chat'
         }
+      ],
+      'admin': [
+        {
+          icon: <FaGraduationCap />,
+          title: 'Liste des stagiaires',
+          link: '/admin/liste-des-stagiaires'
+        },
+        {
+          icon: <MdSupervisorAccount />,
+          title: 'Liste des responsables',
+          link: '/admin/liste-des-responsables'
+        },
+        {
+          icon: <IoBusiness />,
+          title: 'Liste des entreprise',
+          link: '/admin/liste-des-entrprises'
+        },
+
       ]
     };
 

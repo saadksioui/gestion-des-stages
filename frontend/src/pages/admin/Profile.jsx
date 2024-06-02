@@ -1,10 +1,10 @@
 import { images } from "../../constants";
-import AdminLayout from "../../layouts/AdminLayout";
 import { IoMail } from "react-icons/io5";
 import { FaBarcode, FaGraduationCap,FaPhone } from "react-icons/fa6";
 import StagiaireForm from "../../components/StagiaireForm";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import UserLayout from "../../layouts/UserLayout";
 
 const ProfileA = () => {
   const [User, setUser] = useState([]);
@@ -39,7 +39,7 @@ const ProfileA = () => {
     setIsModalOpen(false);
   };
   return (
-    <AdminLayout>
+    <UserLayout>
       <section className={`px-10 mt-10 ${isModalOpen ? 'opacity-25' : ''}`}>
         <h1 className="text-4xl font-bold">Profile</h1>
         <div className="mt-10 p-10 flex gap-10 relative rounded-xl border border-[#999999]">
@@ -71,13 +71,13 @@ const ProfileA = () => {
           handleCloseModal={handleCloseModal}
         />
         </>
-        
+
       ):null}
         </div>
       </section>
-      
-      
-    </AdminLayout>
+
+
+    </UserLayout>
   )
 };
 
