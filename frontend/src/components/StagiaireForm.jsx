@@ -5,7 +5,7 @@ import axios from "axios";
 const StagiaireForm = ({ isOpen, onClose, handleCloseModal }) => {
   const storedData = localStorage.getItem("sessionToken");
   let storedId;
-  
+
   try {
     if (storedData) {
       storedId = storedData.split(",");
@@ -39,7 +39,7 @@ const StagiaireForm = ({ isOpen, onClose, handleCloseModal }) => {
   else {
       setCv(file);
   }
-    
+
   };
 
   const handleSubmit = async(e) => {
@@ -93,44 +93,44 @@ const StagiaireForm = ({ isOpen, onClose, handleCloseModal }) => {
         console.log('User updated successfully');
         handleCloseModal()
       }
-      
+
     } catch (error) {
       console.error('Error updating user:', error.message);
     }
 
   }
   if (!isOpen) return null;
-  
+
   return (
-    <div className="fixed inset-0 flex justify-center items-center h-screen px-10 font-poppins cursor-cell">
-      <div className="border-2 border-black bg-white rounded-xl p-5">
-        <div className='flex justify-between items-center border-b-[1px] border-[#99999] w-full pb-5'>
+    <div className="fixed inset-0 z-50 overflow-hidden bg-gray-500 bg-opacity-50">
+      <div className="relative bg-white shadow-md mx-auto my-20 w-3/4 h-fit p-6 rounded-lg">
+        <div className='flex justify-between items-center border-b-[1px] border-[#99999] w-full px-3 pb-5'>
           <h1 className="text-2xl font-semibold">Ajouter Vos Information</h1>
-          <button onClick={onClose} className="size-10 flex items-center justify-center text-lg border-2 border-black rounded-full" >
+          <button onClick={onClose} className="w-10 h-10 flex items-center justify-center rounded-full text-3xl" >
             <FaXmark />
           </button>
         </div>
         <div className="my-3">
           <form onSubmit={handleSubmit} >
-            <div className="grid grid-cols-3 gap-5">
+            <div className="grid grid-cols-1 gap-5">
               <div className="p-3 flex flex-col gap-2">
                 <label >
                   Image de profil:
                 </label>
-                <input type="file" accept=".png, .jpeg, .jpg" onChange={handleImgChange} className="border-2 border-[#99999] rounded-md py-2 px-2 outline-none" />
+                <input type="file" accept=".png, .jpeg, .jpg" onChange={handleImgChange} className="border rounded-md py-2 px-2 outline-none" />
               </div>
 
               <div className="p-3 flex flex-col gap-2">
                 <label >
                   Téléphone:
                 </label>
-                <input type="tel" value={telephoneF} onChange={(e) => setTelephone(e.target.value)} className="border-2 border-[#99999] rounded-md py-2 px-2 outline-none" />
+                <input type="tel" value={telephoneF} onChange={(e) => setTelephone(e.target.value)} className="border rounded-md py-2 px-2 outline-none" />
               </div>
               <div className="p-3 flex flex-col gap-2">
                 <label >
                   CV (PDF):
                 </label>
-                <input type="file" accept=".pdf" onChange={handleCvChange} className="border-2 border-[#99999] rounded-md py-2 px-2 outline-none" maxFileSize={5 * 1024 * 1024}  />
+                <input type="file" accept=".pdf" onChange={handleCvChange} className="border rounded-md py-2 px-2 outline-none" maxFileSize={5 * 1024 * 1024}  />
               </div>
             </div>
             <div className="flex items-center gap-20 my-4">
@@ -147,7 +147,7 @@ const StagiaireForm = ({ isOpen, onClose, handleCloseModal }) => {
                 </div>
               )}
             </div>
-            <div className="flex justify-end gap-10 items-center border-t-[1px] border-[#99999] w-full pt-2">
+            <div className="flex justify-end gap-10 items-center w-full pt-2">
               <button onClick={onClose} className="text-red-600">Fermer</button>
               <button type="submit" className="bg-black py-2 px-4 text-white rounded-xl flex items-center justify-center text-lg">
                 Ajouter
