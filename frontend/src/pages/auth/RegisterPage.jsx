@@ -7,13 +7,12 @@ import VerifyStg from "../../components/VerifyStg";
 import { FaEye, FaEyeSlash } from "react-icons/fa6";
 
 const RegisterPage = () => {
-  const [username, setUsername] = useState('')
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [Message, setMessage] = useState();
+  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [message, setMessage] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [showPassword, setShowPassword] = useState(false)
-
+  const [showPassword, setShowPassword] = useState(false);
 
   const isEightOrMoreCharacters = password.length >= 8;
   const hasUppercaseAndLowercase = /[a-z]/.test(password) && /[A-Z]/.test(password);
@@ -33,7 +32,7 @@ const RegisterPage = () => {
   };
 
   const handleRegister = async (e) => {
-    e.preventDefault()
+    e.preventDefault();
 
     const emptyFields = [username, email, password].filter(field => field === '').length > 0;
 
@@ -48,14 +47,14 @@ const RegisterPage = () => {
     } else {
       const userData = {
         nom: username,
-        email: email,
-        password: password
+        email,
+        password
       };
       try {
         const response = await axios.post('http://127.0.0.1:8000/api/auth/signup', userData);
 
         if (response.data.token) {
-          const user = response.data
+          const user = response.data;
           localStorage.setItem('sessionToken', [response.data.token, user._id, user.role]);
           window.location.replace(`http://localhost:5173/liste-stages`);
         } else {
@@ -66,44 +65,41 @@ const RegisterPage = () => {
         setMessage("Registration failed. Please try again.");
       }
     }
-  }
+  };
+
   return (
     <div>
-      <section className="flex h-screen mx-10 justify-center gap-10 items-center font-poppins">
-        <div className="flex justify-center items-center w-1/2 h-full">
-          <img src={images.RegisterImg} alt="Hero Img" className="size-[532px]" />
+      <section className="lg:flex lg:flex-row h-screen mx-5 lg:mx-10 justify-center gap-5 lg:gap-10 items-center font-poppins">
+        <div className="hidden lg:flex lg:justify-center lg:items-center w-full lg:w-1/2 h-1/3 lg:h-full">
+          <img src={images.RegisterImg} alt="Hero Img" className="object-contain" />
         </div>
-        <div className="w-1/2 h-full">
-          {Message ? (
-            <p className="bg-red-500 text-white mb-3 p-3">
-              {Message}
+        <div className="w-full lg:w-1/2 h-full flex flex-col justify-center items-center">
+          {message && (
+            <p className="bg-red-500 text-white mb-3 p-3 w-3/4 text-center">
+              {message}
             </p>
-          ) : null}
-
-
+          )}
           <div className="flex flex-col justify-center items-center h-full w-full">
             <div className="head text-center">
-              <h1 className="text-[40px] text-center font-extrabold mb-1">Create an account</h1>
-              <p className="font-normal text-gray-500">Already have an ccount? <Link to={'/login'} className='underline'>Log in</Link> </p>
+              <h1 className="text-[32px] lg:text-[40px] font-extrabold mb-1">Create an account</h1>
+              <p className="font-normal text-gray-500">Already have an account? <Link to='/login' className='underline'>Log in</Link></p>
             </div>
-            <div className="form mt-5 w-3/4">
-              <form onSubmit={(e) => handleRegister(e)}>
-                <div className="username flex flex-col mb-8">
-                  <label htmlFor="username" className="text-[#6B778C] mb-1 ml-4 font-medium" >Full name</label>
-                  <input type="text" name="username" className="border border-[#C4C4C4] text-gray-600 py-2 px-4 rounded-lg outline-none" placeholder="Enter your username" onChange={(e) => setUsername(e.target.value)} />
+            <div className="form mt-5 w-full px-5 lg:w-3/4 lg:px-0">
+              <form onSubmit={handleRegister}>
+                <div className="username flex flex-col mb-6 lg:mb-8">
+                  <label htmlFor="username" className="text-[#6B778C] mb-1 ml-1 lg:ml-4 font-medium">Full name</label>
+                  <input type="text" name="username" className="border border-[#C4C4C4] text-gray-600 py-2 px-3 lg:px-4 rounded-lg outline-none" placeholder="Enter your username" onChange={(e) => setUsername(e.target.value)} />
                 </div>
-                <div className="email flex flex-col mb-8">
-                  <label htmlFor="email" className="text-[#6B778C] mb-1 ml-4 font-medium">Email</label>
-                  <input type="email" name="email" className="border border-[#C4C4C4] text-gray-600 py-2 px-4 rounded-lg outline-none" placeholder="Enter your email" onChange={(e) => setEmail(e.target.value)} />
+                <div className="email flex flex-col mb-6 lg:mb-8">
+                  <label htmlFor="email" className="text-[#6B778C] mb-1 ml-1 lg:ml-4 font-medium">Email</label>
+                  <input type="email" name="email" className="border border-[#C4C4C4] text-gray-600 py-2 px-3 lg:px-4 rounded-lg outline-none" placeholder="Enter your email" onChange={(e) => setEmail(e.target.value)} />
                 </div>
-                <div className="password flex flex-col mb-8">
-                  <label htmlFor="password" className="text-[#6B778C] mb-1 ml-4 font-medium">Password</label>
-                  <div className="flex justify-between px-4 items-center rounded-lg border border-[#C4C4C4]">
+                <div className="password flex flex-col mb-6 lg:mb-8">
+                  <label htmlFor="password" className="text-[#6B778C] mb-1 ml-1 lg:ml-4 font-medium">Password</label>
+                  <div className="flex justify-between px-3 lg:px-4 items-center rounded-lg border border-[#C4C4C4]">
                     <input type={showPassword ? "text" : "password"} name="password" className="text-gray-600 py-2 outline-none rounded-lg flex-1" placeholder="Enter your password" value={password} onChange={e => setPassword(e.target.value)} />
-                    <div className="cursor-pointer" onClick={()=>setShowPassword(!showPassword)}>
-                      {
-                        showPassword ? <FaEyeSlash /> : <FaEye />
-                      }
+                    <div className="cursor-pointer" onClick={() => setShowPassword(!showPassword)}>
+                      {showPassword ? <FaEyeSlash /> : <FaEye />}
                     </div>
                   </div>
                   <div className="passwordConf flex flex-wrap gap-3 mt-3">
@@ -130,18 +126,15 @@ const RegisterPage = () => {
             </div>
           </div>
         </div>
-
       </section>
-      {
-        isModalOpen && (
-          <VerifyStg
-            handleCloseModal={handleCloseModal}
-            handleRegister={handleRegister}
-          />
-        )
-      }
+      {isModalOpen && (
+        <VerifyStg
+          handleCloseModal={handleCloseModal}
+          handleRegister={handleRegister}
+        />
+      )}
     </div>
-  )
+  );
 };
 
-export default RegisterPage
+export default RegisterPage;

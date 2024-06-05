@@ -32,17 +32,18 @@ const StagiaireForm = ({ isOpen, onClose, handleCloseModal }) => {
     const file = e.target.files[0];
     const maxFileSize = 5 * 1024 * 1024; // 5MB
 
-  if (file && file.size > maxFileSize) {
-    alert('File size exceeds the maximum limit of 5MB.');
-    e.target.value = null
-    setCv()}
-  else {
+    if (file && file.size > maxFileSize) {
+      alert('File size exceeds the maximum limit of 5MB.');
+      e.target.value = null
+      setCv()
+    }
+    else {
       setCv(file);
-  }
+    }
 
   };
 
-  const handleSubmit = async(e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
 
     //   const emptyFields = [imgF, nomF, prenomF, telephoneF, emailF, cvF,].filter(field => field === '').length > 0;
@@ -84,12 +85,12 @@ const StagiaireForm = ({ isOpen, onClose, handleCloseModal }) => {
       formData.append('img', imgF);
       formData.append('cv', cvF);
 
-      const response= await axios.post(`http://127.0.0.1:8000/api/auth/update/${storedId[1]}`, formData, {
+      const response = await axios.post(`http://127.0.0.1:8000/api/auth/update/${storedId[1]}`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
       });
-      if(response){
+      if (response) {
         console.log('User updated successfully');
         handleCloseModal()
       }
@@ -130,7 +131,7 @@ const StagiaireForm = ({ isOpen, onClose, handleCloseModal }) => {
                 <label >
                   CV (PDF):
                 </label>
-                <input type="file" accept=".pdf" onChange={handleCvChange} className="border rounded-md py-2 px-2 outline-none" maxFileSize={5 * 1024 * 1024}  />
+                <input type="file" accept=".pdf" onChange={handleCvChange} className="border rounded-md py-2 px-2 outline-none" maxFileSize={5 * 1024 * 1024} />
               </div>
             </div>
             <div className="flex items-center gap-20 my-4">
@@ -143,7 +144,7 @@ const StagiaireForm = ({ isOpen, onClose, handleCloseModal }) => {
               {cvF && (
                 <div className="p-3 flex flex-col gap-2">
                   <p>CV (PDF) :</p>
-                  <iframe src={URL.createObjectURL(cvF)}  className="size-48 object-cover" type="application/pdf" />
+                  <iframe src={URL.createObjectURL(cvF)} className="size-48 object-cover" type="application/pdf" />
                 </div>
               )}
             </div>
