@@ -118,20 +118,9 @@ const ChatStg = () => {
   return (
     <UserLayout>
       <div className='p-10 w-full h-full flex items-center gap-10'>
-        <div className='users rounded-xl border h-full border-[#999999] w-1/3 flex flex-col overflow-y-scroll'>
-          <div className='user'>
-            <a href='#' className='flex items-center gap-5 border-b-[0.5px] border-[#999999] p-3'>
-              <img src={`images_cv/${responsable.img_url}`} className='size-20 rounded-full' alt='' />
-              <div>
-                <p className='text-lg font-medium'>{responsable.nom}</p>
-                <p className='text-lg font-light'>{responsable.email}</p>
-              </div>
-            </a>
-          </div>
-        </div>
-        <div className='chatbox w-2/3 h-full flex flex-col gap-5'>
+        <div className='chatbox w-full h-full flex flex-col gap-5'>
           <div className='chat h-[90%] border border-[#999999] rounded-t-xl'>
-            <div className='user h-[25%] p-3 border-b-[0.5px]'>
+            <div className='user h-[17%] p-3 border-b-[0.5px]'>
               <a href='#' className='flex items-center gap-5'>
                 <img src={`images_cv/${responsable.img_url}`} className='size-20 rounded-full' alt='' />
                 <div>
@@ -140,7 +129,7 @@ const ChatStg = () => {
                 </div>
               </a>
             </div>
-            <div className='messages h-[75%] overflow-y-scroll w-full p-3 flex flex-col gap-3'>
+            <div className='messages h-[83%] overflow-y-scroll w-full p-3 flex flex-col gap-3'>
               {messages.map((msg, index) => (
                 <div
                   key={index}
@@ -167,7 +156,7 @@ const ChatStg = () => {
             </div>
           </div>
           <div className='input w-full h-[10%]'>
-            <form onSubmit={handleMsg} className='w-full h-full flex justify-between gap-5 items-center px-3 border border-[#D6D6D6] rounded-xl bg-[#F6F6F6]'>
+            <form onSubmit={handleMsg} className='w-full h-full flex justify-between items-center pl-3 border border-[#D6D6D6] rounded-xl bg-[#F6F6F6]'>
               <input
                 type='text'
                 value={newMsg}
@@ -175,7 +164,7 @@ const ChatStg = () => {
                 className='w-[90%] outline-none h-full rounded-xl bg-[#F6F6F6] placeholder:text-[#999999] text-lg text-black pl-2'
                 placeholder='Type your message here...'
               />
-              <button type='submit' className='p-3 w-[10%] text-white bg-black rounded-xl'>Send</button>
+              <button type='submit' className='p-3 w-fit text-white bg-black rounded-xl'>Send</button>
             </form>
           </div>
         </div>
