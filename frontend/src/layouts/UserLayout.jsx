@@ -9,6 +9,7 @@ import { MdLogout, MdOutlineSupportAgent, MdSupervisorAccount } from "react-icon
 import axios from "axios";
 import Settings from "../components/Settings";
 import { FaBars } from "react-icons/fa";
+import { TfiWrite } from "react-icons/tfi";
 
 const UserLayout = ({ children }) => {
   const [dropdown, setDropDown] = useState(false);
@@ -108,20 +109,20 @@ const UserLayout = ({ children }) => {
       'entreprise': [
         {
           icon: <FaGraduationCap />,
-          title: 'Stage',
-          submenu: [
-            { link: '/liste-stages', title: 'Liste des stages' },
-            { link: '/demandes', title: 'Demandes' }
-          ]
+          title: 'Liste des stages',
+          link: '/liste-stages'
+        },
+        {
+          icon: <TfiWrite />,
+          title: 'Demandes',
+          link: '/demandes'
         }
       ],
       'responsable pédagogique': [
         {
           icon: <FaGraduationCap />,
-          title: 'Stagiaires',
-          submenu: [
-            { link: '/liste-stages', title: 'Liste des stagiaires' }
-          ]
+          title: 'Liste des stagiaires',
+          link: '/liste-stages'
         },
         {
           icon: <IoDocumentText />,

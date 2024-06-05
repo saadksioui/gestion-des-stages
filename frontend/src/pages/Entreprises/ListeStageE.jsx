@@ -4,6 +4,9 @@ import UserLayout from "../../layouts/UserLayout";
 import EntrepriseForm from "../../components/EntrepriseForm";
 import Swal from "sweetalert2";
 import axios from "axios";
+import { MdDateRange, MdDomain, MdTimer } from "react-icons/md";
+import { FaInfoCircle } from "react-icons/fa";
+import { FaPen, FaTrash } from "react-icons/fa6";
 
 const ListeStageE = () => {
   const [stages, setStages] = useState([]);
@@ -96,11 +99,11 @@ const ListeStageE = () => {
     <UserLayout>
       <section className="px-10 mt-10">
         <h1 className="text-4xl font-bold">Liste des stages</h1>
-        <button onClick={handleOpenModal} className="text-white bg-blue-500 hover:bg-blue-700 font-bold py-2 px-4 rounded mt-4">
+        <button onClick={handleOpenModal} className="text-white bg-black hover:bg-gray-700 font-bold py-2 px-4 rounded mt-4">
           Ajouter un stage
         </button>
-        
-        <div className="my-6 flex items-center justify-between">
+
+        <div className="my-6 flex flex-col lg:flex-row items-center justify-between gap-4">
           <form action="" className="w-[308px] h-[47px] flex justify-between items-center px-3 border border-[#D6D6D6] rounded-xl bg-[#F6F6F6]">
             <select id="liste-domaines" className="outline-none rounded-xl w-full bg-[#F6F6F6] text-[#999999] pl-2 " onChange={handleSelectChange}>
               <option value="">Tous les domaines</option>
@@ -114,7 +117,7 @@ const ListeStageE = () => {
             <button type="submit" className="p-3 text-white bg-black rounded-xl">Rechercher</button>
           </form>
         </div>
-        <div className="p-3 border border-gray-400 rounded-lg max-h-[440px]" ref={containerRef}>
+        <div className="p-3 hidden lg:block border border-gray-400 rounded-lg max-h-[440px]" ref={containerRef}>
           <div className="flex flex-col">
             <div className="-m-1.5 overflow-x-auto">
               <div className="min-w-full inline-block align-middle">
@@ -168,6 +171,48 @@ const ListeStageE = () => {
               </div>
             </div>
           </div>
+        </div>
+        <div className="lg:hidden grid grid-cols-1 gap-4 mb-10">
+          {filteredStages?.map((stage, index) => (
+            <div key={index} className="bg-black pt-3 rounded-xl">
+              <div className="rounded-xl shadow-xl p-5 bg-white flex flex-col gap-6">
+                <div className="flex justify-between items-center">
+                  <span className="text-xl font-bold text-[#1b212d]">{stage.titre}</span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="font-semibold text-[#292929]">{stage.description}</span>
+                </div>
+                <div className="flex flex-col gap-3">
+                  <div className="bg-[#CCEDED] text-[#069F9F] flex items-center gap-2 py-1 px-2 rounded-lg w-fit">
+                    <MdTimer className="text-xl" />
+                    <span className="font-semibold">Durée : {stage.duree} mois</span>
+                  </div>
+                  <div className="bg-[#F1F1F1] text-[#7E7E7E] flex items-center gap-2 py-1 px-2 rounded-lg w-fit">
+                    <MdDomain className="text-xl" />
+                    <span className="font-semibold">Domaine : {stage.domaine}</span>
+                  </div>
+                  <div className="bg-[#EDE5FC] text-[#927BC2] flex items-center gap-2 py-1 px-2 rounded-lg w-fit">
+                    <MdDateRange className="text-xl" />
+                    <span className="font-semibold">Date debut : {stage.date_debut.substring(0, 10)}</span>
+                  </div>
+                </div>
+                <div className="flex justify-end items-end gap-5">
+                  <button className="py-2 px-4 rounded-lg border-2 border-green-600 hover:bg-green-600 hover:text-white transition duration-200 font-medium flex items-center gap-2">
+                    Info
+                    <FaInfoCircle />
+                  </button>
+                  <button className="py-2 px-4 rounded-lg border-2 border-blue-400 hover:bg-blue-400 hover:text-white transition duration-200 font-medium flex items-center gap-2">
+                    Modifier
+                    <FaPen />
+                  </button>
+                  <button className="py-2 px-4 rounded-lg border-2 border-red-600 hover:bg-red-600 hover:text-white transition duration-200 font-medium flex items-center gap-2">
+                    Supprimer
+                    <FaTrash />
+                  </button>
+                </div>
+              </div>
+            </div>
+          ))}
         </div>
       </section>
 
