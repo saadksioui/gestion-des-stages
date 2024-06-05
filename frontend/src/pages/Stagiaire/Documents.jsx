@@ -1,7 +1,8 @@
 import { useEffect, useRef } from "react";
 import { icons } from "../../constants";
 import UserLayout from "../../layouts/UserLayout";
-import { FaPlus, FaDownload } from "react-icons/fa6";
+import { FaPlus, FaDownload, FaPen, FaTrash } from "react-icons/fa6";
+import { MdOutlineNumbers } from "react-icons/md";
 
 
 
@@ -27,7 +28,7 @@ const Documents = () => {
             <span>Ajouter</span>
           </button>
         </div>
-        <div className="p-3 border border-gray-400 rounded-lg max-h-[440px]" ref={containerRef}>
+        <div className="hidden lg:block p-3 border border-gray-400 rounded-lg max-h-[440px] overflow-y-auto" ref={containerRef}>
           <div className="flex flex-col">
             <div className="-m-1.5 overflow-x-auto">
               <div className="min-w-full inline-block align-middle">
@@ -101,7 +102,7 @@ const Documents = () => {
                       </tr>
                       <tr>
                         <td className="px-6 py-4 whitespace-nowrap block w-52 truncate  text-sm font-medium text-gray-800">
-                        Attestation
+                          Attestation
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap gap-1">
                           122
@@ -129,6 +130,35 @@ const Documents = () => {
                     </tbody>
                   </table>
                 </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="lg:hidden grid grid-cols-1 gap-4 mb-10">
+
+          <div className="bg-black pt-3 rounded-xl">
+            <div className="rounded-xl shadow-xl p-5 bg-white flex flex-col gap-6">
+              <div className="flex justify-between items-center">
+                <span className="text-xl font-bold text-[#1b212d]">Presentation</span>
+              </div>
+              <div className="flex flex-col gap-3">
+                <div className="bg-[#CCEDED] text-[#069F9F] flex items-center gap-2 py-1 px-2 rounded-lg w-fit">
+                  <MdOutlineNumbers className="text-xl" />
+                  <span className="font-semibold">Stage id : 23</span>
+                </div>
+                <div className="flex items-center bg-[#26CB8F] text-white w-fit px-2 py-1 rounded-lg">
+                  Dernier version
+                </div>
+              </div>
+              <div className="flex justify-end items-end gap-5">
+                <button onClick={(e) => fetchStageData(stage._id)} className="py-2 px-4 rounded-lg border-2 border-green-600 hover:bg-green-600 hover:text-white transition duration-200 font-medium flex items-center gap-2">
+                  Modifier
+                  <FaPen />
+                </button>
+                <button className="py-2 px-4 rounded-lg border-2 border-red-600 hover:bg-red-600 hover:text-white transition duration-200 font-medium flex items-center gap-2">
+                  Delete
+                  <FaTrash />
+                </button>
               </div>
             </div>
           </div>

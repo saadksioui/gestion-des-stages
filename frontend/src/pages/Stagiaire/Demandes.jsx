@@ -83,7 +83,7 @@ const Demandes = () => {
                               </div>
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
-                              {demande.id_stage}
+                              {demande.domaine}
                             </td>
                             <td className={`px-6 py-4 flex items-center gap-5 whitespace-nowrap text-sm text-gray-800`}>
                               <a href="#">

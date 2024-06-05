@@ -6,6 +6,10 @@ import Swal from "sweetalert2";
 import axios from "axios";
 import StageInfo from "../../components/StageInfo";
 import { toast } from "react-toastify";
+import { MdDomain, MdTimer } from "react-icons/md";
+import { FaInfoCircle } from "react-icons/fa";
+import { TfiWrite } from "react-icons/tfi";
+
 
 const ListeStage = () => {
   const storedData = localStorage.getItem("sessionToken");
@@ -89,7 +93,7 @@ const ListeStage = () => {
             <button type="submit" className="p-2 lg:p-3 text-white bg-black rounded-xl">Rechercher</button>
           </form>
         </div>
-        <div className="p-3 border border-gray-400 rounded-lg max-h-[440px] overflow-y-auto" ref={containerRef}>
+        <div className="hidden lg:block p-3 border border-gray-400 rounded-lg max-h-[440px] overflow-y-auto" ref={containerRef}>
           <div className="flex flex-col">
             <div className="-m-1.5 overflow-x-auto">
               <div className="min-w-full inline-block align-middle">
@@ -140,6 +144,40 @@ const ListeStage = () => {
               </div>
             </div>
           </div>
+        </div>
+        <div className="lg:hidden grid grid-cols-1 gap-4 mb-10">
+          {stages?.map((stage, index) => (
+            <div key={index} className="bg-black pt-3 rounded-xl">
+              <div className="rounded-xl shadow-xl p-5 bg-white flex flex-col gap-6">
+                <div className="flex justify-between items-center">
+                  <span className="text-xl font-bold text-[#1b212d]">{stage.titre}</span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="font-semibold text-[#292929]">{stage.description}</span>
+                </div>
+                <div className="flex flex-col gap-3">
+                  <div className="bg-[#CCEDED] text-[#069F9F] flex items-center gap-2 py-1 px-2 rounded-lg w-fit">
+                    <MdTimer className="text-xl" />
+                    <span className="font-semibold">Durée : {stage.duree} mois</span>
+                  </div>
+                  <div className="bg-[#F1F1F1] text-[#7E7E7E] flex items-center gap-2 py-1 px-2 rounded-lg w-fit">
+                    <MdDomain className="text-xl" />
+                    <span className="font-semibold">Domaine : {stage.domaine}</span>
+                  </div>
+                </div>
+                <div className="flex justify-end items-end gap-5">
+                  <button onClick={(e) => fetchStageData(stage._id)} className="py-2 px-4 rounded-lg border-2 border-[#A1DD70] hover:bg-[#A1DD70] hover:text-white transition duration-200 font-medium flex items-center gap-2">
+                    Info
+                    <FaInfoCircle />
+                  </button>
+                  <button className="py-2 px-4 rounded-lg border-2 border-[#A1DD70] hover:bg-[#A1DD70] hover:text-white transition duration-200 font-medium flex items-center gap-2">
+                    Postuler
+                    <TfiWrite />
+                  </button>
+                </div>
+              </div>
+            </div>
+          ))}
         </div>
       </section>
 
