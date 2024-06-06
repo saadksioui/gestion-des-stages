@@ -1,15 +1,17 @@
-import { images } from "../../constants";
+
 import UserLayout from "../../layouts/UserLayout";
-import { IoMail } from "react-icons/io5";
-import { FaBarcode, FaGraduationCap, FaPhone } from "react-icons/fa6";
+import { IoMail, IoDocumentTextOutline } from "react-icons/io5";
+import { FaBarcode, FaDownload, FaGraduationCap, FaPhone } from "react-icons/fa6";
 import StagiaireForm from "../../components/StagiaireForm";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { MdOutlineWeb } from "react-icons/md";
 
 const Profile = () => {
   const [User, setUser] = useState([]);
   const storedData = localStorage.getItem("sessionToken");
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const storedRole = storedData ? storedData.split(",")[2] : 'visiter';
   let storedId;
 
   try {
@@ -55,17 +57,35 @@ const Profile = () => {
                 <span>{User.email}</span>
               </p>
               <p className="flex items-center gap-2 lg:gap-4">
-                <FaGraduationCap className="text-xl lg:text-2xl" />
-                <span>Diplome: TSWFS</span>
-              </p>
-              <p className="flex items-center gap-2 lg:gap-4">
                 <FaPhone className="text-xl lg:text-2xl" />
                 <span>{User.telephone}</span>
               </p>
-              <p className="flex items-center gap-2 lg:gap-4">
-                <FaBarcode className="text-xl lg:text-2xl" />
-                <span>Code: 2000020200956</span>
-              </p>
+              {(storedRole === 'étudiant') && (
+                <>
+                  <p className="flex items-center gap-2 lg:gap-4">
+                    <FaGraduationCap className="text-xl lg:text-2xl" />
+                    <span>Diplome: TSWFS</span>
+                  </p>
+                  <p className="flex items-center gap-2 lg:gap-4">
+                    <FaBarcode className="text-xl lg:text-2xl" />
+                    <span>Code: 2000020200956</span>
+                  </p>
+                  <a href={`/images_cv/${User.cv_url}`} className="flex items-center gap-2 lg:gap-4" download>
+                    <FaDownload className="text-lg" />
+                    <span>Télécharger</span>
+
+                  </a>
+                </>
+              )}
+              {(storedRole === 'entreprise') && (
+                <>
+                  <p className="flex items-center gap-2 lg:gap-4">
+                    <MdOutlineWeb className="text-xl lg:text-2xl" />
+                    <span>www.entreprise.com</span>
+                  </p>
+                </>
+              )}
+
             </div>
           </div>
           <button onClick={handleOpenModal} className="absolute top-4 right-4 lg:top-6 lg:right-6 px-4 py-2 bg-black text-white font-medium w-32 lg:w-fit rounded-lg shadow-md hover:bg-gray-800 transition-colors duration-300">

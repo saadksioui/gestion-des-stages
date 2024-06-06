@@ -237,7 +237,7 @@ const UserLayout = ({ children }) => {
             <img
               src={`images_cv/${User.img_url}`}
               alt=""
-              className="w-10 h-10 rounded-md"
+              className="w-10 h-10 rounded-md object-cover"
             />
             <div
               className={`
