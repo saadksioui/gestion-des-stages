@@ -4,16 +4,40 @@ import UserLayout from "../../layouts/UserLayout";
 import { TbPointFilled } from "react-icons/tb";
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
-import axios from "axios"; // Add this line
+import axios from "axios";
 import { MdDomain } from "react-icons/md";
-import { FaCheck, FaTrash } from "react-icons/fa6";
-import { FaInfoCircle } from "react-icons/fa";
+import { FaTrash, FaInfoCircle } from "react-icons/fa";
 
 const Demandes = () => {
   const containerRef = useRef(null);
   const [demandes, setDemandes] = useState([]);
   const storedData = localStorage.getItem("sessionToken");
-  const storedId = storedData ? storedData.split(",")[1] : null; // Check if storedData exists
+  const storedId = storedData ? storedData.split(",")[1] : null;
+
+  const getStatusClasses = (status) => {
+    switch (status) {
+      case 'en attente':
+        return {
+          bgColor: 'bg-[#1565d833]',
+          textColor: 'text-[#1565D8]'
+        };
+      case 'Accepter':
+        return {
+          bgColor: 'bg-[#4CAF5033]',
+          textColor: 'text-[#4CAF50]'
+        };
+      case 'Refusé':
+        return {
+          bgColor: 'bg-[#F4433633]',
+          textColor: 'text-[#F44336]'
+        };
+      default:
+        return {
+          bgColor: 'bg-gray-200',
+          textColor: 'text-gray-800'
+        };
+    }
+  };
 
   useEffect(() => {
     const containerHeight = containerRef.current.clientHeight;
@@ -24,7 +48,7 @@ const Demandes = () => {
       containerRef.current.classList.remove('overflow-y-scroll');
     }
   }, []);
-  
+
   useEffect(() => {
     const fetchDemandes = async () => {
       try {
@@ -38,11 +62,17 @@ const Demandes = () => {
     };
 
     fetchDemandes();
-  }, [demandes]);
+  }, [storedId]);
 
-  async function deleteOne(id){
-    const response = await axios.delete(`http://127.0.0.1:8000/api/candidature/delete/${id}`);
-  }
+  const deleteOne = async (id) => {
+    try {
+      await axios.delete(`http://127.0.0.1:8000/api/candidature/delete/${id}`);
+      setDemandes(demandes.filter(demande => demande._id !== id));
+    } catch (error) {
+      toast.error("Error deleting demande:", error);
+    }
+  };
+
   return (
     <UserLayout>
       <section className="px-10 mt-10">
@@ -78,29 +108,35 @@ const Demandes = () => {
                           </td>
                         </tr>
                       ) : (
-                        demandes.map((demande, index) => (
-                          <tr key={index}>
-                            <td className="px-6 py-4 whitespace-nowrap block w-52 truncate  text-sm font-medium text-gray-800">
-                              {demande.titre}
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap gap-1">
-                              <div className="flex items-center w-fit px-2 py-1 rounded-lg">
-                                {demande.statut_candidature}
-                              </div>
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
-                              {demande.domain}
-                            </td>
-                            <td className={`px-6 py-4 flex items-center gap-5 whitespace-nowrap text-sm text-gray-800`}>
-                              <a href="#">
-                                <img src={icons.Info} alt=""  />
-                              </a>
-                              <a href="#">
-                                <img src={icons.Delete} alt="" onClick={()=>deleteOne(demande._id)}/>
-                              </a>
-                            </td>
-                          </tr>
-                        ))
+                        demandes.map((demande, index) => {
+                          const { bgColor, textColor } = getStatusClasses(demande.statut_candidature);
+                          return (
+                            <tr key={index}>
+                              <td className="px-6 py-4 whitespace-nowrap block w-52 truncate text-sm font-medium text-gray-800">
+                                {demande.titre}
+                              </td>
+                              <td className="px-6 py-4 whitespace-nowrap gap-1">
+                                <div className={`flex items-center gap-2 py-1 px-2 rounded-lg w-fit ${bgColor} ${textColor}`}>
+                                  <TbPointFilled className="text-xl" />
+                                  <span className="font-semibold">
+                                    {demande.statut_candidature}
+                                  </span>
+                                </div>
+                              </td>
+                              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
+                                {demande.domain}
+                              </td>
+                              <td className="px-6 py-4 flex items-center gap-5 whitespace-nowrap text-sm text-gray-800">
+                                <a href="#">
+                                  <FaInfoCircle className="text-xl text-blue-400" />
+                                </a>
+                                <a href="#">
+                                  <FaTrash className="text-xl cursor-pointer text-red-600" onClick={() => deleteOne(demande._id)} />
+                                </a>
+                              </td>
+                            </tr>
+                          );
+                        })
                       )}
                     </tbody>
                   </table>
@@ -118,42 +154,45 @@ const Demandes = () => {
               </td>
             </tr>
           ) : (
-            demandes.map((demande, index) => (
-              <div className="bg-black pt-3 rounded-xl">
-                <div className="rounded-xl shadow-xl p-5 bg-white flex flex-col gap-6">
-                  <div className="flex justify-between items-center">
-                    <span className="text-xl font-bold text-[#1b212d]">{demande.titre}</span>
-                  </div>
-                  <div className="flex flex-col gap-3">
-                    <div className=" flex items-center gap-2 py-1 px-2 rounded-lg w-fit bg-[#1565d833] text-[#1565D8]">
-                      <TbPointFilled className="text-xl" />
-                      <span className="font-semibold">
-                        {demande.statut_candidature}
-                      </span>
+            demandes.map((demande, index) => {
+              const { bgColor, textColor } = getStatusClasses(demande.statut_candidature);
+              return (
+                <div key={index} className="bg-black pt-3 rounded-xl">
+                  <div className="rounded-xl shadow-xl p-5 bg-white flex flex-col gap-6">
+                    <div className="flex justify-between items-center">
+                      <span className="text-xl font-bold text-[#1b212d]">{demande.titre}</span>
                     </div>
-                    <div className="bg-[#F1F1F1] text-[#7E7E7E] flex items-center gap-2 py-1 px-2 rounded-lg w-fit">
-                      <MdDomain className="text-lg" />
-                      <span className="font-semibold">{demande.domain}</span>
+                    <div className="flex flex-col gap-3">
+                      <div className={`flex items-center gap-2 py-1 px-2 rounded-lg w-fit ${bgColor} ${textColor}`}>
+                        <TbPointFilled className="text-xl" />
+                        <span className="font-semibold">
+                          {demande.statut_candidature}
+                        </span>
+                      </div>
+                      <div className="bg-[#F1F1F1] text-[#7E7E7E] flex items-center gap-2 py-1 px-2 rounded-lg w-fit">
+                        <MdDomain className="text-lg" />
+                        <span className="font-semibold">{demande.domain}</span>
+                      </div>
                     </div>
-                  </div>
-                  <div className="flex justify-end items-end gap-5">
-                    <button className="py-2 px-4 rounded-lg border-2 border-blue-400 hover:bg-blue-400 hover:text-white transition duration-200 font-medium flex items-center gap-2">
-                      Info
-                      <FaInfoCircle />
-                    </button>
-                    <button className="py-2 px-4 rounded-lg border-2 border-red-600 hover:bg-red-600 hover:text-white transition duration-200 font-medium flex items-center gap-2">
-                      Supprimer
-                      <FaTrash />
-                    </button>
+                    <div className="flex justify-end items-end gap-5">
+                      <button className="py-2 px-4 rounded-lg border-2 border-blue-400 hover:bg-blue-400 hover:text-white transition duration-200 font-medium flex items-center gap-2">
+                        Info
+                        <FaInfoCircle />
+                      </button>
+                      <button onClick={() => deleteOne(demande._id)} className="py-2 px-4 rounded-lg border-2 border-red-600 hover:bg-red-600 hover:text-white transition duration-200 font-medium flex items-center gap-2">
+                        Supprimer
+                        <FaTrash />
+                      </button>
+                    </div>
                   </div>
                 </div>
-              </div>
-            )))}
-
+              );
+            })
+          )}
         </div>
       </section>
     </UserLayout>
-  )
+  );
 };
 
 export default Demandes;
