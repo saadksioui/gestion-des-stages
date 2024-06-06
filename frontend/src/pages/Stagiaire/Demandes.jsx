@@ -75,7 +75,7 @@ const Demandes = () => {
                         demandes.map((demande, index) => (
                           <tr key={index}>
                             <td className="px-6 py-4 whitespace-nowrap block w-52 truncate  text-sm font-medium text-gray-800">
-                              {demande._id}
+                              {demande.titre}
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap gap-1">
                               <div className="flex items-center w-fit px-2 py-1 rounded-lg">
@@ -83,7 +83,7 @@ const Demandes = () => {
                               </div>
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
-                              {demande.domaine}
+                              {demande.domain}
                             </td>
                             <td className={`px-6 py-4 flex items-center gap-5 whitespace-nowrap text-sm text-gray-800`}>
                               <a href="#">

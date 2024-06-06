@@ -10,12 +10,19 @@ const candidatureSchema = new mongoose.Schema({
   id_stage: { 
     type: mongoose.Schema.Types.ObjectId, ref: 'Stage', 
     required: true 
-
   },
   date_candidature: { 
     type: Date, 
     default: Date.now 
 
+  },
+  domain:{
+    type: String,
+    required: true
+  },
+  titre:{
+    type: String,
+    required: true
   },
   statut_candidature: { 
     type: String, enum: ['en attente', 'acceptée', 'refusée'], 
