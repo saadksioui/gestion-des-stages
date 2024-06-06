@@ -88,7 +88,7 @@ const ListeStage = () => {
               <option className="text-black">Domaine 2</option>
             </select>
           </form>
-          <form className="w-full lg:w-[425px] h-[47px] flex justify-between items-center px-3 border border-[#D6D6D6] rounded-xl bg-[#F6F6F6]">
+          <form className="w-full lg:w-[425px] h-[47px] flex justify-between items-center pl-3 border border-[#D6D6D6] rounded-xl bg-[#F6F6F6]">
             <input type="text" placeholder="Tapez quelque chose...." className="outline-none rounded-xl bg-[#F6F6F6] placeholder:text-[#999999] text-black pl-2 flex-1" />
             <button type="submit" className="p-2 lg:p-3 text-white bg-black rounded-xl">Rechercher</button>
           </form>

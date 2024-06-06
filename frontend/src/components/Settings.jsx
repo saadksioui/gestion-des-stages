@@ -79,9 +79,9 @@ const Settings = ({ handleCloseModal }) => {
 
   return (
     <div className="fixed inset-0 flex justify-center items-center h-screen px-10 font-poppins">
-      <div className="bg-white border-2 w-2/4 h-fit rounded-lg shadow-md px-10 py-5 font-poppins">
+      <div className="bg-white border-2 w-[90%] lg:w-2/4 h-fit rounded-lg shadow-md px-10 py-5 font-poppins">
         <div className="pb-3 border-b-[1px] border-black flex justify-between items-center">
-          <h1 className="text-3xl font-semibold">Changer le mot de passe</h1>
+          <h1 className="text-xl lg:text-3xl font-semibold">Changer le mot de passe</h1>
           <FaXmark size={27} onClick={handleCloseModal} className="cursor-pointer"/>
         </div>
         <form onSubmit={handleUpdate} className="mt-4">
