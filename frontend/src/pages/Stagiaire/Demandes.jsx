@@ -24,7 +24,7 @@ const Demandes = () => {
       containerRef.current.classList.remove('overflow-y-scroll');
     }
   }, []);
-
+  
   useEffect(() => {
     const fetchDemandes = async () => {
       try {
@@ -38,8 +38,11 @@ const Demandes = () => {
     };
 
     fetchDemandes();
-  }, [storedId]);
+  }, [demandes]);
 
+  async function deleteOne(id){
+    const response = await axios.delete(`http://127.0.0.1:8000/api/candidature/delete/${id}`);
+  }
   return (
     <UserLayout>
       <section className="px-10 mt-10">
@@ -90,10 +93,10 @@ const Demandes = () => {
                             </td>
                             <td className={`px-6 py-4 flex items-center gap-5 whitespace-nowrap text-sm text-gray-800`}>
                               <a href="#">
-                                <img src={icons.Info} alt="" />
+                                <img src={icons.Info} alt=""  />
                               </a>
                               <a href="#">
-                                <img src={icons.Delete} alt="" />
+                                <img src={icons.Delete} alt="" onClick={()=>deleteOne(demande._id)}/>
                               </a>
                             </td>
                           </tr>
