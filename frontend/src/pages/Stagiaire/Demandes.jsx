@@ -5,10 +5,16 @@ import { TbPointFilled } from "react-icons/tb";
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
 import axios from "axios"; // Add this line
+import Modal from "../../components/DemandeInfo";
+
 
 const Demandes = () => {
   const containerRef = useRef(null);
+  const [stages, setStages] = useState([]);
+  const [stageData, setStageData] = useState({});
   const [demandes, setDemandes] = useState([]);
+  const [selectedDemande, setSelectedDemande] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const storedData = localStorage.getItem("sessionToken");
   const storedId = storedData ? storedData.split(",")[1] : null; // Check if storedData exists
 
@@ -36,10 +42,22 @@ const Demandes = () => {
 
     fetchDemandes();
   }, [demandes]);
+ 
+  const handleInfoClick = (demande) => {
+    setSelectedDemande(demande);
+    setIsModalOpen(true);
+  };
 
-  async function deleteOne(id){
-    const response = await axios.delete(`http://127.0.0.1:8000/api/candidature/delete/${id}`);
+  async function deleteOne(id) {
+    try {
+      await axios.delete(`http://127.0.0.1:8000/api/candidature/delete/${id}`);
+      toast.success("Demande deleted successfully");
+      setDemandes(demandes.filter(demande => demande._id !== id));
+    } catch (error) {
+      toast.error("Error deleting demande:", error);
+    }
   }
+
   return (
     <UserLayout>
       <section className="px-10 mt-10">
@@ -77,23 +95,23 @@ const Demandes = () => {
                       ) : (
                         demandes.map((demande, index) => (
                           <tr key={index}>
-                            <td className="px-6 py-4 whitespace-nowrap block w-52 truncate  text-sm font-medium text-gray-800">
+                            <td className="px-6 py-4 whitespace-nowrap block w-52 truncate text-sm font-medium text-gray-800">
                               {demande.titre}
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap gap-1">
                               <div className="flex items-center w-fit px-2 py-1 rounded-lg">
-                              {demande.statut_candidature}
+                                {demande.statut_candidature}
                               </div>
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
                               {demande.domain}
                             </td>
-                            <td className={`px-6 py-4 flex items-center gap-5 whitespace-nowrap text-sm text-gray-800`}>
-                              <a href="#">
-                                <img src={icons.Info} alt=""  />
+                            <td className="px-6 py-4 flex items-center gap-5 whitespace-nowrap text-sm text-gray-800">
+                              <a href="#" onClick={() => handleInfoClick(demande)}>
+                                <img src={icons.Info} alt="Info icon" />
                               </a>
                               <a href="#">
-                                <img src={icons.Delete} alt="" onClick={()=>deleteOne(demande._id)}/>
+                                <img src={icons.Delete} alt="Delete icon" onClick={() => deleteOne(demande._id)} />
                               </a>
                             </td>
                           </tr>
@@ -107,8 +125,10 @@ const Demandes = () => {
           </div>
         </div>
       </section>
+
+      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} demande={selectedDemande} />
     </UserLayout>
-  )
+  );
 };
 
 export default Demandes;
