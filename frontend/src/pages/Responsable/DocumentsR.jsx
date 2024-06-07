@@ -1,7 +1,8 @@
 import { useEffect, useRef } from "react";
 import { icons } from "../../constants";
 import UserLayout from "../../layouts/UserLayout";
-import { FaPlus, FaDownload } from "react-icons/fa6";
+import { FaPlus, FaDownload, FaPen, FaTrash, FaUser } from "react-icons/fa6";
+import { MdOutlineNumbers } from "react-icons/md";
 
 
 
@@ -22,7 +23,7 @@ const DocumentsR = () => {
       <section className="px-10 mt-10">
         <div className="flex justify-between items-center mt-5 mb-10">
           <h1 className="text-4xl font-bold">Documents</h1>
-          
+
         </div>
         <div className="p-3 border border-gray-400 rounded-lg max-h-[440px]" ref={containerRef}>
           <div className="flex flex-col">
@@ -127,6 +128,39 @@ const DocumentsR = () => {
                     </tbody>
                   </table>
                 </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="lg:hidden grid grid-cols-1 gap-4 mb-10">
+
+          <div className="bg-black pt-3 rounded-xl">
+            <div className="rounded-xl shadow-xl p-5 bg-white flex flex-col gap-6">
+              <div className="flex justify-between items-center">
+                <span className="text-xl font-bold text-[#1b212d]">Presentation</span>
+              </div>
+              <div className="flex flex-col gap-3">
+                <div className="bg-[#CCEDED] text-[#069F9F] flex items-center gap-2 py-1 px-2 rounded-lg w-fit">
+                  <FaUser className="text-lg" />
+                  <span className="font-semibold">Nom : Ksioui Saad</span>
+                </div>
+                <div className="bg-[#CCEDED] text-[#069F9F] flex items-center gap-2 py-1 px-2 rounded-lg w-fit">
+                  <MdOutlineNumbers className="text-xl" />
+                  <span className="font-semibold">Stage id : 23</span>
+                </div>
+                <div className="flex items-center bg-[#26CB8F] text-white w-fit px-2 py-1 rounded-lg">
+                  Dernier version
+                </div>
+              </div>
+              <div className="flex justify-end items-end gap-5">
+                <button className="py-2 px-4 rounded-lg border-2 border-green-600 hover:bg-green-600 hover:text-white transition duration-200 font-medium flex items-center gap-2">
+                  Télécharger
+                  <FaDownload />
+                </button>
+                <button className="py-2 px-4 rounded-lg border-2 border-red-600 hover:bg-red-600 hover:text-white transition duration-200 font-medium flex items-center gap-2">
+                  Delete
+                  <FaTrash />
+                </button>
               </div>
             </div>
           </div>

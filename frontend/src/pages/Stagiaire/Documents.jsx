@@ -1,14 +1,23 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { icons } from "../../constants";
 import UserLayout from "../../layouts/UserLayout";
 import { FaPlus, FaDownload, FaPen, FaTrash } from "react-icons/fa6";
 import { MdOutlineNumbers } from "react-icons/md";
+import AjouterDoc from "./AjouterDoc";
 
 
 
 const Documents = () => {
   const containerRef = useRef(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
+  const handleOpenModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
   useEffect(() => {
     const containerHeight = containerRef.current.clientHeight;
     const childrenHeight = containerRef.current.scrollHeight;
@@ -23,7 +32,7 @@ const Documents = () => {
       <section className="px-10 mt-10">
         <div className="flex justify-between items-center mt-5 mb-10">
           <h1 className="text-4xl font-bold">Documents</h1>
-          <button className="flex items-center gap-4 rounded-lg px-4 py-2 bg-black text-white">
+          <button onClick={handleOpenModal} className="flex items-center gap-4 rounded-lg px-4 py-2 bg-black text-white">
             <FaPlus />
             <span>Ajouter</span>
           </button>
@@ -164,6 +173,13 @@ const Documents = () => {
           </div>
         </div>
       </section>
+      {
+        isModalOpen && (
+          <AjouterDoc
+            handleCloseModal={handleCloseModal}
+          />
+        )
+      }
     </UserLayout>
   )
 };

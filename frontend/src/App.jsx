@@ -11,7 +11,7 @@ import StagiaireForm from "./components/StagiaireForm";
 import Demandes from "./pages/Stagiaire/Demandes";
 import Documents from "./pages/Stagiaire/Documents";
 import Profile from "./pages/Stagiaire/Profile";
-import ProfileA from "./pages/admin/Profile";
+import ProfileA from "./pages/admin/ProfileA";
 import VerifyStg from "./components/VerifyStg";
 import ListeStagiaires from "./pages/Responsable/ListeStagiaires";
 import ListeStgs from "./pages/admin/ListeStgs";
@@ -40,7 +40,7 @@ const App = () => {
             </>
           )}
 
-          {(storedRole === 'entreprise' || storedRole === 'admin') && (
+          {(storedRole === 'entreprise' ) && (
             <>
               <Route path="/profile" element={<Profile />} />
               <Route path="/liste-stages" element={<ListeStageE />} />
@@ -49,7 +49,7 @@ const App = () => {
 
             </>
           )}
-          {(storedRole === 'étudiant' || storedRole === 'admin') && (
+          {(storedRole === 'étudiant' ) && (
             <>
               <Route path="/profile" element={<Profile />} />
               <Route path="/liste-stages" element={<ListeStage />} />
@@ -59,7 +59,7 @@ const App = () => {
               <Route path="/documents" element={<Documents />} />
             </>
           )}
-          {(storedRole === 'responsable pédagogique' || storedRole === 'admin') && (
+          {(storedRole === 'responsable pédagogique' ) && (
             <>
               <Route path="/profile" element={<Profile />} />
               <Route path="/liste-stages" element={<ListeStagiaires />} />
@@ -71,7 +71,7 @@ const App = () => {
           )}
           {storedRole === 'admin' && (
             <>
-              <Route path="/profileA" element={<ProfileA />} />
+              <Route path="/profile" element={<ProfileA />} />
               <Route path="/entreprise-form" element={<EntrepriseForm />} />
               <Route path="/stagaire-form" element={<StagiaireForm />} />
               <Route path="/verifystg" element={<VerifyStg />} />

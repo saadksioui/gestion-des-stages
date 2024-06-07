@@ -5,7 +5,7 @@ import axios from "axios";
 const StagiaireForm = ({ isOpen, onClose, handleCloseModal }) => {
   const storedData = localStorage.getItem("sessionToken");
   let storedId;
-
+  const storedRole = storedData ? storedData.split(",")[2] : 'visiter';
   try {
     if (storedData) {
       storedId = storedData.split(",");
@@ -14,10 +14,10 @@ const StagiaireForm = ({ isOpen, onClose, handleCloseModal }) => {
     console.error('Error parsing session token:', error);
   }
 
-  const [nomF, setNom] = useState('');
-  const [prenomF, setPrenom] = useState('');
+  const [nomComplet, setNomComplet] = useState('');
   const [telephoneF, setTelephone] = useState('');
-  const [emailF, setEmail] = useState('');
+  const [email, setEmail] = useState('');
+  const [siteWeb, setSiteWeb] = useState('');
   const [imgF, setImg] = useState(null);
   const [cvF, setCv] = useState(null);
   const [visible, setVisible] = useState(true);
@@ -104,15 +104,17 @@ const StagiaireForm = ({ isOpen, onClose, handleCloseModal }) => {
 
   return (
     <div className="fixed inset-0 z-50 overflow-hidden bg-gray-500 bg-opacity-50">
-      <div className="relative bg-white shadow-md mx-auto my-20 w-3/4 h-fit p-6 rounded-lg">
+      <div className="relative bg-white shadow-md mx-auto my-20 w-3/4 h-4/5 overflow-y-scroll p-6 rounded-lg">
         <div className='flex justify-between items-center border-b-[1px] border-[#99999] w-full px-3 pb-5'>
           <h1 className="text-2xl font-semibold">Ajouter Vos Information</h1>
           <button onClick={onClose} className="w-10 h-10 flex items-center justify-center rounded-full text-3xl" >
             <FaXmark />
           </button>
         </div>
-        <div className="my-3">
+        <div className="my-3 ">
+
           <form onSubmit={handleSubmit} >
+          {(storedRole === 'étudiant' ) && (
             <div className="grid grid-cols-1 gap-5">
               <div className="p-3 flex flex-col gap-2">
                 <label >
@@ -121,6 +123,18 @@ const StagiaireForm = ({ isOpen, onClose, handleCloseModal }) => {
                 <input type="file" accept=".png, .jpeg, .jpg" onChange={handleImgChange} className="border rounded-md py-2 px-2 outline-none" />
               </div>
 
+              <div className="p-3 flex flex-col gap-2">
+                <label >
+                  Nom Complet:
+                </label>
+                <input type="text" value={nomComplet} onChange={(e) => setNomComplet(e.target.value)} className="border rounded-md py-2 px-2 outline-none" />
+              </div>
+              <div className="p-3 flex flex-col gap-2">
+                <label >
+                  Email:
+                </label>
+                <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} className="border rounded-md py-2 px-2 outline-none" />
+              </div>
               <div className="p-3 flex flex-col gap-2">
                 <label >
                   Téléphone:
@@ -134,6 +148,71 @@ const StagiaireForm = ({ isOpen, onClose, handleCloseModal }) => {
                 <input type="file" accept=".pdf" onChange={handleCvChange} className="border rounded-md py-2 px-2 outline-none" maxFileSize={5 * 1024 * 1024} />
               </div>
             </div>
+          )}
+          {(storedRole === 'responsable pédagogique' ) && (
+            <div className="grid grid-cols-1 gap-5">
+              <div className="p-3 flex flex-col gap-2">
+                <label >
+                  Image de profil:
+                </label>
+                <input type="file" accept=".png, .jpeg, .jpg" onChange={handleImgChange} className="border rounded-md py-2 px-2 outline-none" />
+              </div>
+
+              <div className="p-3 flex flex-col gap-2">
+                <label >
+                  Nom Complet:
+                </label>
+                <input type="text" value={nomComplet} onChange={(e) => setNomComplet(e.target.value)} className="border rounded-md py-2 px-2 outline-none" />
+              </div>
+              <div className="p-3 flex flex-col gap-2">
+                <label >
+                  Email:
+                </label>
+                <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} className="border rounded-md py-2 px-2 outline-none" />
+              </div>
+              <div className="p-3 flex flex-col gap-2">
+                <label >
+                  Téléphone:
+                </label>
+                <input type="tel" value={telephoneF} onChange={(e) => setTelephone(e.target.value)} className="border rounded-md py-2 px-2 outline-none" />
+              </div>
+            </div>
+          )}
+          {(storedRole === 'entreprise' ) && (
+            <div className="grid grid-cols-1 gap-5">
+              <div className="p-3 flex flex-col gap-2">
+                <label >
+                  Image de profil:
+                </label>
+                <input type="file" accept=".png, .jpeg, .jpg" onChange={handleImgChange} className="border rounded-md py-2 px-2 outline-none" />
+              </div>
+
+              <div className="p-3 flex flex-col gap-2">
+                <label >
+                  Nom Complet:
+                </label>
+                <input type="text" value={nomComplet} onChange={(e) => setNomComplet(e.target.value)} className="border rounded-md py-2 px-2 outline-none" />
+              </div>
+              <div className="p-3 flex flex-col gap-2">
+                <label >
+                  Email:
+                </label>
+                <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} className="border rounded-md py-2 px-2 outline-none" />
+              </div>
+              <div className="p-3 flex flex-col gap-2">
+                <label >
+                  Téléphone:
+                </label>
+                <input type="tel" value={telephoneF} onChange={(e) => setTelephone(e.target.value)} className="border rounded-md py-2 px-2 outline-none" />
+              </div>
+              <div className="p-3 flex flex-col gap-2">
+                <label >
+                  Site Web:
+                </label>
+                <input type="tel" value={siteWeb} onChange={(e) => setSiteWeb(e.target.value)} className="border rounded-md py-2 px-2 outline-none" />
+              </div>
+            </div>
+          )}
             <div className="flex items-center gap-20 my-4">
               {imgF && (
                 <div className="p-3 flex flex-col gap-2">
