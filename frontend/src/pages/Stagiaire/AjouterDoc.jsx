@@ -1,21 +1,35 @@
 import axios from "axios";
 import { useState } from "react";
 import { FaXmark } from "react-icons/fa6";
+import Swal from 'sweetalert2';
 
 const AjouterDoc = ({ handleCloseModal }) => {
-  const [type, setType] = useState('')
-  const [version, setVersion] = useState('')
-  const [fichier, setFichier] = useState('')
+  const [type, setType] = useState('');
+  const [version, setVersion] = useState('');
+  const [file, setFile] = useState(null);
+  const [filePreview, setFilePreview] = useState(null); // State for file preview
+  const storedData = localStorage.getItem("sessionToken");
+  let storedId = storedData.split(",")[1];
+  const typesDoc = ['Rapport', 'Presentation', 'Attestation'];
+  const versionDoc = ['Dernier version', 'Premier version'];
 
-  const typesDoc = ['Rapport', 'Presentation', 'Attestation']
-  const versionDoc = ['Dernier version', 'Premier version']
+  const handleFileChange = (e) => {
+    const selectedFile = e.target.files[0];
+    setFile(selectedFile);
+
+    // Create a preview of the file
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setFilePreview(reader.result);
+    };
+    reader.readAsDataURL(selectedFile);
+  };
 
   const handleAdd = async (e) => {
     e.preventDefault();
 
-    const emptyFields = [type, version, fichier].filter(field => field === '').length > 0;
-
-    if (emptyFields) {
+    // Check for empty fields
+    if (!type || !version || !file) {
       Swal.fire({
         iconColor: "black",
         icon: "error",
@@ -24,39 +38,43 @@ const AjouterDoc = ({ handleCloseModal }) => {
         confirmButtonColor: "black"
       });
       return;
-    } else {
-      try {
-        // await axios.post(`http://127.0.0.1:8000/api/auth/update-password/${storedId[1]}`, {
-        //   oldPassword: currentPwd,
-        //   newPassword: newPwd
-        // });
+    }
 
-        setType('');
-        setVersion('');
-        setFichier('');
+    try {
+      const formData = new FormData();
+      formData.append('user_id', storedId);
+      formData.append('type', type);
+      formData.append('version', version);
+      formData.append('file', file);
 
+      await axios.post(`http://127.0.0.1:8000/api/documents/add`, formData);
 
-        Swal.fire({
-          iconColor: "black",
-          icon: "success",
-          title: "Success",
-          text: "Le document est ajouté avec succès.",
-          confirmButtonColor: "black"
-        });
+      setType('');
+      setVersion('');
+      setFile(null);
+      setFilePreview(null); // Clear file preview after upload
 
-        handleCloseModal();
-      } catch (error) {
-        console.error('Error adding document:', error.message);
-        Swal.fire({
-          iconColor: "black",
-          icon: "error",
-          title: "Error",
-          text: error.message,
-          confirmButtonColor: "black"
-        });
-      }
+      Swal.fire({
+        iconColor: "black",
+        icon: "success",
+        title: "Success",
+        text: "Le document est ajouté avec succès.",
+        confirmButtonColor: "black"
+      });
+
+      handleCloseModal();
+    } catch (error) {
+      console.error('Error adding document:', error.message);
+      Swal.fire({
+        iconColor: "black",
+        icon: "error",
+        title: "Error",
+        text: error.message,
+        confirmButtonColor: "black"
+      });
     }
   };
+
   return (
     <div className="fixed inset-0 flex justify-center items-center h-screen px-10 font-poppins">
       <div className="bg-white border-2 w-[90%] lg:w-2/4 h-fit rounded-lg shadow-md px-10 py-5 font-poppins">
@@ -89,8 +107,13 @@ const AjouterDoc = ({ handleCloseModal }) => {
           </div>
           <div className="p-3 flex flex-col gap-2">
             <label htmlFor="fichier" className="text-xl font-medium">Fichier:</label>
-            <input type="file" value={fichier} onChange={e => setFichier(e.target.value)} className="border-2 border-[#99999] rounded-md py-2 px-2 outline-none" />
+            <input type="file" onChange={handleFileChange} className="border-2 border-[#99999] rounded-md py-2 px-2 outline-none" />
           </div>
+          {filePreview && (
+            <div className="p-3">
+              <img src={filePreview} alt="File Preview" style={{ width: '50px', height: '50px' }} />
+            </div>
+          )}
           <div className="p-3">
             <button type="submit" className="bg-black py-2 px-4 text-white rounded-xl flex items-center justify-center w-full mt-2 text-lg">
               Ajouter
@@ -99,7 +122,7 @@ const AjouterDoc = ({ handleCloseModal }) => {
         </form>
       </div>
     </div>
-  )
+  );
 };
 
-export default AjouterDoc
+export default AjouterDoc;

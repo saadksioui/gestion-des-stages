@@ -9,6 +9,7 @@ const candidatureRoute = require('./routes/candidatureRoutes');
 const suiviRoute = require('./routes/suiviRoute');
 const responsableRoute = require('./routes/responsableRoute');
 const mailRoute = require("./routes/mailRoute");
+const documentRoutes = require("./routes/documentRoutes");
 const cors = require('cors');
 const { Server } = require('socket.io');
 
@@ -27,6 +28,7 @@ app.use('/api/candidature', candidatureRoute);
 app.use('/api/suivi', suiviRoute);
 app.use('/api/responsable', responsableRoute);
 app.use("/api/mail", mailRoute);
+app.use("/api/documents", documentRoutes);
 
 const server = http.createServer(app);
 const io = new Server(server, {

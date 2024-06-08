@@ -4,13 +4,16 @@ import UserLayout from "../../layouts/UserLayout";
 import { FaPlus, FaDownload, FaPen, FaTrash } from "react-icons/fa6";
 import { MdOutlineNumbers } from "react-icons/md";
 import AjouterDoc from "./AjouterDoc";
+import axios from "axios";
 
 
 
 const Documents = () => {
   const containerRef = useRef(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-
+  const [Documents, setDocuments] = useState([]);
+  const storedData = localStorage.getItem("sessionToken");
+  let storedId = storedData.split(",")[1];
   const handleOpenModal = () => {
     setIsModalOpen(true);
   };
@@ -26,6 +29,18 @@ const Documents = () => {
     } else {
       containerRef.current.classList.remove('overflow-y-scroll');
     }
+  }, []);
+  useEffect(() => {
+    const fetchStages = async () => {
+      try {
+        const response = await axios.get(`http://127.0.0.1:8000/api/documents/user/${storedId}`);
+        setDocuments(response.data);
+      } catch (error) {
+        console.error("Error fetching stages:", error);
+      }
+    };
+
+    fetchStages();
   }, []);
   return (
     <UserLayout>
@@ -47,7 +62,7 @@ const Documents = () => {
                       <tr>
                         <th scope="col" className="px-6 py-3 text-start font-semibold">Type</th>
                         <th scope="col" className="px-6 py-3 flex items-center gap-3 text-start font-semibold">
-                          Stage_id
+                          Date
                         </th>
                         <th scope="col" className="px-6 py-3 text-start font-semibold">Version</th>
                         <th scope="col" className="px-6 py-3 text-start font-semibold">Download</th>
@@ -55,16 +70,17 @@ const Documents = () => {
                       </tr>
                     </thead>
                     <tbody>
-                      <tr>
+                      {Documents.map((doc,i)=>(
+                      <tr key={i}>
                         <td className="px-6 py-4 whitespace-nowrap block w-52 truncate  text-sm font-medium text-gray-800">
-                          Rapport
+                          {doc.type}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap gap-1">
-                          122
+                        {doc.version}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
                           <div className="flex items-center bg-[#26CB8F] text-white w-fit px-2 py-1 rounded-lg">
-                            Dernier version
+                          {doc.version}
                           </div>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
@@ -82,60 +98,8 @@ const Documents = () => {
                           </a>
                         </td>
                       </tr>
-                      <tr>
-                        <td className="px-6 py-4 whitespace-nowrap block w-52 truncate  text-sm font-medium text-gray-800">
-                          Presentation
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap gap-1">
-                          23
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
-                          <div className="flex items-center bg-[#327AF8] text-white w-fit px-2 py-1 rounded-lg">
-                            Premier version
-                          </div>
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
-                          <button className="flex items-center gap-2">
-                            <FaDownload className="text-lg" />
-                            <span>Télécharger</span>
-                          </button>
-                        </td>
-                        <td className={`px-6 py-4 flex items-center gap-5 whitespace-nowrap text-sm text-gray-800`}>
-                          <a href="#">
-                            <img src={icons.Info} alt="" />
-                          </a>
-                          <a href="#">
-                            <img src={icons.Delete} alt="" />
-                          </a>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td className="px-6 py-4 whitespace-nowrap block w-52 truncate  text-sm font-medium text-gray-800">
-                          Attestation
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap gap-1">
-                          122
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
-                          <div className="flex items-center bg-[#26CB8F] text-white w-fit px-2 py-1 rounded-lg">
-                            Dernier version
-                          </div>
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
-                          <button className="flex items-center gap-2">
-                            <FaDownload className="text-lg" />
-                            <span>Télécharger</span>
-                          </button>
-                        </td>
-                        <td className={`px-6 py-4 flex items-center gap-5 whitespace-nowrap text-sm text-gray-800`}>
-                          <a href="#">
-                            <img src={icons.Info} alt="" />
-                          </a>
-                          <a href="#">
-                            <img src={icons.Delete} alt="" />
-                          </a>
-                        </td>
-                      </tr>
+                      ))}
+                      
                     </tbody>
                   </table>
                 </div>

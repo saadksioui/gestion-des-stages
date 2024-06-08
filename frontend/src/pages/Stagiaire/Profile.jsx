@@ -31,7 +31,7 @@ const Profile = () => {
       }
     };
     fetchData();
-  }, []);
+  }, [isModalOpen]);
 
   const handleOpenModal = () => {
     setIsModalOpen(true);
@@ -39,6 +39,7 @@ const Profile = () => {
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
+
   };
 
   return (
@@ -64,7 +65,7 @@ const Profile = () => {
                 <>
                   <p className="flex items-center gap-2 lg:gap-4">
                     <FaGraduationCap className="text-xl lg:text-2xl" />
-                    <span>Diplome: TSWFS</span>
+                    <span>Diplome: {User.diplome}</span>
                   </p>
                   <p className="flex items-center gap-2 lg:gap-4">
                     <FaBarcode className="text-xl lg:text-2xl" />

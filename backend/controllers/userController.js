@@ -153,46 +153,54 @@ const upload = multer({
 const updateUser = asyncHandler(async (req, res) => {
   try {
     const { id } = req.params;
-    const { telephone } = req.body;
+    const { nom, telephone, email } = req.body;
 
     const user = await User.findOne({ _id: id });
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
 
+    const updateData = {};
     const oldImgFilename = user.img_url;
     const oldCvFilename = user.cv_url;
 
-    const imgFilename = req.files.img[0].filename;
-    const cvFilename = req.files.cv[0].filename;
-
-    const updateData = {
-      img_url: imgFilename,
-      cv_url: cvFilename,
-      telephone
-    };
-
-    const updatedUser = await User.updateOne({ _id: id }, { $set: updateData });
-    if (updatedUser) {
-      // Delete old image and CV files using fs.promises.unlink
+    if (req.files.img && req.files.img[0]) {
+      const imgFilename = req.files.img[0].filename;
+      updateData.img_url = imgFilename;
       if (oldImgFilename && oldImgFilename !== imgFilename) {
         try {
-          const oldImgFilePath = path.join(__dirname, '../../frontend/public/images_cv', oldImgFilename);
-          await fs.unlink(oldImgFilePath); // Use fs.promises.unlink
+          const oldImgFilePath = path.join(__dirname, '../frontend/public/images_cv', oldImgFilename);
+          await fs.promises.unlink(oldImgFilePath);
         } catch (error) {
           console.error('Error deleting old image file:', error);
         }
       }
+    }
 
+    if (req.files.cv && req.files.cv[0]) {
+      const cvFilename = req.files.cv[0].filename;
+      updateData.cv_url = cvFilename;
       if (oldCvFilename && oldCvFilename !== cvFilename) {
         try {
-          const oldCvFilePath = path.join(__dirname, '../../frontend/public/images_cv', oldCvFilename);
-          await fs.unlink(oldCvFilePath); // Use fs.promises.unlink
+          const oldCvFilePath = path.join(__dirname, '../frontend/public/images_cv', oldCvFilename);
+          await fs.promises.unlink(oldCvFilePath);
         } catch (error) {
           console.error('Error deleting old CV file:', error);
         }
       }
     }
+
+    if (nom) {
+      updateData.nom = nom;
+    }
+    if (telephone) {
+      updateData.telephone = telephone;
+    }
+    if (email) {
+      updateData.email = email;
+    }
+
+    await User.updateOne({ _id: id }, { $set: updateData });
 
     res.json({ message: 'User updated successfully' });
   } catch (error) {

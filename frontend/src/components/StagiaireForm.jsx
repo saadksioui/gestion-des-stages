@@ -133,7 +133,7 @@ const StagiaireForm = ({ isOpen, onClose, handleCloseModal }) => {
                   <label >
                     EmailD:
                   </label>
-                  <input type="email" placeholder={emailD} value={email} onChange={(e) => setEmail(e.target.value)} className="border rounded-md py-2 px-2 outline-none" />
+                  <input type="email" disabled placeholder={emailD} value={email} onChange={(e) => setEmail(e.target.value)} className="border rounded-md py-2 px-2 outline-none" />
                 </div>
                 <div className="p-3 flex flex-col gap-2">
                   <label >
