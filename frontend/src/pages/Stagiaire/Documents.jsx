@@ -42,6 +42,9 @@ const Documents = () => {
 
     fetchStages();
   }, []);
+  async function deleteDocs(id){
+    const response = await axios.delete(`http://127.0.0.1:8000/api/documents/delete/${id}`);
+  }
   return (
     <UserLayout>
       <section className="px-10 mt-10">
@@ -93,7 +96,7 @@ const Documents = () => {
                           <a href="#">
                             <img src={icons.Info} alt="" />
                           </a>
-                          <a href="#">
+                          <a onClick={()=>deleteDocs(doc._id)}>
                             <img src={icons.Delete} alt="" />
                           </a>
                         </td>

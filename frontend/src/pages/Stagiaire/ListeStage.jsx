@@ -105,6 +105,25 @@ const ListeStage = () => {
     setFilteredStages(sortedStages);
     setSortDirection(sortDirection === "asc" ? "desc" : "asc");
   };
+
+  //* send demande
+  async function sendDemande(){
+    const data = {
+      id_utilisateur: "6641c55fbc200003e4d07c7e",
+      id_stage: "66402dfc3bef34ea2c60edcb",
+      domain: "Design",
+      titre: "Stage de design graphique",
+      date_candidature: "2024-05-05T00:00:00.000Z",
+      statut_candidature: "en attente"
+    };
+  
+    try {
+      const response = await axios.post("http://127.0.0.1:8000/api/candidature/add", data);
+      
+    } catch (error) {
+      console.error("Erreur lors de l'envoi de la demande:", error);
+    }
+  }
   return (
     <UserLayout>
       <section className={`px-4 lg:px-10 mt-10 ${isModalOpen ? 'opacity-25' : ''}`}>
@@ -168,7 +187,7 @@ const ListeStage = () => {
                             <button onClick={(e) => fetchStageData(stage._id)}>
                               <img src={icons.Info} alt="Info icon" />
                             </button>
-                            <a href="#">
+                            <a onClick={()=>sendDemande(stage._id,stage.titre,stage.domaine)}>
                               <img src={icons.Edit} alt="Edit icon" />
                             </a>
                           </td>
