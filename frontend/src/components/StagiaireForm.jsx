@@ -162,19 +162,19 @@ const StagiaireForm = ({ isOpen, onClose, handleCloseModal }) => {
                   <label >
                     Nom Complet:
                   </label>
-                  <input type="text" value={nomCompletD} onChange={(e) => setNomCompletD(e.target.value)} className="border rounded-md py-2 px-2 outline-none" />
+                  <input type="text" placeholder={nomCompletD} value={nomComplet} onChange={(e) => setNomComplet(e.target.value)} className="border rounded-md py-2 px-2 outline-none" />
                 </div>
                 <div className="p-3 flex flex-col gap-2">
                   <label >
                     EmailD:
                   </label>
-                  <input type="emailD" value={emailD} onChange={(e) => setEmailD(e.target.value)} className="border rounded-md py-2 px-2 outline-none" />
+                  <input type="emailD" disabled placeholder={emailD} value={email} onChange={(e) => setEmail(e.target.value)} className="border rounded-md py-2 px-2 outline-none" />
                 </div>
                 <div className="p-3 flex flex-col gap-2">
                   <label >
                     Téléphone:
                   </label>
-                  <input type="tel" value={telephoneD} onChange={(e) => setTelephoneD(e.target.value)} className="border rounded-md py-2 px-2 outline-none" />
+                  <input type="tel" placeholder={telephoneD} value={telephone} onChange={(e) => setTelephone(e.target.value)} className="border rounded-md py-2 px-2 outline-none" />
                 </div>
               </div>
             )}
@@ -191,25 +191,25 @@ const StagiaireForm = ({ isOpen, onClose, handleCloseModal }) => {
                   <label >
                     Nom Complet:
                   </label>
-                  <input type="text" value={nomCompletD} onChange={(e) => setNomCompletD(e.target.value)} className="border rounded-md py-2 px-2 outline-none" />
+                  <input type="text" placeholder={nomCompletD} value={nomComplet} onChange={(e) => setNomComplet(e.target.value)} className="border rounded-md py-2 px-2 outline-none" />
                 </div>
                 <div className="p-3 flex flex-col gap-2">
                   <label >
                     EmailD:
                   </label>
-                  <input type="emailD" value={emailD} onChange={(e) => setEmailD(e.target.value)} className="border rounded-md py-2 px-2 outline-none" />
+                  <input type="emailD" disabled placeholder={emailD} value={email} onChange={(e) => setEmail(e.target.value)} className="border rounded-md py-2 px-2 outline-none" />
                 </div>
                 <div className="p-3 flex flex-col gap-2">
                   <label >
                     Téléphone:
                   </label>
-                  <input type="tel" value={telephoneD} onChange={(e) => setTelephoneD(e.target.value)} className="border rounded-md py-2 px-2 outline-none" />
+                  <input type="tel" placeholder={telephoneD} value={telephone} onChange={(e) => setTelephone(e.target.value)} className="border rounded-md py-2 px-2 outline-none" />
                 </div>
                 <div className="p-3 flex flex-col gap-2">
                   <label >
                     Site Web:
                   </label>
-                  <input type="tel" value={siteWebD} onChange={(e) => setSiteWebD(e.target.value)} className="border rounded-md py-2 px-2 outline-none" />
+                  <input type="tel" placeholder={siteWebD} value={siteWeb} onChange={(e) => setSiteWeb(e.target.value)} className="border rounded-md py-2 px-2 outline-none" />
                 </div>
               </div>
             )}

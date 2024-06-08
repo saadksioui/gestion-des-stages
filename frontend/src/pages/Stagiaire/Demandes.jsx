@@ -21,6 +21,18 @@ const Demandes = () => {
   const storedData = localStorage.getItem("sessionToken");
   const storedId = storedData ? storedData.split(",")[1] : null; // Check if storedData exists
 
+  const demandeStatut = {
+    'en attente': ["bg-[#1565d833]", "text-[#1565D8]"],
+    'accepter': ["bg-[#00ff0024]", "text-[#029802]"],
+    'refuser': ["bg-[#ff00002b]", "text-[#FF0000]"],
+  }
+  const getStatusClasses = (status) => {
+    return demandeStatut[status]
+      ? `${demandeStatut[status][0]} ${demandeStatut[status][1]} flex items-center gap-2 py-1 px-2 rounded-lg w-fit`
+      : "";
+  };
+
+
   useEffect(() => {
     const containerHeight = containerRef.current.clientHeight;
     const childrenHeight = containerRef.current.scrollHeight;
@@ -102,8 +114,11 @@ const Demandes = () => {
                               {demande.titre}
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap gap-1">
-                              <div className="flex items-center w-fit px-2 py-1 rounded-lg">
-                                {demande.statut_candidature}
+                              <div className={getStatusClasses(demande.statut_candidature)}>
+                                <TbPointFilled className="text-xl" />
+                                <span className="font-semibold">
+                                  {demande.statut_candidature}
+                                </span>
                               </div>
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
@@ -141,7 +156,7 @@ const Demandes = () => {
                     <span className="text-xl font-bold text-[#1b212d]">{demande.titre}</span>
                   </div>
                   <div className="flex flex-col gap-3">
-                    <div className=" flex items-center gap-2 py-1 px-2 rounded-lg w-fit bg-[#1565d833] text-[#1565D8]">
+                    <div className={getStatusClasses(demande.statut_candidature)}>
                       <TbPointFilled className="text-xl" />
                       <span className="font-semibold">
                         {demande.statut_candidature}
