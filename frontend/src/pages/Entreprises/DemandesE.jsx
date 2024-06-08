@@ -1,24 +1,96 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { icons } from "../../constants";
 import UserLayout from "../../layouts/UserLayout";
 import { TbPointFilled } from "react-icons/tb";
-import { FaCheck, FaInfoCircle } from "react-icons/fa";
+import { FaCheck, FaInfoCircle, FaTrash, FaUser } from "react-icons/fa";
 import { MdDomain } from "react-icons/md";
-import { FaPerson, FaTrash, FaUser } from "react-icons/fa6";
-
+import { toast } from "react-toastify";
+import axios from "axios";
+import { FaXmark } from "react-icons/fa6";
 
 const DemandesE = () => {
   const containerRef = useRef(null);
+  const storedData = localStorage.getItem("sessionToken");
+  const storedId = storedData.split(",")[1];
+  const [demandes, setDemandes] = useState([]);
+
+  const demandeStatut = {
+    'en attente': ["bg-[#1565d833]", "text-[#1565D8]"],
+    'accepter': ["bg-[#00ff0024]", "text-[#029802]"],
+    'refuser': ["bg-[#ff00002b]", "text-[#FF0000]"],
+  };
+
+  const getStatusClasses = (status) => {
+    return demandeStatut[status]
+      ? `${demandeStatut[status][0]} ${demandeStatut[status][1]} flex items-center gap-2 py-1 px-2 rounded-lg w-fit`
+      : "";
+  };
 
   useEffect(() => {
-    const containerHeight = containerRef.current.clientHeight;
-    const childrenHeight = containerRef.current.scrollHeight;
-    if (childrenHeight > containerHeight) {
-      containerRef.current.classList.add('overflow-y-scroll');
-    } else {
-      containerRef.current.classList.remove('overflow-y-scroll');
-    }
-  }, []);
+    const fetchDemandes = async () => {
+      try {
+        // Fetch stages associated with the enterprise
+        const stagesResponse = await axios.get(`http://127.0.0.1:8000/api/stage/entreprise/${storedId}`);
+        const idsStages = stagesResponse.data;
+        console.log(idsStages);
+        // Fetch demandes for each stage
+        const demandesPromises = idsStages.map(async (idStage) => {
+          const demandeResponse = await axios.get(`http://127.0.0.1:8000/api/candidature/search/stage/${idStage._id}`);
+          console.log(demandeResponse.data);
+          const demandesWithUser = await Promise.all(
+            demandeResponse.data.map(async (demande) => {
+              console.log(demande.id_utilisateur);
+              const userResponse = await axios.get(`http://127.0.0.1:8000/api/auth/findById/${demande.id_utilisateur}`);
+              return { ...demande, user: userResponse.data };
+            })
+          );
+          return demandesWithUser;
+        });
+
+        const allDemandes = (await Promise.all(demandesPromises)).flat();
+        setDemandes(allDemandes);
+        console.log(demandes);
+
+        // Set scroll behavior based on content height
+        if (containerRef.current) {
+          const containerHeight = containerRef.current.clientHeight;
+          const childrenHeight = containerRef.current.scrollHeight;
+          if (childrenHeight > containerHeight) {
+            containerRef.current.classList.add('overflow-y-scroll');
+          } else {
+            containerRef.current.classList.remove('overflow-y-scroll');
+          }
+        }
+      } catch (error) {
+        console.error("Error fetching documents:", error);
+        toast.error("Error fetching documents. Please try again later.");
+      }
+    };
+
+    fetchDemandes();
+  }, [storedId]);
+
+  const handleAccept = async (id) => {
+    await axios.put(`http://127.0.0.1:8000/api/candidature/accept/${id}`)
+      .then(() => {
+        toast.success("Demande acceptée avec succès");
+        window.location.reload();
+      })
+      .catch((error) => {
+        toast.error(error.response.data);
+      });
+  }
+  const handleRefuse = async (id) => {
+    await axios.put(`http://127.0.0.1:8000/api/candidature/refuse/${id}`)
+      .then(() => {
+        toast.success("Demande acceptée avec succès");
+        window.location.reload();
+      })
+      .catch((error) => {
+        toast.error(error.response.data);
+      });
+  }
+
   return (
     <UserLayout>
       <section className="px-10 mt-10">
@@ -49,93 +121,35 @@ const DemandesE = () => {
                       </tr>
                     </thead>
                     <tbody>
-                      <tr>
-                        <td className="px-6 py-4 whitespace-nowrap block w-52 truncate  text-sm font-medium text-gray-800">
-                          Lorem ipsum dolor sitsdqdsqdfsqdfsqdfsd
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
-                          Ksioui Saad
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap gap-1">
-                          <div className="flex items-center bg-[#1565d833] text-[#1565D8] w-fit px-2 py-1 rounded-lg">
-                            <TbPointFilled className="text-lg" />
-                            <span>
-                              En cours
-                            </span>
-                          </div>
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
-                          Full Stack
-                        </td>
-                        <td className={`px-6 py-4 flex items-center gap-5 whitespace-nowrap text-sm text-gray-800`}>
-                          <a href="#">
-                            <FaCheck className="text-black-500" />
-                          </a>
-                          <a href="#">
-                            <img src={icons.Info} alt="" />
-                          </a>
-                          <a href="#">
-                            <img src={icons.Delete} alt="" />
-                          </a>
-
-                        </td>
-                      </tr>
-                      <tr>
-                        <td className="px-6 py-4 whitespace-nowrap block w-52 truncate  text-sm font-medium text-gray-800">
-                          Lorem ipsum dolor sitsdqdsqdfsqdfsqdfsd
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
-                          Sedik Abdellah
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap gap-1">
-                          <div className="flex items-center bg-[#ff00002b] text-[#FF0000] w-fit px-2 py-1 rounded-lg">
-                            <TbPointFilled className="text-lg" />
-                            <span>En attendant</span>
-                          </div>
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
-                          Full Stack
-                        </td>
-                        <td className={`px-6 py-4 flex items-center gap-5 whitespace-nowrap text-sm text-gray-800`}>
-                          <a href="#">
-                            <FaCheck className="text-black-500" />
-                          </a>
-                          <a href="#">
-                            <img src={icons.Info} alt="" />
-                          </a>
-                          <a href="#">
-                            <img src={icons.Delete} alt="" />
-                          </a>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td className="px-6 py-4 whitespace-nowrap block w-52 truncate  text-sm font-medium text-gray-800">
-                          Lorem ipsum dolor sitsdqdsqdfsqdfsqdfsd
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
-                          Benbouhia Aymen
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap gap-1">
-                          <div className="flex items-center bg-[#00ff0024] text-[#00FF00] w-fit px-2 py-1 rounded-lg">
-                            <TbPointFilled className="text-lg" />
-                            <span>Accepté</span>
-                          </div>
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
-                          Full Stack
-                        </td>
-                        <td className={`px-6 py-4 flex items-center gap-5 whitespace-nowrap text-sm text-gray-800`}>
-                          <a href="#">
-                            <FaCheck className="text-black-500" />
-                          </a>
-                          <a href="#">
-                            <img src={icons.Info} alt="" />
-                          </a>
-                          <a href="#">
-                            <img src={icons.Delete} alt="" />
-                          </a>
-                        </td>
-                      </tr>
+                      {demandes.map((demande) => (
+                        <tr key={demande._id}>
+                          <td className="px-6 py-4 whitespace-nowrap block w-52 truncate text-sm font-medium text-gray-800">
+                            {demande.titre}
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
+                            {demande.user.nom}
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap gap-1">
+                            <div className={getStatusClasses(demande.statut_candidature)}>
+                              <TbPointFilled className="text-xl" />
+                              <span className="font-semibold">
+                                {demande.statut_candidature}
+                              </span>
+                            </div>
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
+                            {demande.domain}
+                          </td>
+                          <td className="px-6 py-4 flex items-center gap-5 whitespace-nowrap text-sm text-gray-800">
+                            <button onClick={() => handleAccept(demande._id)}>
+                              <FaCheck className="text-green-600" />
+                            </button>
+                            <button onClick={() => handleRefuse(demande._id)}>
+                              <FaXmark className="text-red-600 text-xl" />
+                            </button>
+                          </td>
+                        </tr>
+                      ))}
                     </tbody>
                   </table>
                 </div>
@@ -144,122 +158,45 @@ const DemandesE = () => {
           </div>
         </div>
         <div className="lg:hidden grid grid-cols-1 gap-4 mb-10">
-
-          <div className="bg-black pt-3 rounded-xl">
-            <div className="rounded-xl shadow-xl p-5 bg-white flex flex-col gap-6">
-              <div className="flex justify-between items-center">
-                <span className="text-xl font-bold text-[#1b212d]">Lorem ipsum dolor sitsdqdsqdfsqdfsqdfsd</span>
-              </div>
-              <div className="flex flex-col gap-3">
-                <div className="bg-[#F1F1F1] text-[#7E7E7E] flex items-center gap-2 py-1 px-2 rounded-lg w-fit">
-                  <FaUser className="text-lg" />
-                  <span className="font-semibold">Ksioui Saad</span>
+          {demandes.map((demande) => (
+            <div key={demande._id} className="bg-black pt-3 rounded-xl">
+              <div className="rounded-xl shadow-xl p-5 bg-white flex flex-col gap-6">
+                <div className="flex justify-between items-center">
+                  <span className="text-xl font-bold text-[#1b212d]">{demande.titre}</span>
                 </div>
-                <div className=" flex items-center gap-2 py-1 px-2 rounded-lg w-fit bg-[#1565d833] text-[#1565D8]">
-                  <TbPointFilled className="text-xl" />
-                  <span className="font-semibold">
-                    En cours
-                  </span>
+                <div className="flex flex-col gap-3">
+                  <div className="bg-[#F1F1F1] text-[#7E7E7E] flex items-center gap-2 py-1 px-2 rounded-lg w-fit">
+                    <FaUser className="text-lg" />
+                    <span className="font-semibold">{demande.user.nom}</span>
+                  </div>
+                  <div className={getStatusClasses(demande.statut_candidature)}>
+                    <TbPointFilled className="text-xl" />
+                    <span className="font-semibold">
+                      {demande.statut_candidature}
+                    </span>
+                  </div>
+                  <div className="bg-[#F1F1F1] text-[#7E7E7E] flex items-center gap-2 py-1 px-2 rounded-lg w-fit">
+                    <MdDomain className="text-lg" />
+                    <span className="font-semibold">{demande.domain}</span>
+                  </div>
                 </div>
-                <div className="bg-[#F1F1F1] text-[#7E7E7E] flex items-center gap-2 py-1 px-2 rounded-lg w-fit">
-                  <MdDomain className="text-lg" />
-                  <span className="font-semibold">Full Stack</span>
+                <div className="flex justify-end items-end gap-5">
+                  <button onClick={() => handleAccept(demande._id)} className="py-2 px-4 rounded-lg border-2 border-green-600 hover:bg-green-600 hover:text-white transition duration-200 font-medium flex items-center gap-2">
+                    Accepter
+                    <FaCheck />
+                  </button>
+                  <button className="py-2 px-4 rounded-lg border-2 border-red-600 hover:bg-red-600 hover:text-white transition duration-200 font-medium flex items-center gap-2">
+                    Supprimer
+                    <FaTrash />
+                  </button>
                 </div>
-              </div>
-              <div className="flex justify-end items-end gap-5">
-                <button className="py-2 px-4 rounded-lg border-2 border-green-600 hover:bg-green-600 hover:text-white transition duration-200 font-medium flex items-center gap-2">
-                  Accepter
-                  <FaCheck />
-                </button>
-                <button className="py-2 px-4 rounded-lg border-2 border-blue-400 hover:bg-blue-400 hover:text-white transition duration-200 font-medium flex items-center gap-2">
-                  Info
-                  <FaInfoCircle />
-                </button>
-                <button className="py-2 px-4 rounded-lg border-2 border-red-600 hover:bg-red-600 hover:text-white transition duration-200 font-medium flex items-center gap-2">
-                  Supprimer
-                  <FaTrash />
-                </button>
               </div>
             </div>
-          </div>
-          <div className="bg-black pt-3 rounded-xl">
-            <div className="rounded-xl shadow-xl p-5 bg-white flex flex-col gap-6">
-              <div className="flex justify-between items-center">
-                <span className="text-xl font-bold text-[#1b212d]">Lorem ipsum dolor sitsdqdsqdfsqdfsqdfsd</span>
-              </div>
-              <div className="flex flex-col gap-3">
-                <div className="bg-[#F1F1F1] text-[#7E7E7E] flex items-center gap-2 py-1 px-2 rounded-lg w-fit">
-                  <FaUser className="text-lg" />
-                  <span className="font-semibold">Sedik Abdellah</span>
-                </div>
-                <div className=" flex items-center gap-2 py-1 px-2 rounded-lg w-fit bg-[#ff00002b] text-[#FF0000]">
-                  <TbPointFilled className="text-xl" />
-                  <span className="font-semibold">
-                  En attendant
-                  </span>
-                </div>
-                <div className="bg-[#F1F1F1] text-[#7E7E7E] flex items-center gap-2 py-1 px-2 rounded-lg w-fit">
-                  <MdDomain className="text-lg" />
-                  <span className="font-semibold">Full Stack</span>
-                </div>
-              </div>
-              <div className="flex justify-end items-end gap-5">
-                <button className="py-2 px-4 rounded-lg border-2 border-green-600 hover:bg-green-600 hover:text-white transition duration-200 font-medium flex items-center gap-2">
-                  Accepter
-                  <FaCheck />
-                </button>
-                <button className="py-2 px-4 rounded-lg border-2 border-blue-400 hover:bg-blue-400 hover:text-white transition duration-200 font-medium flex items-center gap-2">
-                  Info
-                  <FaInfoCircle />
-                </button>
-                <button className="py-2 px-4 rounded-lg border-2 border-red-600 hover:bg-red-600 hover:text-white transition duration-200 font-medium flex items-center gap-2">
-                  Supprimer
-                  <FaTrash />
-                </button>
-              </div>
-            </div>
-          </div>
-          <div className="bg-black pt-3 rounded-xl">
-            <div className="rounded-xl shadow-xl p-5 bg-white flex flex-col gap-6">
-              <div className="flex justify-between items-center">
-                <span className="text-xl font-bold text-[#1b212d]">Lorem ipsum dolor sitsdqdsqdfsqdfsqdfsd</span>
-              </div>
-              <div className="flex flex-col gap-3">
-                <div className="bg-[#F1F1F1] text-[#7E7E7E] flex items-center gap-2 py-1 px-2 rounded-lg w-fit">
-                  <FaUser className="text-lg" />
-                  <span className="font-semibold">Benbouhia Aymen</span>
-                </div>
-                <div className=" flex items-center gap-2 py-1 px-2 rounded-lg w-fit bg-[#00ff0024] text-[#00FF00]">
-                  <TbPointFilled className="text-xl" />
-                  <span className="font-semibold">
-                  Accepté
-                  </span>
-                </div>
-                <div className="bg-[#F1F1F1] text-[#7E7E7E] flex items-center gap-2 py-1 px-2 rounded-lg w-fit">
-                  <MdDomain className="text-lg" />
-                  <span className="font-semibold">Full Stack</span>
-                </div>
-              </div>
-              <div className="flex justify-end items-end gap-5">
-                <button className="py-2 px-4 rounded-lg border-2 border-green-600 hover:bg-green-600 hover:text-white transition duration-200 font-medium flex items-center gap-2">
-                  Accepter
-                  <FaCheck />
-                </button>
-                <button className="py-2 px-4 rounded-lg border-2 border-blue-400 hover:bg-blue-400 hover:text-white transition duration-200 font-medium flex items-center gap-2">
-                  Info
-                  <FaInfoCircle />
-                </button>
-                <button className="py-2 px-4 rounded-lg border-2 border-red-600 hover:bg-red-600 hover:text-white transition duration-200 font-medium flex items-center gap-2">
-                  Supprimer
-                  <FaTrash />
-                </button>
-              </div>
-            </div>
-          </div>
+          ))}
         </div>
       </section>
     </UserLayout>
-  )
+  );
 };
 
-export default DemandesE
+export default DemandesE;

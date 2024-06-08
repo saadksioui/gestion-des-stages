@@ -18,9 +18,15 @@ router.delete('/delete/:id', candidatureController.deleteCandidature);
 router.get('/search', candidatureController.getCandidaturesById);
 
 // GET candidature by Stage Id
-router.get('/search/stage', candidatureController.getCandidaturesByStage);
+router.get('/search/stage/:id', candidatureController.getCandidaturesByStage);
 
 // GET candidature by Stagiaire Id
 router.get('/demandes/:id_stagiaire', candidatureController.getCandidaturesByStagiaire);
+
+// Accepter une demande
+router.put('/accept/:id', candidatureController.accepterDemande);
+
+// Refuser une demande
+router.put('/refuse/:id', candidatureController.refuserDemande);
 
 module.exports = router;

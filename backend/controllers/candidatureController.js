@@ -53,8 +53,8 @@ const getCandidaturesById = async (req, res) => {
 
 const getCandidaturesByStage = async (req, res) => {
   try {
-    const { id_stage } = req.body;
-    const candidatures = await Candidature.find({ id_stage: id_stage });
+    const { id } = req.params;
+    const candidatures = await Candidature.find({ id_stage: id });
     res.json(candidatures);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -73,6 +73,34 @@ const getCandidaturesByStagiaire = async (req, res) => {
   }
 
 };
+const accepterDemande = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const candidature = await Candidature.findOneAndUpdate(
+      { _id: id },
+      { $set: { statut_candidature: "accepter" } },
+      { new: true }
+    );
+    res.json(candidature);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+const refuserDemande = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const candidature = await Candidature.findOneAndUpdate(
+      { _id: id },
+      { $set: { statut_candidature: "refuser" } },
+      { new: true }
+    );
+    res.json(candidature);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 
 module.exports = {
   getAllCandidatures,
@@ -81,5 +109,7 @@ module.exports = {
   deleteCandidature,
   getCandidaturesById,
   getCandidaturesByStage,
-  getCandidaturesByStagiaire
+  getCandidaturesByStagiaire,
+  accepterDemande,
+  refuserDemande
 };

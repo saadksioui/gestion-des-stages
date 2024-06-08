@@ -14,7 +14,7 @@ import { TfiWrite } from "react-icons/tfi";
 const ListeStage = () => {
   const storedData = localStorage.getItem("sessionToken");
   const storedRole = storedData?.split(",")[2];
-  let stored;
+  let storedId;
   const [stages, setStages] = useState([]);
   const [selectedDomain, setSelectedDomain] = useState("");
   const [filteredStages, setFilteredStages] = useState([]);
@@ -26,7 +26,8 @@ const ListeStage = () => {
 
   try {
     if (storedData) {
-      stored = storedData.split(",");
+      storedId = storedData.split(",")[1];
+      console.log(storedId);
     }
   } catch (error) {
     toast.error('Error parsing session token:', error);
@@ -85,14 +86,11 @@ const ListeStage = () => {
     }
 
     setFilteredStages(filteredData);
-  }, [selectedDomain,searchTitle, stages]);
+  }, [selectedDomain, searchTitle, stages]);
 
-  const handleSelectChange = (e) => {
-    setSelectedDomain(e.target.value);
-  };
-  const handleSearchTitleChange = (e) => {
-    setSearchTitle(e.target.value);
-  };
+
+
+
   const handleSortByDuree = () => {
     const sortedStages = [...filteredStages];
     sortedStages.sort((a, b) => {
@@ -104,24 +102,22 @@ const ListeStage = () => {
     });
     setFilteredStages(sortedStages);
     setSortDirection(sortDirection === "asc" ? "desc" : "asc");
-  };
-
+  }
   //* send demande
-  async function sendDemande(){
+  async function sendDemande(id, titre, domaine) {
     const data = {
-      id_utilisateur: "6641c55fbc200003e4d07c7e",
-      id_stage: "66402dfc3bef34ea2c60edcb",
-      domain: "Design",
-      titre: "Stage de design graphique",
-      date_candidature: "2024-05-05T00:00:00.000Z",
+      id_utilisateur: storedId,
+      id_stage: id,
+      domain: domaine,
+      titre: titre,
       statut_candidature: "en attente"
     };
-  
+
     try {
-      const response = await axios.post("http://127.0.0.1:8000/api/candidature/add", data);
-      
+      await axios.post("http://127.0.0.1:8000/api/candidature/add", data);
+      toast.success("Demande ajoutée avec succès");
     } catch (error) {
-      console.error("Erreur lors de l'envoi de la demande:", error);
+      toast.error("Erreur lors de l'envoi de la demande:", error);
     }
   }
   return (
@@ -136,15 +132,15 @@ const ListeStage = () => {
 
         <div className="my-6 flex flex-col lg:flex-row items-center justify-between gap-4">
           <form className="w-full lg:w-[308px] h-[47px] flex justify-between items-center px-3 border border-[#D6D6D6] rounded-xl bg-[#F6F6F6]">
-            <select id="liste-domaines" className="outline-none rounded-xl w-full bg-[#F6F6F6] text-[#999999] pl-2"  onChange={handleSelectChange}>
+            <select id="liste-domaines" className="outline-none rounded-xl w-full bg-[#F6F6F6] text-[#999999] pl-2" onChange={e => setSelectedDomain(e.target.value)}>
               <option value="">Tous les domaines</option>
               {Array.from(new Set(stages.map(item => item.domaine))).map((domaine, i) => (
                 <option key={i} value={domaine} className="text-black">{domaine}</option>
               ))}
             </select>
           </form>
-          <form action="" className="w-[425px] h-[72px] flex justify-between items-center px-3 border border-[#D6D6D6] rounded-xl bg-[#F6F6F6]">
-            <input type="text" placeholder="Tapez titre...." value={searchTitle} onChange={handleSearchTitleChange} className="outline-none rounded-xl bg-[#F6F6F6] placeholder:text-[#999999] text-black pl-2" />
+          <form className="w-[425px] h-[72px] flex justify-between items-center px-3 border border-[#D6D6D6] rounded-xl bg-[#F6F6F6]">
+            <input type="text" placeholder="Tapez titre...." value={searchTitle} onChange={e => setSearchTitle(e.target.value)} className="outline-none rounded-xl bg-[#F6F6F6] placeholder:text-[#999999] text-black pl-2" />
             <button type="submit" className="p-3 text-white bg-black rounded-xl">Rechercher</button>
           </form>
         </div>
@@ -158,7 +154,7 @@ const ListeStage = () => {
                       <tr>
                         <th scope="col" className="px-2 lg:px-6 py-3 text-start font-semibold">Titre de stage</th>
                         <th scope="col" className="px-2 lg:px-6 py-3 text-start font-semibold">Description</th>
-                        <th scope="col" className="px-2 lg:px-6 py-3 flex items-center gap-3 text-start font-semibold"  onClick={handleSortByDuree}>
+                        <th scope="col" className="px-2 lg:px-6 py-3 flex items-center gap-3 text-start font-semibold" onClick={handleSortByDuree}>
                           <span>Durée de stage</span>
                           <a href="#">
                             <img src={icons.ArrowSwitched} className="size-4" alt="Arrow icon" />
@@ -187,9 +183,9 @@ const ListeStage = () => {
                             <button onClick={(e) => fetchStageData(stage._id)}>
                               <img src={icons.Info} alt="Info icon" />
                             </button>
-                            <a onClick={()=>sendDemande(stage._id,stage.titre,stage.domaine)}>
+                            <button onClick={() => sendDemande(stage._id, stage.titre, stage.domaine)}>
                               <img src={icons.Edit} alt="Edit icon" />
-                            </a>
+                            </button>
                           </td>
                         </tr>
                       ))}
@@ -225,7 +221,7 @@ const ListeStage = () => {
                     Info
                     <FaInfoCircle />
                   </button>
-                  <button className="py-2 px-4 rounded-lg border-2 border-[#A1DD70] hover:bg-[#A1DD70] hover:text-white transition duration-200 font-medium flex items-center gap-2">
+                  <button onClick={() => sendDemande(stage._id, stage.titre, stage.domaine)} className="py-2 px-4 rounded-lg border-2 border-[#A1DD70] hover:bg-[#A1DD70] hover:text-white transition duration-200 font-medium flex items-center gap-2">
                     Postuler
                     <TfiWrite />
                   </button>
