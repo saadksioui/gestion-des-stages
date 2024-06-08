@@ -1,6 +1,7 @@
 import { FaXmark } from "react-icons/fa6";
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from "axios";
+import Swal from "sweetalert2";
 
 const StagiaireForm = ({ isOpen, onClose, handleCloseModal }) => {
   const storedData = localStorage.getItem("sessionToken");
@@ -14,13 +15,18 @@ const StagiaireForm = ({ isOpen, onClose, handleCloseModal }) => {
     console.error('Error parsing session token:', error);
   }
 
+  const [nomCompletD, setNomCompletD] = useState('');
+  const [telephoneD, setTelephoneD] = useState('');
+  const [emailD, setEmailD] = useState('');
+  const [siteWebD, setSiteWebD] = useState('');
+  const [imgD, setImgD] = useState(null);
+  const [cvD, setCvD] = useState(null);
   const [nomComplet, setNomComplet] = useState('');
-  const [telephoneF, setTelephone] = useState('');
+  const [telephone, setTelephone] = useState('');
   const [email, setEmail] = useState('');
   const [siteWeb, setSiteWeb] = useState('');
-  const [imgF, setImg] = useState(null);
-  const [cvF, setCv] = useState(null);
-  const [visible, setVisible] = useState(true);
+  const [img, setImg] = useState(null);
+  const [cv, setCv] = useState(null);
 
 
   const handleImgChange = (e) => {
@@ -28,6 +34,26 @@ const StagiaireForm = ({ isOpen, onClose, handleCloseModal }) => {
     setImg(file);
   };
 
+  useEffect(() => {
+    if (storedId) {
+      const fetchData = async () => {
+        try {
+          const response = await axios.get(`http://127.0.0.1:8000/api/auth/findById/${storedId[1]}`);
+          console.log(response.data);
+          setNomCompletD(response.data.nom || '');
+          setTelephoneD(response.data.telephone || '');
+          setEmailD(response.data.email || '');
+          setSiteWebD(response.data.siteWeb || '');
+          setImgD(response.data.img_url || null);
+          setCvD(response.data.cv_url || null);
+        } catch (error) {
+          console.error('Error fetching user data:', error);
+        }
+      };
+
+      fetchData();
+    }
+  }, [storedId]);
   const handleCvChange = (e) => {
     const file = e.target.files[0];
     const maxFileSize = 5 * 1024 * 1024; // 5MB
@@ -46,58 +72,32 @@ const StagiaireForm = ({ isOpen, onClose, handleCloseModal }) => {
   const handleSubmit = async (e) => {
     e.preventDefault()
 
-    //   const emptyFields = [imgF, nomF, prenomF, telephoneF, emailF, cvF,].filter(field => field === '').length > 0;
-
-    //   if (emptyFields) {
-    //     Swal.fire({
-    //       iconColor: "black",
-    //       icon: "error",
-    //       title: "Oops…",
-    //       text: "Please fill in all required fields.",
-    //       confirmButtonColor: "black"
-    //     });
-    //     return;
-    //   }
-    //   else {
-    //     const stgData = {
-    //       img: imgF,
-    //       nom: nomF,
-    //       prenom: prenomF,
-    //       telephone: telephoneF,
-    //       email: emailF,
-    //       cv: cvF,
-    //     }
-
-    //     console.log("Form submitted:", stgData);
-
-    //     setImg('')
-    //     setNom('')
-    //     setPrenom('')
-    //     setTelephone('')
-    //     setEmail('')
-    //     setCv('')
-
-    //     handleCloseModal();
-    //   }
+    const userData = {
+      img: img ? img : imgD,
+      nom: nomComplet,
+      telephone: telephone,
+      email: email,
+      cv: cv ? cv : cvD,
+    }
     try {
       const formData = new FormData();
-      formData.append('telephone', telephoneF);
-      formData.append('img', imgF);
-      formData.append('cv', cvF);
-
-      const response = await axios.post(`http://127.0.0.1:8000/api/auth/update/${storedId[1]}`, formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data'
-        }
+      Object.entries(userData).forEach(([key, value]) => {
+        formData.append(key, value);
       });
+
+      const response = await axios.put(
+        `http://127.0.0.1:8000/api/auth/update/${storedId[1]}`,
+        formData
+      );
+
       if (response) {
         console.log('User updated successfully');
-        handleCloseModal()
+        handleCloseModal();
       }
-
     } catch (error) {
       console.error('Error updating user:', error.message);
     }
+
 
   }
   if (!isOpen) return null;
@@ -114,119 +114,105 @@ const StagiaireForm = ({ isOpen, onClose, handleCloseModal }) => {
         <div className="my-3 ">
 
           <form onSubmit={handleSubmit} >
-          {(storedRole === 'étudiant' ) && (
-            <div className="grid grid-cols-1 gap-5">
-              <div className="p-3 flex flex-col gap-2">
-                <label >
-                  Image de profil:
-                </label>
-                <input type="file" accept=".png, .jpeg, .jpg" onChange={handleImgChange} className="border rounded-md py-2 px-2 outline-none" />
-              </div>
-
-              <div className="p-3 flex flex-col gap-2">
-                <label >
-                  Nom Complet:
-                </label>
-                <input type="text" value={nomComplet} onChange={(e) => setNomComplet(e.target.value)} className="border rounded-md py-2 px-2 outline-none" />
-              </div>
-              <div className="p-3 flex flex-col gap-2">
-                <label >
-                  Email:
-                </label>
-                <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} className="border rounded-md py-2 px-2 outline-none" />
-              </div>
-              <div className="p-3 flex flex-col gap-2">
-                <label >
-                  Téléphone:
-                </label>
-                <input type="tel" value={telephoneF} onChange={(e) => setTelephone(e.target.value)} className="border rounded-md py-2 px-2 outline-none" />
-              </div>
-              <div className="p-3 flex flex-col gap-2">
-                <label >
-                  CV (PDF):
-                </label>
-                <input type="file" accept=".pdf" onChange={handleCvChange} className="border rounded-md py-2 px-2 outline-none" maxFileSize={5 * 1024 * 1024} />
-              </div>
-            </div>
-          )}
-          {(storedRole === 'responsable pédagogique' ) && (
-            <div className="grid grid-cols-1 gap-5">
-              <div className="p-3 flex flex-col gap-2">
-                <label >
-                  Image de profil:
-                </label>
-                <input type="file" accept=".png, .jpeg, .jpg" onChange={handleImgChange} className="border rounded-md py-2 px-2 outline-none" />
-              </div>
-
-              <div className="p-3 flex flex-col gap-2">
-                <label >
-                  Nom Complet:
-                </label>
-                <input type="text" value={nomComplet} onChange={(e) => setNomComplet(e.target.value)} className="border rounded-md py-2 px-2 outline-none" />
-              </div>
-              <div className="p-3 flex flex-col gap-2">
-                <label >
-                  Email:
-                </label>
-                <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} className="border rounded-md py-2 px-2 outline-none" />
-              </div>
-              <div className="p-3 flex flex-col gap-2">
-                <label >
-                  Téléphone:
-                </label>
-                <input type="tel" value={telephoneF} onChange={(e) => setTelephone(e.target.value)} className="border rounded-md py-2 px-2 outline-none" />
-              </div>
-            </div>
-          )}
-          {(storedRole === 'entreprise' ) && (
-            <div className="grid grid-cols-1 gap-5">
-              <div className="p-3 flex flex-col gap-2">
-                <label >
-                  Image de profil:
-                </label>
-                <input type="file" accept=".png, .jpeg, .jpg" onChange={handleImgChange} className="border rounded-md py-2 px-2 outline-none" />
-              </div>
-
-              <div className="p-3 flex flex-col gap-2">
-                <label >
-                  Nom Complet:
-                </label>
-                <input type="text" value={nomComplet} onChange={(e) => setNomComplet(e.target.value)} className="border rounded-md py-2 px-2 outline-none" />
-              </div>
-              <div className="p-3 flex flex-col gap-2">
-                <label >
-                  Email:
-                </label>
-                <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} className="border rounded-md py-2 px-2 outline-none" />
-              </div>
-              <div className="p-3 flex flex-col gap-2">
-                <label >
-                  Téléphone:
-                </label>
-                <input type="tel" value={telephoneF} onChange={(e) => setTelephone(e.target.value)} className="border rounded-md py-2 px-2 outline-none" />
-              </div>
-              <div className="p-3 flex flex-col gap-2">
-                <label >
-                  Site Web:
-                </label>
-                <input type="tel" value={siteWeb} onChange={(e) => setSiteWeb(e.target.value)} className="border rounded-md py-2 px-2 outline-none" />
-              </div>
-            </div>
-          )}
-            <div className="flex items-center gap-20 my-4">
-              {imgF && (
+            {(storedRole === 'étudiant') && (
+              <div className="grid grid-cols-1 gap-5">
                 <div className="p-3 flex flex-col gap-2">
-                  <p>Image de profil :</p>
-                  <img src={URL.createObjectURL(imgF)} alt="Image de profil" className="size-48 object-cover" />
+                  <label >
+                    Image de profil:
+                  </label>
+                  <input type="file" accept=".png, .jpeg, .jpg" onChange={handleImgChange} className="border rounded-md py-2 px-2 outline-none" />
                 </div>
-              )}
-              {cvF && (
+
                 <div className="p-3 flex flex-col gap-2">
-                  <p>CV (PDF) :</p>
-                  <iframe src={URL.createObjectURL(cvF)} className="size-48 object-cover" type="application/pdf" />
+                  <label >
+                    Nom Complet:
+                  </label>
+                  <input type="text" placeholder={nomCompletD} value={nomComplet} onChange={(e) => setNomComplet(e.target.value)} className="border rounded-md py-2 px-2 outline-none" />
                 </div>
-              )}
-            </div>
+                <div className="p-3 flex flex-col gap-2">
+                  <label >
+                    EmailD:
+                  </label>
+                  <input type="email" placeholder={emailD} value={email} onChange={(e) => setEmail(e.target.value)} className="border rounded-md py-2 px-2 outline-none" />
+                </div>
+                <div className="p-3 flex flex-col gap-2">
+                  <label >
+                    Téléphone:
+                  </label>
+                  <input type="tel" placeholder={telephoneD} value={telephone} onChange={(e) => setTelephone(e.target.value)} className="border rounded-md py-2 px-2 outline-none" />
+                </div>
+                <div className="p-3 flex flex-col gap-2">
+                  <label >
+                    CV (PDF):
+                  </label>
+                  <input type="file" accept=".pdf" onChange={handleCvChange} className="border rounded-md py-2 px-2 outline-none" maxFileSize={5 * 1024 * 1024} />
+                </div>
+              </div>
+            )}
+            {(storedRole === 'responsable pédagogique') && (
+              <div className="grid grid-cols-1 gap-5">
+                <div className="p-3 flex flex-col gap-2">
+                  <label >
+                    Image de profil:
+                  </label>
+                  <input type="file" accept=".png, .jpeg, .jpg" onChange={handleImgChange} className="border rounded-md py-2 px-2 outline-none" />
+                </div>
+
+                <div className="p-3 flex flex-col gap-2">
+                  <label >
+                    Nom Complet:
+                  </label>
+                  <input type="text" value={nomCompletD} onChange={(e) => setNomCompletD(e.target.value)} className="border rounded-md py-2 px-2 outline-none" />
+                </div>
+                <div className="p-3 flex flex-col gap-2">
+                  <label >
+                    EmailD:
+                  </label>
+                  <input type="emailD" value={emailD} onChange={(e) => setEmailD(e.target.value)} className="border rounded-md py-2 px-2 outline-none" />
+                </div>
+                <div className="p-3 flex flex-col gap-2">
+                  <label >
+                    Téléphone:
+                  </label>
+                  <input type="tel" value={telephoneD} onChange={(e) => setTelephoneD(e.target.value)} className="border rounded-md py-2 px-2 outline-none" />
+                </div>
+              </div>
+            )}
+            {(storedRole === 'entreprise') && (
+              <div className="grid grid-cols-1 gap-5">
+                <div className="p-3 flex flex-col gap-2">
+                  <label >
+                    Image de profil:
+                  </label>
+                  <input type="file" accept=".png, .jpeg, .jpg" onChange={handleImgChange} className="border rounded-md py-2 px-2 outline-none" />
+                </div>
+
+                <div className="p-3 flex flex-col gap-2">
+                  <label >
+                    Nom Complet:
+                  </label>
+                  <input type="text" value={nomCompletD} onChange={(e) => setNomCompletD(e.target.value)} className="border rounded-md py-2 px-2 outline-none" />
+                </div>
+                <div className="p-3 flex flex-col gap-2">
+                  <label >
+                    EmailD:
+                  </label>
+                  <input type="emailD" value={emailD} onChange={(e) => setEmailD(e.target.value)} className="border rounded-md py-2 px-2 outline-none" />
+                </div>
+                <div className="p-3 flex flex-col gap-2">
+                  <label >
+                    Téléphone:
+                  </label>
+                  <input type="tel" value={telephoneD} onChange={(e) => setTelephoneD(e.target.value)} className="border rounded-md py-2 px-2 outline-none" />
+                </div>
+                <div className="p-3 flex flex-col gap-2">
+                  <label >
+                    Site Web:
+                  </label>
+                  <input type="tel" value={siteWebD} onChange={(e) => setSiteWebD(e.target.value)} className="border rounded-md py-2 px-2 outline-none" />
+                </div>
+              </div>
+            )}
             <div className="flex justify-end gap-10 items-center w-full pt-2">
               <button onClick={onClose} className="text-red-600">Fermer</button>
               <button type="submit" className="bg-black py-2 px-4 text-white rounded-xl flex items-center justify-center text-lg">
