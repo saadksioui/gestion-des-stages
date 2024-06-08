@@ -2,9 +2,10 @@ import { useEffect, useRef, useState } from "react";
 import { icons } from "../../constants";
 import UserLayout from "../../layouts/UserLayout";
 import { FaPlus, FaDownload, FaPen, FaTrash } from "react-icons/fa6";
-import { MdOutlineNumbers } from "react-icons/md";
+import { MdOutlineNumbers, MdTimer } from "react-icons/md";
 import AjouterDoc from "./AjouterDoc";
 import axios from "axios";
+import moment from "moment";
 
 
 
@@ -62,7 +63,7 @@ const Documents = () => {
                       <tr>
                         <th scope="col" className="px-6 py-3 text-start font-semibold">Type</th>
                         <th scope="col" className="px-6 py-3 flex items-center gap-3 text-start font-semibold">
-                          Date
+                          Created at
                         </th>
                         <th scope="col" className="px-6 py-3 text-start font-semibold">Version</th>
                         <th scope="col" className="px-6 py-3 text-start font-semibold">Download</th>
@@ -70,36 +71,36 @@ const Documents = () => {
                       </tr>
                     </thead>
                     <tbody>
-                      {Documents.map((doc,i)=>(
-                      <tr key={i}>
-                        <td className="px-6 py-4 whitespace-nowrap block w-52 truncate  text-sm font-medium text-gray-800">
-                          {doc.type}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap gap-1">
-                        {doc.version}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
-                          <div className="flex items-center bg-[#26CB8F] text-white w-fit px-2 py-1 rounded-lg">
-                          {doc.version}
-                          </div>
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
-                          <button className="flex items-center gap-2">
-                            <FaDownload className="text-lg" />
-                            <span>Télécharger</span>
-                          </button>
-                        </td>
-                        <td className={`px-6 py-4 flex items-center gap-5 whitespace-nowrap text-sm text-gray-800`}>
-                          <a href="#">
-                            <img src={icons.Info} alt="" />
-                          </a>
-                          <a href="#">
-                            <img src={icons.Delete} alt="" />
-                          </a>
-                        </td>
-                      </tr>
+                      {Documents.map((doc, i) => (
+                        <tr key={i}>
+                          <td className="px-6 py-4 whitespace-nowrap block w-52 truncate  text-sm font-medium text-gray-800">
+                            {doc.type}
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap gap-1">
+                            {moment(doc.created_at).fromNow()}
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
+                            <div className={`flex items-center ${doc.version === 'Dernier version' ? 'bg-[#26CB8F]' : 'bg-[#327AF8]'}  text-white w-fit px-2 py-1 rounded-lg`}>
+                              {doc.version}
+                            </div>
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
+                            <a href={`/docs/${doc.file}`} className="flex items-center gap-2" download>
+                              <FaDownload className="text-lg" />
+                              <span>Télécharger</span>
+                            </a>
+                          </td>
+                          <td className={`px-6 py-4 flex items-center gap-5 whitespace-nowrap text-sm text-gray-800`}>
+                            <a href="#">
+                              <img src={icons.Info} alt="" />
+                            </a>
+                            <a href="#">
+                              <img src={icons.Delete} alt="" />
+                            </a>
+                          </td>
+                        </tr>
                       ))}
-                      
+
                     </tbody>
                   </table>
                 </div>
@@ -108,33 +109,38 @@ const Documents = () => {
           </div>
         </div>
         <div className="lg:hidden grid grid-cols-1 gap-4 mb-10">
-
-          <div className="bg-black pt-3 rounded-xl">
-            <div className="rounded-xl shadow-xl p-5 bg-white flex flex-col gap-6">
-              <div className="flex justify-between items-center">
-                <span className="text-xl font-bold text-[#1b212d]">Presentation</span>
-              </div>
-              <div className="flex flex-col gap-3">
-                <div className="bg-[#CCEDED] text-[#069F9F] flex items-center gap-2 py-1 px-2 rounded-lg w-fit">
-                  <MdOutlineNumbers className="text-xl" />
-                  <span className="font-semibold">Stage id : 23</span>
+          {Documents.map((doc, i) => (
+            <div key={i} className="bg-black pt-3 rounded-xl">
+              <div className="rounded-xl shadow-xl p-5 bg-white flex flex-col gap-6">
+                <div className="flex justify-between items-center">
+                  <span className="text-xl font-bold text-[#1b212d]">{doc.type}</span>
                 </div>
-                <div className="flex items-center bg-[#26CB8F] text-white w-fit px-2 py-1 rounded-lg">
-                  Dernier version
+                <div className="flex flex-col gap-3">
+                  <div className="bg-[#CCEDED] text-[#069F9F] flex items-center gap-2 py-1 px-2 rounded-lg w-fit">
+                    <MdTimer className="text-xl" />
+                    <span className="font-semibold">{moment(doc.created_at).fromNow()}</span>
+                  </div>
+                  <div className={`flex items-center ${doc.version === 'Dernier version' ? 'bg-[#26CB8F]' : 'bg-[#327AF8]'}  text-white w-fit px-2 py-1 rounded-lg`}>
+                    {doc.version}
+                  </div>
+                  <a href={`/docs/${doc.file}`} className="flex items-center gap-2" download>
+                    <FaDownload className="text-lg" />
+                    <span>Télécharger</span>
+                  </a>
                 </div>
-              </div>
-              <div className="flex justify-end items-end gap-5">
-                <button onClick={(e) => fetchStageData(stage._id)} className="py-2 px-4 rounded-lg border-2 border-green-600 hover:bg-green-600 hover:text-white transition duration-200 font-medium flex items-center gap-2">
-                  Modifier
-                  <FaPen />
-                </button>
-                <button className="py-2 px-4 rounded-lg border-2 border-red-600 hover:bg-red-600 hover:text-white transition duration-200 font-medium flex items-center gap-2">
-                  Delete
-                  <FaTrash />
-                </button>
+                <div className="flex justify-end items-end gap-5">
+                  <button className="py-2 px-4 rounded-lg border-2 border-green-600 hover:bg-green-600 hover:text-white transition duration-200 font-medium flex items-center gap-2">
+                    Modifier
+                    <FaPen />
+                  </button>
+                  <button className="py-2 px-4 rounded-lg border-2 border-red-600 hover:bg-red-600 hover:text-white transition duration-200 font-medium flex items-center gap-2">
+                    Delete
+                    <FaTrash />
+                  </button>
+                </div>
               </div>
             </div>
-          </div>
+          ))}
         </div>
       </section>
       {
