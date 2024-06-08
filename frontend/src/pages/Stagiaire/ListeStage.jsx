@@ -16,6 +16,11 @@ const ListeStage = () => {
   const storedRole = storedData?.split(",")[2];
   let stored;
   const [stages, setStages] = useState([]);
+  const [selectedDomain, setSelectedDomain] = useState("");
+  const [filteredStages, setFilteredStages] = useState([]);
+  const [searchTitle, setSearchTitle] = useState("");
+  const [sortDirection, setSortDirection] = useState("asc");
+
   const [stageData, setStageData] = useState({});
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -69,7 +74,56 @@ const ListeStage = () => {
       console.error("Error fetching stage data:", error);
     }
   };
+  useEffect(() => {
+    let filteredData = [...stages];
 
+    if (selectedDomain !== "") {
+      filteredData = filteredData.filter(stage => stage.domaine === selectedDomain);
+    }
+    if (searchTitle !== "") {
+      filteredData = filteredData.filter(stage => stage.titre.toLowerCase().includes(searchTitle.toLowerCase()));
+    }
+
+    setFilteredStages(filteredData);
+  }, [selectedDomain,searchTitle, stages]);
+
+  const handleSelectChange = (e) => {
+    setSelectedDomain(e.target.value);
+  };
+  const handleSearchTitleChange = (e) => {
+    setSearchTitle(e.target.value);
+  };
+  const handleSortByDuree = () => {
+    const sortedStages = [...filteredStages];
+    sortedStages.sort((a, b) => {
+      if (sortDirection === "asc") {
+        return a.duree - b.duree;
+      } else {
+        return b.duree - a.duree;
+      }
+    });
+    setFilteredStages(sortedStages);
+    setSortDirection(sortDirection === "asc" ? "desc" : "asc");
+  };
+
+  //* send demande
+  async function sendDemande(){
+    const data = {
+      id_utilisateur: "6641c55fbc200003e4d07c7e",
+      id_stage: "66402dfc3bef34ea2c60edcb",
+      domain: "Design",
+      titre: "Stage de design graphique",
+      date_candidature: "2024-05-05T00:00:00.000Z",
+      statut_candidature: "en attente"
+    };
+  
+    try {
+      const response = await axios.post("http://127.0.0.1:8000/api/candidature/add", data);
+      
+    } catch (error) {
+      console.error("Erreur lors de l'envoi de la demande:", error);
+    }
+  }
   return (
     <UserLayout>
       <section className={`px-4 lg:px-10 mt-10 ${isModalOpen ? 'opacity-25' : ''}`}>
@@ -82,15 +136,16 @@ const ListeStage = () => {
 
         <div className="my-6 flex flex-col lg:flex-row items-center justify-between gap-4">
           <form className="w-full lg:w-[308px] h-[47px] flex justify-between items-center px-3 border border-[#D6D6D6] rounded-xl bg-[#F6F6F6]">
-            <select id="liste-domaines" className="outline-none rounded-xl w-full bg-[#F6F6F6] text-[#999999] pl-2">
-              <option className="text-black">Sélectionnez un domaine</option>
-              <option className="text-black">Domaine 1</option>
-              <option className="text-black">Domaine 2</option>
+            <select id="liste-domaines" className="outline-none rounded-xl w-full bg-[#F6F6F6] text-[#999999] pl-2"  onChange={handleSelectChange}>
+              <option value="">Tous les domaines</option>
+              {Array.from(new Set(stages.map(item => item.domaine))).map((domaine, i) => (
+                <option key={i} value={domaine} className="text-black">{domaine}</option>
+              ))}
             </select>
           </form>
-          <form className="w-full lg:w-[425px] h-[47px] flex justify-between items-center pl-3 border border-[#D6D6D6] rounded-xl bg-[#F6F6F6]">
-            <input type="text" placeholder="Tapez quelque chose...." className="outline-none rounded-xl bg-[#F6F6F6] placeholder:text-[#999999] text-black pl-2 flex-1" />
-            <button type="submit" className="p-2 lg:p-3 text-white bg-black rounded-xl">Rechercher</button>
+          <form action="" className="w-[425px] h-[72px] flex justify-between items-center px-3 border border-[#D6D6D6] rounded-xl bg-[#F6F6F6]">
+            <input type="text" placeholder="Tapez titre...." value={searchTitle} onChange={handleSearchTitleChange} className="outline-none rounded-xl bg-[#F6F6F6] placeholder:text-[#999999] text-black pl-2" />
+            <button type="submit" className="p-3 text-white bg-black rounded-xl">Rechercher</button>
           </form>
         </div>
         <div className="hidden lg:block p-3 border border-gray-400 rounded-lg max-h-[440px] overflow-y-auto" ref={containerRef}>
@@ -103,7 +158,7 @@ const ListeStage = () => {
                       <tr>
                         <th scope="col" className="px-2 lg:px-6 py-3 text-start font-semibold">Titre de stage</th>
                         <th scope="col" className="px-2 lg:px-6 py-3 text-start font-semibold">Description</th>
-                        <th scope="col" className="px-2 lg:px-6 py-3 flex items-center gap-3 text-start font-semibold">
+                        <th scope="col" className="px-2 lg:px-6 py-3 flex items-center gap-3 text-start font-semibold"  onClick={handleSortByDuree}>
                           <span>Durée de stage</span>
                           <a href="#">
                             <img src={icons.ArrowSwitched} className="size-4" alt="Arrow icon" />
@@ -114,7 +169,7 @@ const ListeStage = () => {
                       </tr>
                     </thead>
                     <tbody>
-                      {stages?.map((stage, index) => (
+                      {filteredStages.map((stage, index) => (
                         <tr key={index}>
                           <td className="px-2 lg:px-6 py-4 whitespace-nowrap w-52 truncate text-sm font-medium text-gray-800">
                             {stage.titre}
@@ -132,7 +187,7 @@ const ListeStage = () => {
                             <button onClick={(e) => fetchStageData(stage._id)}>
                               <img src={icons.Info} alt="Info icon" />
                             </button>
-                            <a href="#">
+                            <a onClick={()=>sendDemande(stage._id,stage.titre,stage.domaine)}>
                               <img src={icons.Edit} alt="Edit icon" />
                             </a>
                           </td>

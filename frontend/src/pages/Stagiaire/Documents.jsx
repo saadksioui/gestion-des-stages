@@ -43,6 +43,9 @@ const Documents = () => {
 
     fetchStages();
   }, []);
+  async function deleteDocs(id){
+    const response = await axios.delete(`http://127.0.0.1:8000/api/documents/delete/${id}`);
+  }
   return (
     <UserLayout>
       <section className="px-10 mt-10">
@@ -71,34 +74,34 @@ const Documents = () => {
                       </tr>
                     </thead>
                     <tbody>
-                      {Documents.map((doc, i) => (
-                        <tr key={i}>
-                          <td className="px-6 py-4 whitespace-nowrap block w-52 truncate  text-sm font-medium text-gray-800">
-                            {doc.type}
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap gap-1">
-                            {moment(doc.created_at).fromNow()}
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
-                            <div className={`flex items-center ${doc.version === 'Dernier version' ? 'bg-[#26CB8F]' : 'bg-[#327AF8]'}  text-white w-fit px-2 py-1 rounded-lg`}>
-                              {doc.version}
-                            </div>
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
-                            <a href={`/docs/${doc.file}`} className="flex items-center gap-2" download>
-                              <FaDownload className="text-lg" />
-                              <span>Télécharger</span>
-                            </a>
-                          </td>
-                          <td className={`px-6 py-4 flex items-center gap-5 whitespace-nowrap text-sm text-gray-800`}>
-                            <a href="#">
-                              <img src={icons.Info} alt="" />
-                            </a>
-                            <a href="#">
-                              <img src={icons.Delete} alt="" />
-                            </a>
-                          </td>
-                        </tr>
+                      {Documents.map((doc,i)=>(
+                      <tr key={i}>
+                        <td className="px-6 py-4 whitespace-nowrap block w-52 truncate  text-sm font-medium text-gray-800">
+                          {doc.type}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap gap-1">
+                        {doc.version}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
+                          <div className="flex items-center bg-[#26CB8F] text-white w-fit px-2 py-1 rounded-lg">
+                          {doc.version}
+                          </div>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
+                          <button className="flex items-center gap-2">
+                            <FaDownload className="text-lg" />
+                            <span>Télécharger</span>
+                          </button>
+                        </td>
+                        <td className={`px-6 py-4 flex items-center gap-5 whitespace-nowrap text-sm text-gray-800`}>
+                          <a href="#">
+                            <img src={icons.Info} alt="" />
+                          </a>
+                          <a onClick={()=>deleteDocs(doc._id)}>
+                            <img src={icons.Delete} alt="" />
+                          </a>
+                        </td>
+                      </tr>
                       ))}
 
                     </tbody>
