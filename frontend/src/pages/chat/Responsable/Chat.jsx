@@ -140,7 +140,7 @@ const ChatR = () => {
       console.error('Error deleting chat message:', error.message);
     }
   };
-  
+
 
   useEffect(() => {
     socket.on('newMessage', (data) => {
@@ -168,7 +168,7 @@ const ChatR = () => {
           {users.map((user, i) => (
             <button key={i} onClick={() => showChat(user._id)}>
               <div className='flex items-center gap-5 border-b-[0.5px] border-[#999999] p-3'>
-                <img src={`images_cv/${user.img_url}`} className='size-20 rounded-full' alt={user.nom} />
+                <img src={`images_cv/${user.img_url}`} className='size-20 rounded-full object-cover' alt={user.nom} />
                 <div className='text-start'>
                   <p className='text-lg font-medium'>{user.nom}</p>
                   <p className='text-lg font-light'>{user.email}</p>
@@ -182,7 +182,7 @@ const ChatR = () => {
             <div className="user h-[25%] p-3 border-b-[0.5px] flex items-center gap-5">
               {selectedUser && (
                 <>
-                  <img src={`images_cv/${selectedUser.img_url}`} className='size-20 rounded-full' alt={selectedUser.nom} />
+                  <img src={`images_cv/${selectedUser.img_url}`} className='size-20 rounded-full object-cover' alt={selectedUser.nom} />
                   <div>
                     <p className='text-lg font-medium'>{selectedUser.nom}</p>
                     <p className='text-lg font-light'>{selectedUser.email}</p>
