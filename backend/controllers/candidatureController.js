@@ -23,7 +23,7 @@ const createCandidature = asyncHandler(async (req, res) => {
 const updateCandidature = asyncHandler(async (req, res) => {
   try {
     const { id } = req.params;
-    const updatedCandidature = await Candidature.updateOne({_id:id}, req.body);
+    const updatedCandidature = await Candidature.updateOne({ _id: id }, req.body);
     res.json(updatedCandidature);
   } catch (error) {
     res.status(400).json({ message: error.message });
@@ -33,7 +33,7 @@ const updateCandidature = asyncHandler(async (req, res) => {
 const deleteCandidature = asyncHandler(async (req, res) => {
   try {
     const { id } = req.params;
-    await Candidature.deleteOne({_id:id});
+    await Candidature.deleteOne({ _id: id });
     res.json({ message: 'Candidature deleted successfully' });
   } catch (error) {
     res.status(400).json({ message: error.message });
@@ -41,20 +41,20 @@ const deleteCandidature = asyncHandler(async (req, res) => {
 });
 
 const getCandidaturesById = async (req, res) => {
-    try {
-      const { id } = req.body;
-      const candidatures = await Candidature.find({_id:id});
-      res.json(candidatures);
-    } catch (error) {
-      res.status(500).json({ message: error.message });
-    }
+  try {
+    const { id } = req.body;
+    const candidatures = await Candidature.find({ _id: id });
+    res.json(candidatures);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
 
 };
 
 const getCandidaturesByStage = async (req, res) => {
   try {
     const { id_stage } = req.body;
-    const candidatures = await Candidature.find({id_stage:id_stage});
+    const candidatures = await Candidature.find({ id_stage: id_stage });
     res.json(candidatures);
   } catch (error) {
     res.status(500).json({ message: error.message });
