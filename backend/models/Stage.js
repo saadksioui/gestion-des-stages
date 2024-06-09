@@ -30,6 +30,9 @@ const stageSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
+    type_stage: {
+        type: String,
+    },
     entreprise: {
         type: mongoose.Schema.Types.ObjectId, ref: 'User',
     required: true }

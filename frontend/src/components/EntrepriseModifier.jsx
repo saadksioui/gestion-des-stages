@@ -7,15 +7,17 @@ const EntrepriseModifier = ({ isOpen, onClose, handleCloseForm, stageData }) => 
 
     const storedData = localStorage.getItem("sessionToken");
     let stored= storedData.split(",");
-console.log(stageData);
+
     const [titreF, setTitreF] = useState(stageData.titre);
     const [descriptionF, setDescriptionF] = useState(stageData.description);
     const [domaineF, setDomaineF] = useState(stageData.domaine);
     const [localisationF, setLocalisationF] = useState(stageData.localisation);
-    const [competencesRequisesF, setCompetencesRequisesF] = useState(stageData.competencesRequises);
+    const [competencesRequisesF, setCompetencesRequisesF] = useState(stageData.competences_requises);
     const [dateDebutF, setDateDebutF] = useState(stageData.date_debut);
     const [dureeF, setDureeF] = useState(stageData.duree);
     const [typeStgF, setTypeStgF] = useState(stageData.typeStg);
+    const [statusF, setStatus] = useState(stageData.status);
+
     const [titre, setTitre] = useState('');
     const [description, setDescription] = useState('');
     const [domaine, setDomaine] = useState('');
@@ -30,6 +32,9 @@ console.log(stageData);
         2,
         4,
         6,
+    ]
+    const statuss = [
+       'ouvert', 'fermé', 'en cours', 'terminé'
     ]
 
     const typeStgAvail = [
@@ -150,6 +155,17 @@ console.log(stageData);
                                     {
                                         typeStgAvail.map((item) => (
                                             <option value={item} selected={item === typeStgF ? true : false}>{item}</option>
+                                        ))
+                                    }
+                                </select>
+                            </div>
+                            <div className="p-3 flex flex-col gap-2">
+                                <label htmlFor="duree">Status:</label>
+                                <select name="duree" className="border-2 border-[#99999] rounded-md py-2 px-2 outline-none" value={statusF} onChange={e => setStatus(e.target.value)}>
+                                    <option>Séléctionner une Status</option>
+                                    {
+                                        statuss.map((item) => (
+                                            <option value={item}>{item} </option>
                                         ))
                                     }
                                 </select>

@@ -1,14 +1,13 @@
 import React, { useEffect, useRef, useState } from "react";
-import { icons } from "../../constants";
+import { toast } from "react-toastify";
+import axios from "axios";
 import UserLayout from "../../layouts/UserLayout";
 import EntrepriseForm from "../../components/EntrepriseForm";
-import Swal from "sweetalert2";
-import axios from "axios";
-import { MdDateRange, MdDomain, MdTimer } from "react-icons/md";
-import { FaInfoCircle } from "react-icons/fa";
-import { FaPen, FaTrash } from "react-icons/fa6";
-import StageInfo from "../../components/StageInfo";
 import EntrepriseModifier from "../../components/EntrepriseModifier";
+import StageInfo from "../../components/StageInfo";
+import { icons } from "../../constants";
+import { MdDateRange, MdDomain, MdTimer } from "react-icons/md";
+import { FaInfoCircle, FaPen, FaTrash } from "react-icons/fa";
 
 const ListeStageE = () => {
   const [stages, setStages] = useState([]);
@@ -74,7 +73,7 @@ const ListeStageE = () => {
     };
 
     fetchUsers()
-  }, [stages])
+  }, [isModifierOpen,isFormOpen,isInfoOpen])
 
   const handleOpenInfo = () => {
     setIsInfoOpen(true);
@@ -135,8 +134,8 @@ const ListeStageE = () => {
   async function deleteOne(id) {
     try {
       await axios.delete(`http://127.0.0.1:8000/api/stage/delete/${id}`);
-      toast.success("Demande deleted successfully");
-      setStages(stages.filter(demande => demande._id !== id));
+      setFilteredStages(filteredStages.filter((demande) => demande._id !== id));
+      toast.success("Stage deleted successfully");
     } catch (error) {
       toast.error("Error deleting demande:", error);
     }
