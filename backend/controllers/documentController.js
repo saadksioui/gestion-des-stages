@@ -70,7 +70,7 @@ const deleteDocument = asyncHandler(async (req, res) => {
       return res.status(404).json({ message: 'Document not found' });
     }
 
-    const filePath = path.join(__dirname, '../frontend/public/docs', document.file);
+    const filePath = path.join('../frontend/public/docs', document.file);
 
     if (!fs.existsSync(filePath)) {
       return res.status(404).json({ message: 'File not found' });
