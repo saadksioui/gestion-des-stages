@@ -127,9 +127,6 @@ const ListeStagiaires = () => {
                       {stagiaire.email}
                     </p>
                   </div>
-                  {/* <div className="inline-flex items-center text-base font-semibold text-gray-900">
-                    $320
-                  </div> */}
                 </div>
               </li>
             ))}

@@ -14,7 +14,7 @@ const sendMail = async (req, res) => {
     //sendmail
     await transporter.sendMail({
       from: email, // you email
-      to: 'multiversal.guru@gmail.com', // to email
+      to: 'isfocasa@gmail.com', // to email
       subject: sujet,
       text: body
     });
