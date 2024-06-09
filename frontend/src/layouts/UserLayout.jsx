@@ -47,7 +47,6 @@ const UserLayout = ({ children }) => {
     fetchData();
   }, []);
 
-  console.log(User);
 
   useEffect(() => {
     const generateMenu = (menuItems) => (
