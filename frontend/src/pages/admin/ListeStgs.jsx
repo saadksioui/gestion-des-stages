@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import { LuCheckCircle } from "react-icons/lu";
 import UserLayout from "../../layouts/UserLayout";
 
+
 const ListeStgs = () => {
   const containerRef = useRef(null);
   const [users, setUsers] = useState([])
@@ -19,12 +20,20 @@ const ListeStgs = () => {
       }
     };
 
-    fetchUsers();
-  }, []);
+    fetchUsers()
+  }, [])
+  console.log(users);
 
-  const Stagiaires = users.filter(user => user.type_utilisateur === 'étudiant')
 
 
+  useEffect(() => {
+    // Filter users based on search title
+    const filtered = users.filter(user =>
+      user.type_utilisateur === 'étudiant' &&
+      user.nom.toLowerCase().includes(searchTitle.toLowerCase())
+    );
+    setFilteredStagiaires(filtered);
+  }, [searchTitle, users]);
 
   useEffect(() => {
     const containerHeight = containerRef.current.clientHeight;
@@ -34,11 +43,8 @@ const ListeStgs = () => {
     } else {
       containerRef.current.classList.remove('overflow-y-scroll');
     }
-  }, []);
 
-  const handleSearch = (e) => {
-    setSearchedName(e.target.value);
-  };
+  }, []);
 
   return (
     <UserLayout>
@@ -61,7 +67,9 @@ const ListeStgs = () => {
                       <tr>
                         <th scope="col" className="px-6 py-3 text-start font-semibold">Id</th>
                         <th scope="col" className="px-6 py-3 text-start font-semibold">Nom Complet</th>
-                        <th scope="col" className="px-6 py-3 text-start font-semibold">Email</th>
+                        <th scope="col" className="px-6 py-3 text-start font-semibold">
+                          Email
+                        </th>
                         <th scope="col" className="px-6 py-3 text-start font-semibold">Téléphone</th>
                         <th scope="col" className="px-6 py-3 text-start font-semibold">Action</th>
                       </tr>
@@ -120,7 +128,7 @@ const ListeStgs = () => {
         </div>
       </section>
     </UserLayout>
-  );
+  )
 };
 
-export default ListeStgs;
+export default ListeStgs
