@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import images from "../../constants/images";
 import Swal from 'sweetalert2';
 import axios from 'axios';
-import VerifyStg from "../../components/VerifyStg";
 import { FaEye, FaEyeSlash } from "react-icons/fa6";
 
 const RegisterPage = () => {
@@ -11,7 +10,6 @@ const RegisterPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
   const isEightOrMoreCharacters = password.length >= 8;
@@ -23,13 +21,7 @@ const RegisterPage = () => {
     return condition ? 'bg-black' : 'bg-gray-400';
   };
 
-  const handleOpenModal = () => {
-    setIsModalOpen(true);
-  };
 
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
-  };
 
   const handleRegister = async (e) => {
     e.preventDefault();
@@ -121,18 +113,13 @@ const RegisterPage = () => {
                     </div>
                   </div>
                 </div>
-                <button onClick={isModalOpen ? handleCloseModal : handleOpenModal} className="w-full py-2 bg-black text-white rounded-xl font-medium">Create an account</button>
+                <button type="submit" className="w-full py-2 bg-black text-white rounded-xl font-medium">Create an account</button>
               </form>
             </div>
           </div>
         </div>
       </section>
-      {isModalOpen && (
-        <VerifyStg
-          handleCloseModal={handleCloseModal}
-          handleRegister={handleRegister}
-        />
-      )}
+
     </div>
   );
 };
