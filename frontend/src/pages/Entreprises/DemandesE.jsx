@@ -1,8 +1,7 @@
 import { useEffect, useRef, useState } from "react";
-import { icons } from "../../constants";
 import UserLayout from "../../layouts/UserLayout";
 import { TbPointFilled } from "react-icons/tb";
-import { FaCheck, FaInfoCircle, FaTrash, FaUser } from "react-icons/fa";
+import { FaCheck, FaTrash, FaUser } from "react-icons/fa";
 import { MdDomain } from "react-icons/md";
 import { toast } from "react-toastify";
 import axios from "axios";
@@ -13,6 +12,8 @@ const DemandesE = () => {
   const storedData = localStorage.getItem("sessionToken");
   const storedId = storedData.split(",")[1];
   const [demandes, setDemandes] = useState([]);
+  const [searchTitle, setSearchTitle] = useState("");
+  const [filteredDemandes, setFilteredDemandes] = useState([]);
 
   const demandeStatut = {
     'en attente': ["bg-[#1565d833]", "text-[#1565D8]"],
@@ -29,17 +30,13 @@ const DemandesE = () => {
   useEffect(() => {
     const fetchDemandes = async () => {
       try {
-        // Fetch stages associated with the enterprise
         const stagesResponse = await axios.get(`http://127.0.0.1:8000/api/stage/entreprise/${storedId}`);
         const idsStages = stagesResponse.data;
-        console.log(idsStages);
-        // Fetch demandes for each stage
+
         const demandesPromises = idsStages.map(async (idStage) => {
           const demandeResponse = await axios.get(`http://127.0.0.1:8000/api/candidature/search/stage/${idStage._id}`);
-          console.log(demandeResponse.data);
           const demandesWithUser = await Promise.all(
             demandeResponse.data.map(async (demande) => {
-              console.log(demande.id_utilisateur);
               const userResponse = await axios.get(`http://127.0.0.1:8000/api/auth/findById/${demande.id_utilisateur}`);
               return { ...demande, user: userResponse.data };
             })
@@ -49,9 +46,7 @@ const DemandesE = () => {
 
         const allDemandes = (await Promise.all(demandesPromises)).flat();
         setDemandes(allDemandes);
-        console.log(demandes);
 
-        // Set scroll behavior based on content height
         if (containerRef.current) {
           const containerHeight = containerRef.current.clientHeight;
           const childrenHeight = containerRef.current.scrollHeight;
@@ -71,33 +66,56 @@ const DemandesE = () => {
   }, [storedId]);
 
   const handleAccept = async (id) => {
-    await axios.put(`http://127.0.0.1:8000/api/candidature/accept/${id}`)
-      .then(() => {
-        toast.success("Demande acceptée avec succès");
-        window.location.reload();
-      })
-      .catch((error) => {
-        toast.error(error.response.data);
-      });
-  }
+    try {
+      await axios.put(`http://127.0.0.1:8000/api/candidature/accept/${id}`);
+      toast.success("Demande acceptée avec succès");
+      window.location.reload();
+    } catch (error) {
+      toast.error(error.response.data);
+    }
+  };
+
   const handleRefuse = async (id) => {
-    await axios.put(`http://127.0.0.1:8000/api/candidature/refuse/${id}`)
-      .then(() => {
-        toast.success("Demande acceptée avec succès");
-        window.location.reload();
-      })
-      .catch((error) => {
-        toast.error(error.response.data);
-      });
-  }
+    try {
+      await axios.put(`http://127.0.0.1:8000/api/candidature/refuse/${id}`);
+      toast.success("Demande refusée avec succès");
+      window.location.reload();
+    } catch (error) {
+      toast.error(error.response.data);
+    }
+  };
+
+  const handleDelete = async (id) => {
+    try {
+      await axios.delete(`http://127.0.0.1:8000/api/candidature/${id}`);
+      toast.success("Demande supprimée avec succès");
+      setDemandes(demandes.filter(demande => demande._id !== id));
+    } catch (error) {
+      toast.error("Erreur lors de la suppression de la demande");
+    }
+  };
+
+  useEffect(() => {
+    let filteredData = [...demandes];
+    if (searchTitle !== "") {
+      filteredData = filteredData.filter(stage => stage.titre.toLowerCase().includes(searchTitle.toLowerCase()));
+    }
+    setFilteredDemandes(filteredData);
+  }, [searchTitle, demandes]);
 
   return (
     <UserLayout>
       <section className="px-10 mt-10">
         <h1 className="text-4xl font-bold">Demandes</h1>
         <div className="my-6 flex items-center justify-end">
-          <form action="" className="w-[425px] h-[72px] flex justify-between items-center px-3 border border-[#D6D6D6] rounded-xl bg-[#F6F6F6]">
-            <input type="text" placeholder="Tapez quelque chose...." className="outline-none rounded-xl bg-[#F6F6F6] placeholder:text-[#999999] text-black pl-2" />
+          <form className="w-[425px] h-[72px] flex justify-between items-center px-3 border border-[#D6D6D6] rounded-xl bg-[#F6F6F6]">
+            <input 
+              type="text" 
+              placeholder="Tapez quelque chose...." 
+              className="outline-none rounded-xl bg-[#F6F6F6] placeholder:text-[#999999] text-black pl-2" 
+              value={searchTitle} 
+              onChange={e => setSearchTitle(e.target.value)} 
+            />
             <button type="submit" className="p-3 text-white bg-black rounded-xl">Rechercher</button>
           </form>
         </div>
@@ -113,15 +131,13 @@ const DemandesE = () => {
                         <th scope="col" className="px-6 py-3 flex items-center gap-3 text-start font-semibold">
                           Nom de stagiaire
                         </th>
-                        <th scope="col" className="px-6 py-3 text-start font-semibold">
-                          Statut
-                        </th>
+                        <th scope="col" className="px-6 py-3 text-start font-semibold">Statut</th>
                         <th scope="col" className="px-6 py-3 text-start font-semibold">Domaine</th>
                         <th scope="col" className="px-6 py-3 text-start font-semibold">Action</th>
                       </tr>
                     </thead>
                     <tbody>
-                      {demandes.map((demande) => (
+                      {filteredDemandes.map((demande) => (
                         <tr key={demande._id}>
                           <td className="px-6 py-4 whitespace-nowrap block w-52 truncate text-sm font-medium text-gray-800">
                             {demande.titre}
@@ -158,7 +174,7 @@ const DemandesE = () => {
           </div>
         </div>
         <div className="lg:hidden grid grid-cols-1 gap-4 mb-10">
-          {demandes.map((demande) => (
+          {filteredDemandes.map((demande) => (
             <div key={demande._id} className="bg-black pt-3 rounded-xl">
               <div className="rounded-xl shadow-xl p-5 bg-white flex flex-col gap-6">
                 <div className="flex justify-between items-center">
@@ -185,7 +201,7 @@ const DemandesE = () => {
                     Accepter
                     <FaCheck />
                   </button>
-                  <button className="py-2 px-4 rounded-lg border-2 border-red-600 hover:bg-red-600 hover:text-white transition duration-200 font-medium flex items-center gap-2">
+                  <button onClick={() => handleDelete(demande._id)} className="py-2 px-4 rounded-lg border-2 border-red-600 hover:bg-red-600 hover:text-white transition duration-200 font-medium flex items-center gap-2">
                     Supprimer
                     <FaTrash />
                   </button>

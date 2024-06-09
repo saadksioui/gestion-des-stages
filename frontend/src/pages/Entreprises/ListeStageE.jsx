@@ -94,7 +94,15 @@ const ListeStageE = () => {
     setFilteredStages(sortedStages);
     setSortDirection(sortDirection === "asc" ? "desc" : "asc");
   };
-
+  async function deleteOne(id) {
+    try {
+      await axios.delete(`http://127.0.0.1:8000/api/stage/delete/${id}`);
+      toast.success("Demande deleted successfully");
+      setStages(stages.filter(demande => demande._id !== id));
+    } catch (error) {
+      toast.error("Error deleting demande:", error);
+    }
+  }
   return (
     <UserLayout>
       <section className="px-10 mt-10">
@@ -159,7 +167,7 @@ const ListeStageE = () => {
                             <a href="#">
                               <img src={icons.Edit} alt="" />
                             </a>
-                            <a href="#">
+                            <a onClick={()=>deleteOne(stage._id)}>
                               <img src={icons.Delete} alt="" />
                             </a>
                           </td>
