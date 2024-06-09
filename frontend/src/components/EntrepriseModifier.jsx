@@ -3,19 +3,27 @@ import { useState } from "react";
 import { FaXmark } from "react-icons/fa6";
 import Swal from "sweetalert2";
 
-const EntrepriseForm = ({ isOpen, onClose, handleCloseForm }) => {
+const EntrepriseModifier = ({ isOpen, onClose, handleCloseForm }) => {
 
     const storedData = localStorage.getItem("sessionToken");
     let stored= storedData.split(",");
 
-    const [titreF, setTitreF] = useState('');
-    const [descriptionF, setDescriptionF] = useState('');
-    const [domaineF, setDomaineF] = useState('');
-    const [localisationF, setLocalisationF] = useState('');
-    const [competencesRequisesF, setCompetencesRequisesF] = useState('');
-    const [dateDebutF, setDateDebutF] = useState('');
-    const [dureeF, setDureeF] = useState('');
-    const [typeStgF, setTypeStgF] = useState('');
+    const [titreF, setTitreF] = useState();
+    const [descriptionF, setDescriptionF] = useState();
+    const [domaineF, setDomaineF] = useState();
+    const [localisationF, setLocalisationF] = useState();
+    const [competencesRequisesF, setCompetencesRequisesF] = useState();
+    const [dateDebutF, setDateDebutF] = useState();
+    const [dureeF, setDureeF] = useState();
+    const [typeStgF, setTypeStgF] = useState();
+    const [titre, setTitre] = useState('');
+    const [description, setDescription] = useState('');
+    const [domaine, setDomaine] = useState('');
+    const [localisation, setLocalisation] = useState('');
+    const [competencesRequises, setCompetencesRequises] = useState('');
+    const [dateDebut, setDateDebut] = useState('');
+    const [duree, setDuree] = useState('');
+    const [typeStg, setTypeStg] = useState('');
 
     const dureeAvail = [
         1,
@@ -162,4 +170,4 @@ const EntrepriseForm = ({ isOpen, onClose, handleCloseForm }) => {
     )
 };
 
-export default EntrepriseForm
+export default EntrepriseModifier

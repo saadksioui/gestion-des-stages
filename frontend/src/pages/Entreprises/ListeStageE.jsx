@@ -7,6 +7,8 @@ import axios from "axios";
 import { MdDateRange, MdDomain, MdTimer } from "react-icons/md";
 import { FaInfoCircle } from "react-icons/fa";
 import { FaPen, FaTrash } from "react-icons/fa6";
+import StageInfo from "../../components/StageInfo";
+import EntrepriseModifier from "../../components/EntrepriseModifier";
 
 const ListeStageE = () => {
   const [stages, setStages] = useState([]);
@@ -14,6 +16,11 @@ const ListeStageE = () => {
   const [searchTitle, setSearchTitle] = useState("");
   const [filteredStages, setFilteredStages] = useState([]);
   const [sortDirection, setSortDirection] = useState("asc");
+  const [stageData, setStageData] = useState({});
+  const containerRef = useRef(null);
+  const [isInfoOpen, setIsInfoOpen] = useState(false);
+  const [isFormOpen, setIsFormOpen] = useState(false);
+  const [isModifierOpen, setIsModifierOpen] = useState(false);
 
   const storedData = localStorage.getItem("sessionToken");
   let stored;
@@ -25,9 +32,26 @@ const ListeStageE = () => {
   } catch (error) {
     console.error('Error parsing session token:', error);
   }
+  const fetchStageData = async (id) => {
+    try {
+      const response = await axios.get(`http://127.0.0.1:8000/api/stage/onestage/${id}`);
+      setStageData(response.data);
+      if (stageData) setIsInfoOpen(true);
+    } catch (error) {
+      console.error("Error fetching stage data:", error);
+    }
+  };
+  const fetchStageM = async (id) => {
+    try {
+      const response = await axios.get(`http://127.0.0.1:8000/api/stage/onestage/${id}`);
+      setStageData(response.data);
+      if (stageData) setIsModifierOpen(true);
+    } catch (error) {
+      console.error("Error fetching stage data:", error);
+    }
+  };
 
-  const containerRef = useRef(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+
 
   useEffect(() => {
     const containerHeight = containerRef.current.clientHeight;
@@ -52,12 +76,26 @@ const ListeStageE = () => {
     fetchUsers()
   }, [stages])
 
-  const handleOpenModal = () => {
-    setIsModalOpen(true);
+  const handleOpenInfo = () => {
+    setIsInfoOpen(true);
   };
 
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
+  const handleCloseInfo = () => {
+    setIsInfoOpen(false);
+  };
+  const handleOpenForm = () => {
+    setIsFormOpen(true);
+  };
+
+  const handleCloseForm = () => {
+    setIsFormOpen(false);
+  };
+  const handleOpenModifier = () => {
+    setIsModifierOpen(true);
+  };
+
+  const handleCloseModifier = () => {
+    setIsModifierOpen(false);
   };
 
   useEffect(() => {
@@ -107,7 +145,7 @@ const ListeStageE = () => {
     <UserLayout>
       <section className="px-10 mt-10">
         <h1 className="text-4xl font-bold">Liste des stages</h1>
-        <button onClick={handleOpenModal} className="text-white bg-black hover:bg-gray-700 font-bold py-2 px-4 rounded mt-4">
+        <button onClick={handleOpenForm} className="text-white bg-black hover:bg-gray-700 font-bold py-2 px-4 rounded mt-4">
           Ajouter un stage
         </button>
 
@@ -161,12 +199,12 @@ const ListeStageE = () => {
                             {stage.date_debut.substring(0, 10)}
                           </td>
                           <td className={`px-6 py-4 flex items-center gap-5 whitespace-nowrap text-sm text-gray-800`}>
-                            <a href="#">
+                            <button onClick={() => fetchStageData(stage._id)}>
                               <img src={icons.Info} alt="" />
-                            </a>
-                            <a href="#">
+                            </button>
+                            <button onClick={() => fetchStageM(stage._id)}>
                               <img src={icons.Edit} alt="" />
-                            </a>
+                            </button>
                             <a onClick={()=>deleteOne(stage._id)}>
                               <img src={icons.Delete} alt="" />
                             </a>
@@ -205,11 +243,11 @@ const ListeStageE = () => {
                   </div>
                 </div>
                 <div className="flex justify-end items-end gap-5">
-                  <button className="py-2 px-4 rounded-lg border-2 border-green-600 hover:bg-green-600 hover:text-white transition duration-200 font-medium flex items-center gap-2">
+                  <button onClick={() => fetchStageData(stage._id)} className="py-2 px-4 rounded-lg border-2 border-green-600 hover:bg-green-600 hover:text-white transition duration-200 font-medium flex items-center gap-2">
                     Info
                     <FaInfoCircle />
                   </button>
-                  <button className="py-2 px-4 rounded-lg border-2 border-blue-400 hover:bg-blue-400 hover:text-white transition duration-200 font-medium flex items-center gap-2">
+                  <button onClick={() => fetchStageM(stage._id)} className="py-2 px-4 rounded-lg border-2 border-blue-400 hover:bg-blue-400 hover:text-white transition duration-200 font-medium flex items-center gap-2">
                     Modifier
                     <FaPen />
                   </button>
@@ -226,10 +264,17 @@ const ListeStageE = () => {
 
       {/* Modal component */}
       <EntrepriseForm
-        isOpen={isModalOpen}
-        onClose={handleCloseModal}
-        handleCloseModal={handleCloseModal}
+        isOpen={isFormOpen}
+        onClose={handleCloseForm}
+        handleCloseForm={handleCloseForm}
       />
+      <EntrepriseModifier
+        isOpen={isModifierOpen}
+        onClose={handleCloseModifier}
+        handleCloseModifier={handleCloseModifier}
+        stageData={stageData}
+      />
+      <StageInfo isOpen={isInfoOpen} onClose={handleCloseInfo} stageData={stageData} />
     </UserLayout>
   )
 };
