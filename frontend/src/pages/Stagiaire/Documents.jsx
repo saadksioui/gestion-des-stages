@@ -48,7 +48,7 @@ const Documents = () => {
     };
 
     fetchDocuments();
-  }, [storedId]);
+  }, [isModalOpen]);
 
   const deleteDocs = async (id) => {
     try {
