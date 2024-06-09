@@ -3,10 +3,10 @@ import { useEffect, useRef, useState } from "react";
 import { LuCheckCircle } from "react-icons/lu";
 import UserLayout from "../../layouts/UserLayout";
 
-
 const ListeStgs = () => {
   const containerRef = useRef(null);
-  const [users, setUsers] = useState([])
+  const [users, setUsers] = useState([]);
+  const [searchedName, setSearchedName] = useState("");
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -18,13 +18,10 @@ const ListeStgs = () => {
       }
     };
 
-    fetchUsers()
-  }, [])
-  console.log(users);
+    fetchUsers();
+  }, []);
 
-  const Stagiaires = users.filter(user => user.type_utilisateur === 'étudiant')
-
-
+  const Stagiaires = users.filter(user => user.type_utilisateur === 'étudiant' && user.nom.toLowerCase().includes(searchedName.toLowerCase()));
 
   useEffect(() => {
     const containerHeight = containerRef.current.clientHeight;
@@ -34,16 +31,25 @@ const ListeStgs = () => {
     } else {
       containerRef.current.classList.remove('overflow-y-scroll');
     }
-
   }, []);
+
+  const handleSearch = (e) => {
+    setSearchedName(e.target.value);
+  };
 
   return (
     <UserLayout>
       <section className="px-10 mt-10">
         <h1 className="text-4xl font-bold">Liste des stagiaires</h1>
         <div className="my-6 flex items-center justify-center">
-          <form action="" className="w-[425px] h-[72px] flex justify-between items-center px-3 border border-[#D6D6D6] rounded-xl bg-[#F6F6F6]">
-            <input type="text" placeholder="Tapez quelque chose...." className="outline-none rounded-xl bg-[#F6F6F6] placeholder:text-[#999999] text-black pl-2" />
+          <form onSubmit={(e) => e.preventDefault()} className="w-[425px] h-[72px] flex justify-between items-center px-3 border border-[#D6D6D6] rounded-xl bg-[#F6F6F6]">
+            <input 
+              type="text" 
+              placeholder="Tapez quelque chose...." 
+              className="outline-none rounded-xl bg-[#F6F6F6] placeholder:text-[#999999] text-black pl-2" 
+              value={searchedName}
+              onChange={handleSearch}
+            />
             <button type="submit" className="p-3 text-white bg-black rounded-xl">Rechercher</button>
           </form>
         </div>
@@ -57,36 +63,23 @@ const ListeStgs = () => {
                       <tr>
                         <th scope="col" className="px-6 py-3 text-start font-semibold">Id</th>
                         <th scope="col" className="px-6 py-3 text-start font-semibold">Nom Complet</th>
-                        <th scope="col" className="px-6 py-3 text-start font-semibold">
-                          Email
-                        </th>
+                        <th scope="col" className="px-6 py-3 text-start font-semibold">Email</th>
                         <th scope="col" className="px-6 py-3 text-start font-semibold">Téléphone</th>
                         <th scope="col" className="px-6 py-3 text-start font-semibold">Action</th>
                       </tr>
                     </thead>
                     <tbody>
-                      {
-                        Stagiaires.map((stagiaire, index) => (
-                          <tr key={index}>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
-                              {stagiaire._id}
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
-                              {stagiaire.nom}
-                            </td>
-
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
-                            {stagiaire.email}
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
-                            {stagiaire.telephone}
-                            </td>
-                            <td className={`px-6 py-4 flex justify-start gap-5 whitespace-nowrap font-medium text-2xl text-[#00FF00] `}>
-                              <LuCheckCircle />
-                            </td>
-                          </tr>
-                        ))
-                      }
+                      {Stagiaires.map((stagiaire, index) => (
+                        <tr key={index}>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">{stagiaire._id}</td>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">{stagiaire.nom}</td>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">{stagiaire.email}</td>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">{stagiaire.telephone}</td>
+                          <td className="px-6 py-4 flex justify-start gap-5 whitespace-nowrap font-medium text-2xl text-[#00FF00]">
+                            <LuCheckCircle />
+                          </td>
+                        </tr>
+                      ))}
                     </tbody>
                   </table>
                 </div>
@@ -96,7 +89,7 @@ const ListeStgs = () => {
         </div>
       </section>
     </UserLayout>
-  )
+  );
 };
 
-export default ListeStgs
+export default ListeStgs;
