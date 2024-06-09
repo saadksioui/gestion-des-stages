@@ -31,6 +31,7 @@ const ListeStageE = () => {
   } catch (error) {
     console.error('Error parsing session token:', error);
   }
+
   const fetchStageData = async (id) => {
     try {
       const response = await axios.get(`http://127.0.0.1:8000/api/stage/onestage/${id}`);
@@ -40,17 +41,16 @@ const ListeStageE = () => {
       console.error("Error fetching stage data:", error);
     }
   };
+
   const fetchStageM = async (id) => {
     try {
       const response = await axios.get(`http://127.0.0.1:8000/api/stage/onestage/${id}`);
       setStageData(response.data);
       if (stageData) setIsModifierOpen(true);
     } catch (error) {
-      console.error("Error fetching stage data:", error);
+      console.error('Error fetching stages:', error);
     }
   };
-
-
 
   useEffect(() => {
     const containerHeight = containerRef.current.clientHeight;
@@ -73,7 +73,7 @@ const ListeStageE = () => {
     };
 
     fetchUsers()
-  }, [isModifierOpen,isFormOpen,isInfoOpen])
+  }, [isModifierOpen, isFormOpen, isInfoOpen])
 
   const handleOpenInfo = () => {
     setIsInfoOpen(true);
@@ -82,6 +82,7 @@ const ListeStageE = () => {
   const handleCloseInfo = () => {
     setIsInfoOpen(false);
   };
+
   const handleOpenForm = () => {
     setIsFormOpen(true);
   };
@@ -89,6 +90,7 @@ const ListeStageE = () => {
   const handleCloseForm = () => {
     setIsFormOpen(false);
   };
+
   const handleOpenModifier = () => {
     setIsModifierOpen(true);
   };
@@ -131,6 +133,7 @@ const ListeStageE = () => {
     setFilteredStages(sortedStages);
     setSortDirection(sortDirection === "asc" ? "desc" : "asc");
   };
+
   async function deleteOne(id) {
     try {
       await axios.delete(`http://127.0.0.1:8000/api/stage/delete/${id}`);
@@ -140,6 +143,7 @@ const ListeStageE = () => {
       toast.error("Error deleting demande:", error);
     }
   }
+
   return (
     <UserLayout>
       <section className="px-10 mt-10">
@@ -185,7 +189,7 @@ const ListeStageE = () => {
                     <tbody>
                       {filteredStages.map((stage, i) => (
                         <tr key={i}>
-                          <td className="px-6 py-4 whitespace-nowrap block w-52 truncate  text-sm font-medium text-gray-800">
+                          <td className="px-6 py-4 whitespace-nowrap block w-52 truncate text-sm font-medium text-gray-800">
                             {stage.titre}
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
@@ -204,7 +208,7 @@ const ListeStageE = () => {
                             <button onClick={() => fetchStageM(stage._id)}>
                               <img src={icons.Edit} alt="" />
                             </button>
-                            <a onClick={()=>deleteOne(stage._id)}>
+                            <a onClick={() => deleteOne(stage._id)}>
                               <img src={icons.Delete} alt="" />
                             </a>
                           </td>
@@ -250,7 +254,7 @@ const ListeStageE = () => {
                     Modifier
                     <FaPen />
                   </button>
-                  <button className="py-2 px-4 rounded-lg border-2 border-red-600 hover:bg-red-600 hover:text-white transition duration-200 font-medium flex items-center gap-2">
+                  <button onClick={() => deleteOne(stage._id)} className="py-2 px-4 rounded-lg border-2 border-red-600 hover:bg-red-600 hover:text-white transition duration-200 font-medium flex items-center gap-2">
                     Supprimer
                     <FaTrash />
                   </button>
