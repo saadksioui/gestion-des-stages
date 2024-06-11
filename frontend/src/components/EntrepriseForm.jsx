@@ -3,7 +3,7 @@ import { useState } from "react";
 import { FaXmark } from "react-icons/fa6";
 import Swal from "sweetalert2";
 
-const EntrepriseForm = ({ isOpen, onClose, handleCloseModal }) => {
+const EntrepriseForm = ({ isOpen, onClose, handleCloseForm }) => {
 
     const storedData = localStorage.getItem("sessionToken");
     let stored= storedData.split(",");
@@ -80,7 +80,7 @@ const EntrepriseForm = ({ isOpen, onClose, handleCloseModal }) => {
             setDureeF('')
             setTypeStgF('')
 
-            handleCloseModal();
+            handleCloseForm();
         }
     }
 

@@ -1,12 +1,13 @@
 import React, { useEffect, useRef, useState } from "react";
-import { icons } from "../../constants";
+import { toast } from "react-toastify";
+import axios from "axios";
 import UserLayout from "../../layouts/UserLayout";
 import EntrepriseForm from "../../components/EntrepriseForm";
-import Swal from "sweetalert2";
-import axios from "axios";
+import EntrepriseModifier from "../../components/EntrepriseModifier";
+import StageInfo from "../../components/StageInfo";
+import { icons } from "../../constants";
 import { MdDateRange, MdDomain, MdTimer } from "react-icons/md";
-import { FaInfoCircle } from "react-icons/fa";
-import { FaPen, FaTrash } from "react-icons/fa6";
+import { FaInfoCircle, FaPen, FaTrash } from "react-icons/fa";
 
 const ListeStageE = () => {
   const [stages, setStages] = useState([]);
@@ -14,6 +15,11 @@ const ListeStageE = () => {
   const [searchTitle, setSearchTitle] = useState("");
   const [filteredStages, setFilteredStages] = useState([]);
   const [sortDirection, setSortDirection] = useState("asc");
+  const [stageData, setStageData] = useState({});
+  const containerRef = useRef(null);
+  const [isInfoOpen, setIsInfoOpen] = useState(false);
+  const [isFormOpen, setIsFormOpen] = useState(false);
+  const [isModifierOpen, setIsModifierOpen] = useState(false);
 
   const storedData = localStorage.getItem("sessionToken");
   let stored;
@@ -26,8 +32,25 @@ const ListeStageE = () => {
     console.error('Error parsing session token:', error);
   }
 
-  const containerRef = useRef(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const fetchStageData = async (id) => {
+    try {
+      const response = await axios.get(`http://127.0.0.1:8000/api/stage/onestage/${id}`);
+      setStageData(response.data);
+      if (stageData) setIsInfoOpen(true);
+    } catch (error) {
+      console.error("Error fetching stage data:", error);
+    }
+  };
+
+  const fetchStageM = async (id) => {
+    try {
+      const response = await axios.get(`http://127.0.0.1:8000/api/stage/onestage/${id}`);
+      setStageData(response.data);
+      if (stageData) setIsModifierOpen(true);
+    } catch (error) {
+      console.error('Error fetching stages:', error);
+    }
+  };
 
   useEffect(() => {
     const containerHeight = containerRef.current.clientHeight;
@@ -50,14 +73,30 @@ const ListeStageE = () => {
     };
 
     fetchUsers()
-  }, [stages])
+  }, [isModifierOpen, isFormOpen, isInfoOpen])
 
-  const handleOpenModal = () => {
-    setIsModalOpen(true);
+  const handleOpenInfo = () => {
+    setIsInfoOpen(true);
   };
 
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
+  const handleCloseInfo = () => {
+    setIsInfoOpen(false);
+  };
+
+  const handleOpenForm = () => {
+    setIsFormOpen(true);
+  };
+
+  const handleCloseForm = () => {
+    setIsFormOpen(false);
+  };
+
+  const handleOpenModifier = () => {
+    setIsModifierOpen(true);
+  };
+
+  const handleCloseModifier = () => {
+    setIsModifierOpen(false);
   };
 
   useEffect(() => {
@@ -95,11 +134,21 @@ const ListeStageE = () => {
     setSortDirection(sortDirection === "asc" ? "desc" : "asc");
   };
 
+  async function deleteOne(id) {
+    try {
+      await axios.delete(`http://127.0.0.1:8000/api/stage/delete/${id}`);
+      setFilteredStages(filteredStages.filter((demande) => demande._id !== id));
+      toast.success("Stage deleted successfully");
+    } catch (error) {
+      toast.error("Error deleting demande:", error);
+    }
+  }
+
   return (
     <UserLayout>
       <section className="px-10 mt-10">
         <h1 className="text-4xl font-bold">Liste des stages</h1>
-        <button onClick={handleOpenModal} className="text-white bg-black hover:bg-gray-700 font-bold py-2 px-4 rounded mt-4">
+        <button onClick={handleOpenForm} className="text-white bg-black hover:bg-gray-700 font-bold py-2 px-4 rounded mt-4">
           Ajouter un stage
         </button>
 
@@ -140,7 +189,7 @@ const ListeStageE = () => {
                     <tbody>
                       {filteredStages.map((stage, i) => (
                         <tr key={i}>
-                          <td className="px-6 py-4 whitespace-nowrap block w-52 truncate  text-sm font-medium text-gray-800">
+                          <td className="px-6 py-4 whitespace-nowrap block w-52 truncate text-sm font-medium text-gray-800">
                             {stage.titre}
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
@@ -153,13 +202,13 @@ const ListeStageE = () => {
                             {stage.date_debut.substring(0, 10)}
                           </td>
                           <td className={`px-6 py-4 flex items-center gap-5 whitespace-nowrap text-sm text-gray-800`}>
-                            <a href="#">
+                            <button onClick={() => fetchStageData(stage._id)}>
                               <img src={icons.Info} alt="" />
-                            </a>
-                            <a href="#">
+                            </button>
+                            <button onClick={() => fetchStageM(stage._id)}>
                               <img src={icons.Edit} alt="" />
-                            </a>
-                            <a href="#">
+                            </button>
+                            <a onClick={() => deleteOne(stage._id)}>
                               <img src={icons.Delete} alt="" />
                             </a>
                           </td>
@@ -197,15 +246,15 @@ const ListeStageE = () => {
                   </div>
                 </div>
                 <div className="flex justify-end items-end gap-5">
-                  <button className="py-2 px-4 rounded-lg border-2 border-green-600 hover:bg-green-600 hover:text-white transition duration-200 font-medium flex items-center gap-2">
+                  <button onClick={() => fetchStageData(stage._id)} className="py-2 px-4 rounded-lg border-2 border-green-600 hover:bg-green-600 hover:text-white transition duration-200 font-medium flex items-center gap-2">
                     Info
                     <FaInfoCircle />
                   </button>
-                  <button className="py-2 px-4 rounded-lg border-2 border-blue-400 hover:bg-blue-400 hover:text-white transition duration-200 font-medium flex items-center gap-2">
+                  <button onClick={() => fetchStageM(stage._id)} className="py-2 px-4 rounded-lg border-2 border-blue-400 hover:bg-blue-400 hover:text-white transition duration-200 font-medium flex items-center gap-2">
                     Modifier
                     <FaPen />
                   </button>
-                  <button className="py-2 px-4 rounded-lg border-2 border-red-600 hover:bg-red-600 hover:text-white transition duration-200 font-medium flex items-center gap-2">
+                  <button onClick={() => deleteOne(stage._id)} className="py-2 px-4 rounded-lg border-2 border-red-600 hover:bg-red-600 hover:text-white transition duration-200 font-medium flex items-center gap-2">
                     Supprimer
                     <FaTrash />
                   </button>
@@ -218,10 +267,17 @@ const ListeStageE = () => {
 
       {/* Modal component */}
       <EntrepriseForm
-        isOpen={isModalOpen}
-        onClose={handleCloseModal}
-        handleCloseModal={handleCloseModal}
+        isOpen={isFormOpen}
+        onClose={handleCloseForm}
+        handleCloseForm={handleCloseForm}
       />
+      <EntrepriseModifier
+        isOpen={isModifierOpen}
+        onClose={handleCloseModifier}
+        handleCloseModifier={handleCloseModifier}
+        stageData={stageData}
+      />
+      <StageInfo isOpen={isInfoOpen} onClose={handleCloseInfo} stageData={stageData} />
     </UserLayout>
   )
 };

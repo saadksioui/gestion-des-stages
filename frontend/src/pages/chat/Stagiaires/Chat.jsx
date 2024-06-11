@@ -16,6 +16,7 @@ const ChatStg = () => {
   const [responsableID, setResponsableID] = useState();
   const [user, setUser] = useState({});
   const messageEndRef = useRef(null);
+  const [initialScrollDone, setInitialScrollDone] = useState(false);
 
   const storedData = localStorage.getItem('sessionToken');
   let storedId = storedData ? storedData.split(',') : [];
@@ -77,10 +78,12 @@ const ChatStg = () => {
   }, [chatId]);
 
   useEffect(() => {
-    if (messageEndRef.current) {
+    // Scroll to the last message only if initialScrollDone is false
+    if (!initialScrollDone && messageEndRef.current) {
       messageEndRef.current.scrollIntoView({ behavior: 'smooth' });
+      setInitialScrollDone(true); // Set the flag to true after scrolling
     }
-  }, [messages]);
+  }, [messages, initialScrollDone]);
 
   useEffect(() => {
     const interval = setInterval(fetchMessages, 2000);
@@ -139,7 +142,7 @@ const ChatStg = () => {
                   <div
                     className={`${msg.id_utilisateur === storedId[1] ? 'bg-black text-white' : 'bg-white text-black'} text-2xl py-3 px-4 rounded-xl shadow-md flex items-center gap-2 w-fit`}
                   >
-                    <div className='flex flex-col gap-2'>
+                    <div className='flex flex-col gap-2' >
                       <span className='text-2xl font-medium'>{msg.message}</span>
                       <span className='text-xl font-light'>{moment(msg.created_at).fromNow()}</span>
                     </div>

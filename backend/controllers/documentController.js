@@ -1,6 +1,7 @@
 const asyncHandler = require('express-async-handler');
 const Document = require('../models/Document');
 const multer = require('multer');
+const fs = require('fs');
 const path = require('path');
 
 const getAllDocuments = asyncHandler(async (req, res) => {
@@ -13,13 +14,13 @@ const getAllDocuments = asyncHandler(async (req, res) => {
 });
 
 const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-      cb(null, '../frontend/public/docs');
-    },
-    filename: function (req, file, cb) {
-      cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
-    }
-  });
+  destination: function (req, file, cb) {
+    cb(null, '../frontend/public/docs');
+  },
+  filename: function (req, file, cb) {
+    cb(null, file.originalname); 
+  }
+});
   
   // Initialize multer
   const upload = multer({ storage: storage }).single('file');
@@ -63,7 +64,22 @@ const updateDocument = asyncHandler(async (req, res) => {
 const deleteDocument = asyncHandler(async (req, res) => {
   try {
     const { id } = req.params;
+    const document = await Document.findOne({ _id: id });
+
+    if (!document) {
+      return res.status(404).json({ message: 'Document not found' });
+    }
+
+    const filePath = path.join('../frontend/public/docs', document.file);
+
+    if (!fs.existsSync(filePath)) {
+      return res.status(404).json({ message: 'File not found' });
+    }
+
+    fs.unlinkSync(filePath);
+
     await Document.deleteOne({ _id: id });
+
     res.json({ message: 'Document deleted successfully' });
   } catch (error) {
     res.status(400).json({ message: error.message });

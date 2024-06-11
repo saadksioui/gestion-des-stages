@@ -47,7 +47,6 @@ const UserLayout = ({ children }) => {
     fetchData();
   }, []);
 
-  console.log(User);
 
   useEffect(() => {
     const generateMenu = (menuItems) => (
@@ -235,7 +234,7 @@ const UserLayout = ({ children }) => {
         <Link to={'/profile'} className="w-full">
           <div className={`border-t flex p-3 w-full mt-10 lg:mt-0`}>
             <img
-              src={`images_cv/${User.img_url}`}
+              src={`/images_cv/${User.img_url}`}
               alt=""
               className="w-10 h-10 rounded-md object-cover"
             />
